@@ -314,4 +314,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-.env.dev
+.direnv/ 
+.envrc 
+.venv
+.env*

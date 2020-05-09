@@ -8,8 +8,7 @@ ENV PYTHONUNBUFFERED 1
 
 # Install dependencies
 RUN pip install --upgrade pip
-RUN pip install pipenv
-COPY Pipfile ./Pipfile.lock /usr/src/app/
-RUN pipenv install --deploy --system
+COPY ./requirements.txt /usr/src/app/
+RUN pip install -r requirements.txt
 
 COPY . /usr/src/app/
