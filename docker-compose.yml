@@ -1,7 +1,8 @@
-version: '3'
+version: '3.8'
 
 services:
   web:
+    container_name: "echo_backend_web"
     restart: 'always'
     build: .
     command: python manage.py runserver 0.0.0.0:8000
@@ -14,6 +15,7 @@ services:
     depends_on:
       - db
   db:
+    container_name: "echo_backend_db"
     image: postgres:12.0
     restart: 'always'
     volumes:
