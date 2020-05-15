@@ -33,14 +33,18 @@ ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
 # Application definition
 
 INSTALLED_APPS = [
+    # internal
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # third-party
     "graphene_django",
+    # ours
     "apps.pages",
+    "apps.event",
 ]
 
 MIDDLEWARE = [

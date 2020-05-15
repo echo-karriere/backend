@@ -1,9 +1,10 @@
 import graphene
 
 import apps.pages.schema
+import apps.event.schema
 
 
-class Query(apps.pages.schema.Query, graphene.ObjectType):
+class Query(apps.pages.schema.Query, apps.event.schema.Query, graphene.ObjectType):
     pass
 
 
