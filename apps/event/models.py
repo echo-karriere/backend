@@ -1,4 +1,5 @@
 from django.db import models, transaction
+from django.utils.text import slugify
 
 
 class EventDate(models.Model):
@@ -8,6 +9,20 @@ class EventDate(models.Model):
 
     def __str__(self):
         return f"{self.start.strftime('%b %d %Y')}: {self.start.strftime('%H:%M:%S')} - {self.end.strftime('%H:%M:%S')}"
+
+
+class EventContent(models.Model):
+    event = models.ForeignKey("Event", on_delete=models.CASCADE)
+    title = models.CharField(max_length=120)
+    title_id = models.CharField(max_length=120)
+    content = models.TextField()
+
+    def save(self, *args, **kwargs):
+        self.title_id = slugify(self.title)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
 
 
 class Event(models.Model):
