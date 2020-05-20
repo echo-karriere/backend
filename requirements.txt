@@ -7,7 +7,10 @@ cfgv==3.1.0
 click==7.1.2
 distlib==0.3.0
 Django==3.0.6
+django-ckeditor==5.9.0
 django-environ==0.4.5
+django-js-asset==1.2.2
+django-tinymce==3.0.2
 filelock==3.0.12
 graphene==2.1.8
 graphene-django==2.10.0

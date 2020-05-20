@@ -1,3 +1,4 @@
+from ckeditor.fields import RichTextField
 from django.db import models, transaction
 from django.utils.text import slugify
 
@@ -15,7 +16,7 @@ class EventContent(models.Model):
     event = models.ForeignKey("Event", on_delete=models.CASCADE)
     title = models.CharField(max_length=120)
     title_id = models.CharField(max_length=120)
-    content = models.TextField()
+    content = RichTextField()
 
     def save(self, *args, **kwargs):
         self.title_id = slugify(self.title)
