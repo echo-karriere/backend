@@ -4,7 +4,7 @@ from .models import Page, Namespace
 
 @admin.register(Page)
 class PageAdmin(admin.ModelAdmin):
-    list_display = ("title", "slug")
+    list_display = ("title", "status", "slug")
 
 
 @admin.register(Namespace)

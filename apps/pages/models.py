@@ -19,12 +19,18 @@ class Namespace(models.Model):
 
 
 class Page(models.Model):
+    PUBLISHED = "P"
+    DRAFT = "D"
+    DELETED = "X"
+    STATUS_CHOICES = [(PUBLISHED, "Published"), (DRAFT, "Draft"), (DELETED, "Deleted")]
+
     title = models.CharField(max_length=100)
     content = RichTextField()
     slug = models.SlugField(editable=False)
     namespace = models.ForeignKey(
         Namespace, on_delete=models.CASCADE, blank=True, null=True
     )
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=DRAFT)
 
     def __str__(self):
         return self.title
