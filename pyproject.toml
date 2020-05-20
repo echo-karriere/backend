@@ -1,5 +1,25 @@
+[tool.poetry]
+name = "echo-karriere-backend"
+version = "0.1.0"
+description = "A Django GraphQL backend for www.echokarriere.no"
+authors = ["Sondre Nilsen <nilsen.sondre@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+Django = "^3.0.6"
+graphene-django = "^2.10.1"
+django-filter = "^2.2.0"
+psycopg2 = "^2.8.5"
+django-environ = "^0.4.5"
+django-ckeditor = "^5.9.0"
+
+[tool.poetry.dev-dependencies]
+black = "^19.10b0"
+pre-commit = "^2.4.0"
+
 [tool.black]
-target-version = ['py36', 'py37', 'py38']
+target-version = ['py37', 'py38']
 exclude = '''
 /(
     \.eggs
