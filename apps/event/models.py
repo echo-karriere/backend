@@ -31,9 +31,7 @@ class Event(models.Model):
     active = models.BooleanField()
     year = models.DateField()
 
-    def save(
-        self, *args, **kwargs,
-    ):
+    def save(self, *args, **kwargs):
         if not self.active:
             return super(Event, self).save(*args, **kwargs)
         with transaction.atomic():

@@ -1,4 +1,12 @@
 from django.contrib import admin
-from .models import Page
+from .models import Page, Namespace
 
-admin.site.register(Page)
+
+@admin.register(Page)
+class PageAdmin(admin.ModelAdmin):
+    list_display = ("title", "slug")
+
+
+@admin.register(Namespace)
+class NamespaceAdmin(admin.ModelAdmin):
+    list_display = ("title", "description", "namespace")
