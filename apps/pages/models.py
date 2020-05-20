@@ -9,6 +9,9 @@ class Namespace(models.Model):
     description = models.CharField(max_length=250)
     namespace = models.SlugField(editable=False)
 
+    class Meta:
+        pass
+
     def __str__(self):
         return self.title
 
@@ -28,9 +31,7 @@ class Page(models.Model):
     title = models.CharField(max_length=100, unique=True)
     content = RichTextField()
     slug = models.SlugField(editable=False)
-    namespace = models.ForeignKey(
-        Namespace, on_delete=models.CASCADE, blank=True, null=True
-    )
+    namespace = models.ForeignKey(Namespace, on_delete=models.CASCADE, blank=True, null=True)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=DRAFT)
     created_on = models.DateTimeField(editable=False, auto_now_add=True)
     modified_on = models.DateTimeField(editable=False, auto_now=True)

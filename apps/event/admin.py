@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Event, EventDate, EventContent
+from .models import Event, EventContent, EventDate
 
 
 class EventDateInline(admin.TabularInline):

@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Page, Namespace
+
+from .models import Namespace, Page
 
 
 @admin.register(Page)

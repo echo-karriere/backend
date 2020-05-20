@@ -1,7 +1,8 @@
 import graphene
 from django.contrib.auth.models import User
 from graphene_django import DjangoObjectType
-from .models import Event, EventDate, EventContent
+
+from .models import Event, EventContent, EventDate
 
 
 class EventDateType(DjangoObjectType):
