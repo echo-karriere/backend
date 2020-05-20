@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # third-party
     "graphene_django",
+    "django_filters",
     "ckeditor",
     # ours
     "apps.pages",
