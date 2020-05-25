@@ -35,7 +35,7 @@ class Page(models.Model):
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=DRAFT)
     created_on = models.DateTimeField(editable=False, auto_now_add=True)
     modified_on = models.DateTimeField(editable=False, auto_now=True)
-    published_on = models.DateTimeField(editable=False)
+    published_on = models.DateTimeField(editable=False, blank=True, null=True)
 
     class Meta:
         ordering = ["modified_on"]
@@ -44,12 +44,9 @@ class Page(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        super(Page, self).save(*args, **kwargs)
-
         if Namespace.objects.filter(page=self.id).exists():
             namespace = Namespace.objects.get(page=self.id)
-            slug = f"/{namespace.namespace}/{slugify(self.title)}/"
-            self.slug = slug
+            self.slug = f"/{namespace.namespace}/{slugify(self.title)}/"
         else:
             self.slug = f"/{slugify(self.title)}/"
 
