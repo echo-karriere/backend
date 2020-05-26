@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # third-party
-    "graphene_django",
     "django_filters",
     "ckeditor",
     # ours
