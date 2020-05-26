@@ -15,7 +15,6 @@ class InterestSchema(models.Model):
     class Meta:
         verbose_name = "Interest form"
         verbose_name_plural = "Interest form"
-        app_label = "forms"
 
     def __str__(self):
         return self.company

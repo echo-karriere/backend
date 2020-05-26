@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     "apps.users",
     "apps.pages",
     "apps.event",
-    "apps.forms",
     "apps.forms.interest",
 ]
 
