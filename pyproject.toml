@@ -13,6 +13,7 @@ django-filter = "^2.2.0"
 psycopg2 = "^2.8.5"
 django-environ = "^0.4.5"
 django-ckeditor = "^5.9.0"
+Pillow = "^7.1.2"
 
 [tool.poetry.dev-dependencies]
 black = "^19.10b0"
