@@ -1,12 +1,6 @@
-package no.echokarriere
+package no.echokarriere.backend
 
-import io.ktor.application.*
-import io.ktor.auth.*
-import io.ktor.features.*
 import io.ktor.http.*
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.routing.*
 import io.ktor.server.testing.*
 import kotlin.test.*
 
@@ -16,7 +10,7 @@ class ApplicationTest {
         withTestApplication({ module(testing = true) }) {
             handleRequest(HttpMethod.Get, "/").apply {
                 assertEquals(HttpStatusCode.OK, response.status())
-                assertEquals("HELLO WORLD!", response.content)
+                assertEquals("{\"snippets\":[{\"text\":\"hello\"},{\"text\":\"world\"}]}", response.content)
             }
         }
     }
