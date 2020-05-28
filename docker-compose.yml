@@ -11,8 +11,7 @@ services:
       - 5432:5432
     networks:
       - postgres
-    env_file:
-      - .env
+    env_file: .env
 
   pgadmin:
     container_name: "echo_backend_pgadmin"
@@ -24,8 +23,7 @@ services:
       - 5000:80
     networks:
       - postgres
-    env_file:
-      - .env
+    env_file: .env
 
 networks:
   postgres:

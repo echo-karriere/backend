@@ -20,7 +20,7 @@ import java.util.UUID
 
 fun main(args: Array<String>): Unit = EngineMain.main(args)
 
-open class SimpleJWT(val secret: String) {
+open class SimpleJWT(private val secret: String) {
     private val algorithm = Algorithm.HMAC256(secret)
     val verifier: JWTVerifier = JWT.require(algorithm).build()
     fun sign(name: String): String = JWT.create().withClaim("name", name).sign(algorithm)

@@ -1,6 +1,7 @@
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
+val jdbi_version: String by project
 
 plugins {
     application
@@ -31,6 +32,12 @@ dependencies {
     implementation("io.ktor:ktor-auth:$ktor_version")
     implementation("io.ktor:ktor-auth-jwt:$ktor_version")
     implementation("io.ktor:ktor-serialization:$ktor_version")
+
+    implementation("org.jdbi:jdbi3-bom:$jdbi_version")
+    implementation("org.jdbi:jdbi3-sqlobject:$jdbi_version")
+    implementation("org.jdbi:jdbi3-kotlin:$jdbi_version")
+    implementation("org.jdbi:jdbi3-kotlin-sqlobject:$jdbi_version")
+    implementation("org.jdbi:jdbi3-postgres:$jdbi_version")
 
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
 }
