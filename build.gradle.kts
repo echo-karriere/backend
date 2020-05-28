@@ -38,6 +38,7 @@ dependencies {
     implementation("org.jdbi:jdbi3-kotlin:$jdbi_version")
     implementation("org.jdbi:jdbi3-kotlin-sqlobject:$jdbi_version")
     implementation("org.jdbi:jdbi3-postgres:$jdbi_version")
+    implementation("org.postgresql:postgresql:42.2.12.jre7")
 
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
 }
@@ -47,4 +48,3 @@ kotlin.sourceSets["test"].kotlin.srcDirs("test")
 
 sourceSets["main"].resources.srcDirs("resources")
 sourceSets["test"].resources.srcDirs("testresources")
-

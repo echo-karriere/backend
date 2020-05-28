@@ -3,20 +3,28 @@ package no.echokarriere.backend
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
-import io.ktor.application.*
-import io.ktor.auth.*
+import io.ktor.application.Application
+import io.ktor.application.call
+import io.ktor.application.install
+import io.ktor.auth.Authentication
+import io.ktor.auth.UserIdPrincipal
 import io.ktor.auth.jwt.jwt
-import io.ktor.features.*
-import io.ktor.http.*
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.features.CORS
+import io.ktor.features.ContentNegotiation
+import io.ktor.features.StatusPages
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
+import io.ktor.request.receive
+import io.ktor.response.respond
+import io.ktor.routing.get
+import io.ktor.routing.post
+import io.ktor.routing.routing
 import io.ktor.serialization.json
 import io.ktor.server.netty.EngineMain
-import kotlinx.serialization.Serializable
-import java.lang.RuntimeException
 import java.util.Collections
-import java.util.UUID
+import kotlinx.serialization.Serializable
+import no.echokarriere.backend.routing.apiRouter
 
 fun main(args: Array<String>): Unit = EngineMain.main(args)
 
@@ -29,24 +37,11 @@ open class SimpleJWT(private val secret: String) {
 @Serializable
 class User(val name: String, val password: String)
 
-val users: MutableMap<String, User> = Collections.synchronizedMap(listOf(User("test", "test")).associateBy { it.name }.toMutableMap())
+val users: MutableMap<String, User> =
+    Collections.synchronizedMap(listOf(User("test", "test")).associateBy { it.name }.toMutableMap())
 
 @Serializable
 class LoginRegister(val user: String, val password: String)
-
-@Serializable
-data class Snippet(val user: String, val id: Int, val text: String)
-
-@Serializable
-data class PostSnippet(val snippet: Text) {
-    @Serializable
-    data class Text(val text: String)
-}
-
-val snippets: MutableList<Snippet> = Collections.synchronizedList(mutableListOf(
-    Snippet("test", 1, "hello"),
-    Snippet("test",2, "world")
-))
 
 @Serializable
 class InvalidCredentialsException(override val message: String) : RuntimeException(message)
@@ -58,7 +53,7 @@ fun Application.module(testing: Boolean = false) {
 
     install(StatusPages) {
         exception<InvalidCredentialsException> { exception ->
-            call.respond(HttpStatusCode.Unauthorized, mapOf("OK" to "false", "error" to (exception.message ?: "")))
+            call.respond(HttpStatusCode.Unauthorized, mapOf("OK" to "false", "error" to exception.message))
         }
     }
 
@@ -88,31 +83,15 @@ fun Application.module(testing: Boolean = false) {
     }
 
     routing {
-        route("/") {
-            get {
-                call.respond(mapOf("snippets" to synchronized(snippets) { snippets.toList() }))
-            }
-            authenticate {
-                post {
-                    val post = call.receive<PostSnippet>()
-                    val principal = call.principal<UserIdPrincipal>() ?: error("No principal")
-                    snippets += Snippet(
-                        principal.name,
-                        snippets.size + 1,
-                        post.snippet.text
-                    )
-                    call.respond(mapOf("OK" to true))
-                }
-                delete("{id}") {
-                    val id: Int = call.parameters["id"]?.toInt() ?: error("ID went wrong")
-                    snippets.removeIf { it.id == id}
-                    call.respond(mapOf("OK" to true))
-                }
-            }
+        get("/") {
+            call.respond(mapOf("OK" to true))
         }
+
+        apiRouter()
+
         post("/login-register") {
             val post = call.receive<LoginRegister>()
-            val user = users.getOrPut(post.user) { User(post.user, post.password)}
+            val user = users.getOrPut(post.user) { User(post.user, post.password) }
             if (user.password != post.password) throw InvalidCredentialsException("Invalid credentials")
             call.respond(mapOf("token" to simpleJWT.sign(user.name)))
         }
