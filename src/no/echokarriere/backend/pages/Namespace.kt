@@ -1,10 +1,12 @@
 package no.echokarriere.backend.pages
 
+import kotlinx.serialization.Serializable
 import org.jdbi.v3.core.mapper.reflect.ColumnName
 
+@Serializable
 data class Namespace(
     @ColumnName("id")
-    val id: Int,
+    val id: Int = 0,
     @ColumnName("title")
     val title: String,
     @ColumnName("description")
