@@ -52,8 +52,11 @@ fun Application.module(testing: Boolean = false) {
     val simpleJWT = SimpleJWT("very-secret-ssh")
 
     install(StatusPages) {
-        exception<InvalidCredentialsException> { exception ->
-            call.respond(HttpStatusCode.Unauthorized, mapOf("OK" to "false", "error" to exception.message))
+        exception<InvalidCredentialsException> { cause ->
+            call.respond(HttpStatusCode.Unauthorized, mapOf("OK" to "false", "error" to cause.message))
+        }
+        exception<ItemNotFoundException> { cause ->
+            call.respond(HttpStatusCode.NotFound, mapOf("error" to cause.message))
         }
     }
 
