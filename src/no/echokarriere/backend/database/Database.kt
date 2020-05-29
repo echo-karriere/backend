@@ -1,6 +1,5 @@
 package no.echokarriere.backend.database
 
-import no.echokarriere.backend.pages.NamespaceDao
 import org.jdbi.v3.core.Jdbi
 import org.jdbi.v3.core.kotlin.KotlinPlugin
 import org.jdbi.v3.postgres.PostgresPlugin

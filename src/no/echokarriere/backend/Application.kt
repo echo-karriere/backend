@@ -24,6 +24,10 @@ import io.ktor.serialization.json
 import io.ktor.server.netty.EngineMain
 import java.util.Collections
 import kotlinx.serialization.Serializable
+import no.echokarriere.backend.errors.ErrorResponse
+import no.echokarriere.backend.errors.InternalServerErrorException
+import no.echokarriere.backend.errors.InvalidCredentialsException
+import no.echokarriere.backend.errors.NotFoundException
 import no.echokarriere.backend.routing.apiRouter
 
 fun main(args: Array<String>): Unit = EngineMain.main(args)
@@ -43,9 +47,6 @@ val users: MutableMap<String, User> =
 @Serializable
 class LoginRegister(val user: String, val password: String)
 
-@Serializable
-class InvalidCredentialsException(override val message: String) : RuntimeException(message)
-
 @Suppress("unused") // Referenced in application.conf
 @JvmOverloads
 fun Application.module(testing: Boolean = false) {
@@ -53,10 +54,34 @@ fun Application.module(testing: Boolean = false) {
 
     install(StatusPages) {
         exception<InvalidCredentialsException> { cause ->
-            call.respond(HttpStatusCode.Unauthorized, mapOf("OK" to "false", "error" to cause.message))
+            call.respond(
+                HttpStatusCode.Unauthorized,
+                ErrorResponse(
+                    HttpStatusCode.Unauthorized.value,
+                    "unauthorized",
+                    cause.message
+                )
+            )
         }
-        exception<ItemNotFoundException> { cause ->
-            call.respond(HttpStatusCode.NotFound, mapOf("error" to cause.message))
+        exception<NotFoundException> { cause ->
+            call.respond(
+                HttpStatusCode.NotFound,
+                ErrorResponse(
+                    HttpStatusCode.NotFound.value,
+                    "not_found",
+                    cause.message ?: "Resource not found"
+                )
+            )
+        }
+        exception<InternalServerErrorException> { cause ->
+            call.respond(
+                HttpStatusCode.InternalServerError,
+                ErrorResponse(
+                    HttpStatusCode.InternalServerError.value,
+                    "internal_error",
+                    cause.message
+                )
+            )
         }
     }
 
@@ -95,7 +120,9 @@ fun Application.module(testing: Boolean = false) {
         post("/login-register") {
             val post = call.receive<LoginRegister>()
             val user = users.getOrPut(post.user) { User(post.user, post.password) }
-            if (user.password != post.password) throw InvalidCredentialsException("Invalid credentials")
+            if (user.password != post.password) throw InvalidCredentialsException(
+                "Invalid credentials"
+            )
             call.respond(mapOf("token" to simpleJWT.sign(user.name)))
         }
     }

@@ -1,4 +1,4 @@
-package no.echokarriere.backend.pages
+package no.echokarriere.backend.database
 
 import org.jdbi.v3.sqlobject.statement.SqlUpdate
 

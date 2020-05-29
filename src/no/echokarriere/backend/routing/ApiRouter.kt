@@ -18,6 +18,6 @@ fun Routing.apiRouter() {
         get("/") {
             call.respond(mapOf("OK" to true))
         }
-        pageRouter(database.namespaceDao)
+        namespaceRouter(database.namespaceDao)
     }
 }

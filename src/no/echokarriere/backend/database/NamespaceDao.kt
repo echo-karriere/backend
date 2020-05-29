@@ -1,7 +1,10 @@
-package no.echokarriere.backend.pages
+package no.echokarriere.backend.database
 
+import no.echokarriere.backend.pages.Namespace
 import org.jdbi.v3.sqlobject.SingleValue
 import org.jdbi.v3.sqlobject.customizer.BindBean
+import org.jdbi.v3.sqlobject.kotlin.RegisterKotlinMapper
+import org.jdbi.v3.sqlobject.statement.GetGeneratedKeys
 import org.jdbi.v3.sqlobject.statement.SqlQuery
 import org.jdbi.v3.sqlobject.statement.SqlUpdate
 
@@ -32,17 +35,22 @@ interface NamespaceDao {
         VALUES (:title, :description, :namespace)
         """
     )
-    fun insert(@BindBean namespace: Namespace)
+    @GetGeneratedKeys
+    @RegisterKotlinMapper(Namespace::class)
+    fun insert(@BindBean namespace: Namespace): Namespace
 
     @SqlUpdate(
         """
         UPDATE namespace
         SET title = :title, description = :description, namespace = :namespace
         WHERE id = :id
+        RETURNING *
     """
     )
-    fun update(id: Int, @BindBean namespace: Namespace)
+    @GetGeneratedKeys
+    @RegisterKotlinMapper(Namespace::class)
+    fun update(id: Int, @BindBean namespace: Namespace): Namespace?
 
     @SqlUpdate("DELETE FROM namespace WHERE ID = :id")
-    fun delete(id: Int)
+    fun delete(id: Int): Int
 }
