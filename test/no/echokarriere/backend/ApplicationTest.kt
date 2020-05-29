@@ -1,3 +1,5 @@
+@file:Suppress("EXPERIMENTAL_API_USAGE")
+
 package no.echokarriere.backend
 
 import io.ktor.http.HttpMethod
@@ -10,10 +12,12 @@ import kotlin.test.assertEquals
 class ApplicationTest {
     @Test
     fun testRoot() {
-        withTestApplication({ module(testing = true) }) {
+        withTestApplication({
+            module(testing = true, database = TestDatabase())
+        }) {
             handleRequest(HttpMethod.Get, "/").apply {
                 assertEquals(HttpStatusCode.OK, response.status())
-                assertEquals("{\"snippets\":[{\"text\":\"hello\"},{\"text\":\"world\"}]}", response.content)
+                assertEquals("{\"OK\":true}", response.content)
             }
         }
     }

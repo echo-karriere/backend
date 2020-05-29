@@ -1,14 +1,18 @@
+@file:Suppress("EXPERIMENTAL_API_USAGE")
+
 package no.echokarriere.backend
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
+import com.typesafe.config.ConfigFactory
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.auth.Authentication
 import io.ktor.auth.UserIdPrincipal
 import io.ktor.auth.jwt.jwt
+import io.ktor.config.HoconApplicationConfig
 import io.ktor.features.CORS
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.StatusPages
@@ -24,6 +28,8 @@ import io.ktor.serialization.json
 import io.ktor.server.netty.EngineMain
 import java.util.Collections
 import kotlinx.serialization.Serializable
+import no.echokarriere.backend.database.Database
+import no.echokarriere.backend.database.IDatabase
 import no.echokarriere.backend.errors.ErrorResponse
 import no.echokarriere.backend.errors.InternalServerErrorException
 import no.echokarriere.backend.errors.InvalidCredentialsException
@@ -47,9 +53,11 @@ val users: MutableMap<String, User> =
 @Serializable
 class LoginRegister(val user: String, val password: String)
 
+val config = HoconApplicationConfig(ConfigFactory.load())
+
 @Suppress("unused") // Referenced in application.conf
 @JvmOverloads
-fun Application.module(testing: Boolean = false) {
+fun Application.module(testing: Boolean = false, database: IDatabase = Database(config)) {
     val simpleJWT = SimpleJWT("very-secret-ssh")
 
     install(StatusPages) {
@@ -115,7 +123,7 @@ fun Application.module(testing: Boolean = false) {
             call.respond(mapOf("OK" to true))
         }
 
-        apiRouter()
+        apiRouter(database)
 
         post("/login-register") {
             val post = call.receive<LoginRegister>()

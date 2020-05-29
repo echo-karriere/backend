@@ -10,7 +10,6 @@ import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.put
 import io.ktor.routing.route
-import java.lang.Exception
 import no.echokarriere.backend.database.NamespaceDao
 import no.echokarriere.backend.entities.Namespace
 import no.echokarriere.backend.errors.InternalServerErrorException
@@ -29,7 +28,9 @@ fun Route.namespaceRouter(namespaceDao: NamespaceDao) {
         }
         post {
             val namespace = call.receive<Namespace>()
-            val resp = try { namespaceDao.insert(namespace) } catch (e: Exception) {
+            val resp = try {
+                namespaceDao.insert(namespace)
+            } catch (e: Exception) {
                 return@post call.respond(HttpStatusCode.NoContent)
             }
             call.respond(HttpStatusCode.Created, resp)
