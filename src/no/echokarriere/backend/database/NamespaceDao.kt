@@ -1,6 +1,6 @@
 package no.echokarriere.backend.database
 
-import no.echokarriere.backend.pages.Namespace
+import no.echokarriere.backend.entities.Namespace
 import org.jdbi.v3.sqlobject.SingleValue
 import org.jdbi.v3.sqlobject.customizer.BindBean
 import org.jdbi.v3.sqlobject.kotlin.RegisterKotlinMapper

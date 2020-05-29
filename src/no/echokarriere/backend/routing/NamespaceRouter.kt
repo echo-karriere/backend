@@ -10,11 +10,12 @@ import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.put
 import io.ktor.routing.route
+import java.lang.Exception
 import no.echokarriere.backend.database.NamespaceDao
+import no.echokarriere.backend.entities.Namespace
 import no.echokarriere.backend.errors.InternalServerErrorException
 import no.echokarriere.backend.errors.InvalidRequestException
 import no.echokarriere.backend.errors.NotFoundException
-import no.echokarriere.backend.pages.Namespace
 
 fun Route.namespaceRouter(namespaceDao: NamespaceDao) {
     route("/namespace") {
@@ -23,14 +24,14 @@ fun Route.namespaceRouter(namespaceDao: NamespaceDao) {
         }
         get("{id}") {
             val id: Int = call.parameters["id"]?.toInt() ?: throw InvalidRequestException("ID required")
-            val namespace = namespaceDao.selectOne(id) ?: throw NotFoundException(
-                "No namespace matching $id found"
-            )
+            val namespace = namespaceDao.selectOne(id) ?: throw NotFoundException("No namespace matching $id found")
             call.respond(HttpStatusCode.OK, namespace)
         }
         post {
             val namespace = call.receive<Namespace>()
-            val resp = namespaceDao.insert(namespace)
+            val resp = try { namespaceDao.insert(namespace) } catch (e: Exception) {
+                return@post call.respond(HttpStatusCode.NoContent)
+            }
             call.respond(HttpStatusCode.Created, resp)
         }
         put("{id}") {

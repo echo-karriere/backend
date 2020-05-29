@@ -1,4 +1,4 @@
-package no.echokarriere.backend.pages
+package no.echokarriere.backend.entities
 
 import java.time.LocalDateTime
 import org.jdbi.v3.core.mapper.reflect.ColumnName
