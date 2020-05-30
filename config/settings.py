@@ -87,11 +87,11 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": env.str("POSTGRES_DB"),
-        "USER": env.str("POSTGRES_USER"),
-        "PASSWORD": env.str("POSTGRES_PASSWORD"),
-        "HOST": env.str("POSTGRES_HOST"),
+        "ENGINE": env.str("DATABASE_ENGINE", default="django.db.backends.sqlite3"),
+        "NAME": env.str("POSTGRES_DB", default=os.path.join(BASE_DIR, "db.sqlite3")),
+        "USER": env.str("POSTGRES_USER", default=None),
+        "PASSWORD": env.str("POSTGRES_PASSWORD", default=None),
+        "HOST": env.str("POSTGRES_HOST", default=None),
         "PORT": 5432,
     }
 }
