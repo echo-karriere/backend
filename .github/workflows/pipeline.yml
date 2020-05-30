@@ -3,28 +3,65 @@ name: Pipeline
 on: [push, pull_request]
 
 jobs:
-  tests:
+  lints:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        java: [11, 14]
 
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Java ${{ matrix.java }}
-        uses: actions/setup-java@v1
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
         with:
-          java-version: ${{ matrix.java }}
+          python-version: 3.8
+      - name: Linting
+        run: |
+          pip install pre-commit
+          pre-commit run --all-files
 
-      - name: Cache Gradle packages
+  tests:
+    needs: lints
+    name: ${{ matrix.os }} / ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      matrix:
+        os: [Ubuntu]
+        python-version: [3.7, 3.8]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install poetry
+        shell: bash
+        run: |
+          curl -fsS -o get-poetry.py https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py
+          python get-poetry.py --preview -y
+          echo "::set-env name=PATH::$HOME/.poetry/bin:$PATH"
+
+      - name: Configure poetry
+        shell: bash
+        run: poetry config virtualenvs.in-project true
+
+      - name: Set up cache
         uses: actions/cache@v1
+        id: cache
         with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: ${{ runner.os }}-gradle
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.full-python-version.outputs.version }}-${{ hashFiles('**/poetry.lock') }}
 
-      - name: Build
-        run: gradle build
+      - name: Ensure cache is healthy
+        if: steps.cache.outputs.cache-hit == 'true'
+        shell: bash
+        run: poetry run pip --version >/dev/null 2>&1 || rm -rf .venv
 
-      - name: Test
-        run: gradle test
+      - name: Install dependencies
+        shell: bash
+        run: poetry install
+
+      - name: Run pytest
+        shell: bash
+        run: poetry run pytest -q
+
+
