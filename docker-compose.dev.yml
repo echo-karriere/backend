@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: "echo_backend_db"
+    image: postgres:12.0
+    restart: unless-stopped
+    volumes:
+    - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - 5432:5432
+    networks:
+      - postgres
+    env_file: .env
+
+  pgadmin:
+    container_name: "echo_backend_pgadmin"
+    image: dpage/pgadmin4:4
+    restart: unless-stopped
+    volumes:
+      - pgadmin_data:/root/.pgadmin
+    ports:
+      - 5000:80
+    networks:
+      - postgres
+    env_file: .env
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  pgadmin_data:
