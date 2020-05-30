@@ -62,12 +62,14 @@ jobs:
 
       - name: Run tests
         shell: bash
-        run: poetry run python manage.py test
+        run: |
+          poetry run coverage run manage.py test
+          poetry run coverage xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./.coverage
+          file: ./coverage.xml
           flags: unittests
           fail_ci_if_error: true

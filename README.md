@@ -1,4 +1,4 @@
-# echo karriere backend
+# echo karriere backend ![Pipeline](https://github.com/echo-karriere/backend/workflows/Pipeline/badge.svg) [![codecov](https://codecov.io/gh/echo-karriere/backend/branch/master/graph/badge.svg?token=a1G1xHaXPi)](https://codecov.io/gh/echo-karriere/backend)
 
 ## Developing
 
