@@ -13,6 +13,7 @@ psycopg2 = "^2.8.5"
 django-environ = "^0.4.5"
 django-ckeditor = "^5.9.0"
 Pillow = "^7.1.2"
+djangorestframework = "^3.11.0"
 
 [tool.poetry.dev-dependencies]
 black = "^19.10b0"
@@ -52,7 +53,7 @@ skip_glob = "*/migrations/*"
 include_trailing_comma = true
 known_django = "django"
 sections=["FUTURE","STDLIB","DJANGO","THIRDPARTY","FIRSTPARTY","LOCALFOLDER"]
-known_third_party = ["ckeditor", "django", "environ"]
+known_third_party = ["ckeditor", "django", "environ", "rest_framework"]
 
 [tool.coverage.run]
 source = [ "." ]

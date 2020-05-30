@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # third-party
     "django_filters",
     "ckeditor",
+    "rest_framework",
     # ours
     "apps.users",
     "apps.pages",
