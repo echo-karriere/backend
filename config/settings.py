@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "django_filters",
     "ckeditor",
     "rest_framework",
+    "drf_yasg",
     # ours
     "apps.users",
     "apps.pages",
