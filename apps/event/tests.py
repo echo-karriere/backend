@@ -20,7 +20,7 @@ class EventTests(APITestCase):
         )
 
     def test_get_event(self):
-        response = self.client.get("/api/event")
+        response = self.client.get("/api/event/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
             response.data,
