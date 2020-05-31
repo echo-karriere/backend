@@ -112,8 +112,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # REST API
 REST_FRAMEWORK = {
-    "DEFAULT_RENDERER_CLASSES": ["config.utils.CamelCaseJSONRenderer"],
-    "DEFAULT_PARSER_CLASSES": ["config.utils.CamelCaseJSONParser"],
+    "DEFAULT_RENDERER_CLASSES": ["utils.rest.CamelCaseJSONRenderer"],
+    "DEFAULT_PARSER_CLASSES": ["utils.rest.CamelCaseJSONParser"],
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
 }
 
