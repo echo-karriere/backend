@@ -20,6 +20,7 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions, routers
 
+from apps.event import views as EventViews
 from apps.namespace import views as NamespaceViews
 from apps.pages import views as PageViews
 from config import settings
@@ -38,13 +39,13 @@ schema_view = get_schema_view(
 )
 
 router = routers.DefaultRouter()
-router.register("page", PageViews.PageViewSet)
-router.register("namespace", NamespaceViews.NamespaceViewSet)
+router.register("event", EventViews.EventViewSet, basename="event")
+router.register("page", PageViews.PageViewSet, basename="page")
+router.register("namespace", NamespaceViews.NamespaceViewSet, basename="namespace")
 
 urlpatterns = [
+    path("api/", include((router.urls, "api"), namespace="v1"), name="api"),
     path("api/swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
     path("api/redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
-    path("api/event", include("apps.event.urls", namespace="api-event")),
-    path("api/", include(router.urls, namespace="api")),
     path("admin/", admin.site.urls, name="admin"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

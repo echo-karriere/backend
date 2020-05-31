@@ -1,20 +1,32 @@
 from django.utils.decorators import method_decorator
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import generics
+from rest_framework import viewsets
+from rest_framework.response import Response
 
 from .models import Event
 from .serializer import EventSerializer
 
 
 @method_decorator(
-    name="get",
+    name="list", decorator=swagger_auto_schema(operation_summary="Information about current event"),
+)
+@method_decorator(
+    name="retrieve",
     decorator=swagger_auto_schema(
-        operation_summary="Information about current event", operation_description="GET /api/event",
+        operation_summary="Get information about a specific event",
+        responses={200: EventSerializer, 404: "Event not found"},
     ),
 )
-class EventViewSet(generics.RetrieveAPIView):
+class EventViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Query the API for information about the current or any previous
+    event that has been managed by this API.
+    """
+
     queryset = Event.objects.all()
     serializer_class = EventSerializer
 
-    def get_object(self):
-        return self.queryset.get(active=True)
+    def list(self, request, *args, **kwargs):
+        queryset = Event.objects.get(active=True)
+        serializer = EventSerializer(queryset)
+        return Response(serializer.data)
