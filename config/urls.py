@@ -18,8 +18,10 @@ from django.contrib import admin
 from django.urls import include, path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
-from rest_framework import permissions
+from rest_framework import permissions, routers
 
+from apps.namespace import views as NamespaceViews
+from apps.pages import views as PageViews
 from config import settings
 
 schema_view = get_schema_view(
@@ -35,9 +37,14 @@ schema_view = get_schema_view(
     permission_classes=(permissions.AllowAny,),
 )
 
+router = routers.DefaultRouter()
+router.register("page", PageViews.PageViewSet)
+router.register("namespace", NamespaceViews.NamespaceViewSet)
+
 urlpatterns = [
     path("api/swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
     path("api/redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
     path("api/event", include("apps.event.urls", namespace="api-event")),
+    path("api/", include(router.urls, namespace="api")),
     path("admin/", admin.site.urls, name="admin"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

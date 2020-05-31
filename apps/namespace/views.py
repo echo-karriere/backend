@@ -6,7 +6,7 @@ from .models import Namespace
 from .serializer import NamespaceSerializer
 
 
-# @method_decorator(name="get", decorator=swagger_auto_schema(operation_summary="Hello!"))
+@method_decorator(name="list", decorator=swagger_auto_schema(operation_summary="Hello!"))
 class NamespaceViewSet(viewsets.ModelViewSet):
     queryset = Namespace.objects.all()
     serializer_class = NamespaceSerializer
