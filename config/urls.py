@@ -30,7 +30,32 @@ schema_view = get_schema_view(
     openapi.Info(
         title="echo karriere API",
         default_version="v1",
-        description="API for the echokarriere.no application",
+        description="""
+# API Documentation
+This is a automatically generated API reference for the backend service for [echokarriere](https://www.echokarriere.no).
+
+## Casing of request data
+Note that the API understands both `snake_case` and `camelCase` for the request data, so both
+
+```json
+{
+  "contact_person": "string",
+  "contact_email": "user@example.com",
+  "message": "string"
+}
+```
+
+and
+
+```
+{
+  "contactPerson": "string",
+  "contactEmail": "user@example.com",
+  "message": "string"
+}
+```
+
+are valid request objects.""",
         terms_of_service="",
         contact=openapi.Contact(email="webmaster@echokarriere.no"),
         license=(openapi.License(name="MIT License")),
