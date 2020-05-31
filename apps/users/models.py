@@ -12,6 +12,7 @@ class UserManager(BaseUserManager):
             is_active=True,
             is_staff=is_staff,
             is_superuser=is_superuser,
+            is_admin=is_superuser,
             registered_at=timezone.now(),
         )
         user.set_password(password)
