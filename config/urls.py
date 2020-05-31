@@ -20,9 +20,10 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions, routers
 
-from apps.event import views as EventViews
-from apps.namespace import views as NamespaceViews
-from apps.pages import views as PageViews
+from apps.event.views import EventViewSet
+from apps.forms.contact.views import ContactViewSet
+from apps.namespace.views import NamespaceViewSet
+from apps.pages.views import PageViewSet
 from config import settings
 
 schema_view = get_schema_view(
@@ -39,9 +40,10 @@ schema_view = get_schema_view(
 )
 
 router = routers.DefaultRouter()
-router.register("event", EventViews.EventViewSet, basename="event")
-router.register("page", PageViews.PageViewSet, basename="page")
-router.register("namespace", NamespaceViews.NamespaceViewSet, basename="namespace")
+router.register("event", EventViewSet, basename="event")
+router.register("page", PageViewSet, basename="page")
+router.register("namespace", NamespaceViewSet, basename="namespace")
+router.register("contact-us", ContactViewSet, basename="contact")
 
 urlpatterns = [
     path("api/", include((router.urls, "api"), namespace="v1"), name="api"),
