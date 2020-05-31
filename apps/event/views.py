@@ -7,14 +7,11 @@ from .models import Event
 from .serializer import EventSerializer
 
 
-@method_decorator(
-    name="list", decorator=swagger_auto_schema(operation_summary="Information about current event"),
-)
+@method_decorator(name="list", decorator=swagger_auto_schema(operation_summary="Get current event"))
 @method_decorator(
     name="retrieve",
     decorator=swagger_auto_schema(
-        operation_summary="Get information about a specific event",
-        responses={200: EventSerializer, 404: "Event not found"},
+        operation_summary="Get event by id", responses={200: EventSerializer, 404: "Event not found"},
     ),
 )
 class EventViewSet(viewsets.ReadOnlyModelViewSet):
