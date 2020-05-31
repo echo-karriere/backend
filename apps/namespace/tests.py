@@ -4,7 +4,7 @@ from rest_framework.test import APITestCase
 from apps.namespace.models import Namespace
 
 
-class EventTests(APITestCase):
+class NamespaceTests(APITestCase):
     def setUp(self) -> None:
         Namespace.objects.create(title="About", description="About us")
         Namespace.objects.create(title="Information", description="Info")
