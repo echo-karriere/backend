@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "drf_yasg",
     # ours
     "apps.users",
+    "apps.namespace",
     "apps.pages",
     "apps.event",
     "apps.forms.interest",

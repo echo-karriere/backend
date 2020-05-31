@@ -3,23 +3,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify
 
-
-class Namespace(models.Model):
-    title = models.CharField(max_length=100)
-    description = models.CharField(max_length=250)
-    namespace = models.SlugField(editable=False)
-
-    class Meta:
-        pass
-
-    def __str__(self):
-        return self.title
-
-    def save(self, *args, **kwargs):
-        namespace = slugify(self.title)
-
-        self.namespace = namespace
-        super(Namespace, self).save(*args, **kwargs)
+from apps.namespace.models import Namespace
 
 
 class Page(models.Model):
@@ -31,7 +15,7 @@ class Page(models.Model):
     title = models.CharField(max_length=100, unique=True)
     content = RichTextField()
     slug = models.SlugField(editable=False)
-    namespace = models.ForeignKey(Namespace, on_delete=models.CASCADE, blank=True, null=True)
+    namespace = models.ForeignKey("namespace.Namespace", on_delete=models.CASCADE, blank=True, null=True)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=DRAFT)
     created_on = models.DateTimeField(editable=False, auto_now_add=True)
     modified_on = models.DateTimeField(editable=False, auto_now=True)
