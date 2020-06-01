@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     # third-party
     "django_filters",
     "ckeditor",
+    "corsheaders",
     "rest_framework",
     "rest_framework.authtoken",
     "allauth",
@@ -60,6 +61,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -122,6 +124,9 @@ REST_FRAMEWORK = {
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
     "DEFAULT_AUTHENTICATION_CLASSES": ["rest_framework.authentication.TokenAuthentication"],
 }
+
+# REST CORS
+CORS_ORIGIN_WHITELIST = ["http://localhost:3000"]
 
 # REST API Auth
 REST_AUTH_SERIALIZERS = {

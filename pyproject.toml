@@ -18,6 +18,7 @@ drf-yasg = {extras = ["validation"], version = "^1.17.1"}
 dj-rest-auth = "^1.0.6"
 django-rest-knox = "^4.1.0"
 django-allauth = "^0.42.0"
+django-cors-headers = "^3.3.0"
 
 [tool.poetry.dev-dependencies]
 black = "^19.10b0"
