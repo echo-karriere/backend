@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     "django_filters",
     "ckeditor",
     "rest_framework",
+    "rest_framework.authtoken",
+    "dj_rest_auth",
     "drf_yasg",
     # ours
     "apps.users",
@@ -115,6 +117,11 @@ REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": ["utils.rest.CamelCaseJSONRenderer"],
     "DEFAULT_PARSER_CLASSES": ["utils.rest.CamelCaseJSONParser"],
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
+}
+
+# REST API Auth
+REST_AUTH_SERIALIZERS = {
+    "USER_DETAILS_SERIALIZER": "apps.users.serializer.UserSerializer",
 }
 
 # Internationalization

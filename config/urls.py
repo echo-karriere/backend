@@ -71,6 +71,7 @@ router.register("namespace", NamespaceViewSet, basename="namespace")
 router.register("contact-us", ContactViewSet, basename="contact")
 
 urlpatterns = [
+    path("auth/", include(("dj_rest_auth.urls", "auth"), namespace="auth")),
     path("api/", include((router.urls, "api"), namespace="v1"), name="api"),
     path("api/swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
     path("api/redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
