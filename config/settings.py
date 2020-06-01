@@ -124,6 +124,9 @@ REST_AUTH_SERIALIZERS = {
     "USER_DETAILS_SERIALIZER": "apps.users.serializer.UserSerializer",
 }
 
+# REST Swagger/Redoc
+SWAGGER_SETTINGS = {"DEFAULT_AUTO_SCHEMA_CLASS": "utils.swagger.CustomSwaggerAutoSchema"}
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
