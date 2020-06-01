@@ -120,6 +120,7 @@ REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": ["utils.rest.CamelCaseJSONRenderer"],
     "DEFAULT_PARSER_CLASSES": ["utils.rest.CamelCaseJSONParser"],
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
+    "DEFAULT_AUTHENTICATION_CLASSES": ["rest_framework.authentication.TokenAuthentication"],
 }
 
 # REST API Auth
