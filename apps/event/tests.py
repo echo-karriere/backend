@@ -1,12 +1,26 @@
 from datetime import datetime
 
-from django.test import TestCase
 from django.utils.timezone import make_aware
+from graphene_django.utils import GraphQLTestCase
 
-from apps.event.models import Event, EventContent, EventDate
+from config.schema import schema
+
+from .models import Event, EventContent, EventDate
+
+ACTIVE_EVENT_QUERY = """
+query {
+    activeEvent {
+        id
+        name
+        year
+    }
+}
+"""
 
 
-class EventTests(TestCase):
+class EventTests(GraphQLTestCase):
+    GRAPHQL_SCHEMA = schema
+
     def setUp(self) -> None:
         event = Event.objects.create(name="Test Event", active=True, year=datetime(2020, 2, 14))
         EventContent.objects.create(event=event, title="About", content="Hello, world!")
@@ -16,6 +30,11 @@ class EventTests(TestCase):
             start=make_aware(datetime(2020, 2, 14, 12)),
             end=make_aware(datetime(2020, 2, 14, 16)),
         )
+
+    def test_query_active_event(self):
+        resp = self.query(ACTIVE_EVENT_QUERY)
+
+        self.assertResponseNoErrors(resp)
 
     def test_save_active(self):
         new_event = Event.objects.create(name="Next Event", active=True, year=datetime(2020, 3, 10))
