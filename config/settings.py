@@ -40,17 +40,13 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "django.contrib.sites",
     # third-party
-    "django_filters",
     "ckeditor",
     "corsheaders",
-    "rest_framework",
-    "rest_framework.authtoken",
-    "allauth",
-    "allauth.account",
-    "dj_rest_auth",
-    "drf_yasg",
+    "graphene_django",
+    "graphql_auth",
+    "graphql_jwt.refresh_token.apps.RefreshTokenConfig",
+    "django_filters",
     # ours
     "apps.users",
     "apps.namespace",
@@ -117,37 +113,56 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-# REST API
-REST_FRAMEWORK = {
-    "DEFAULT_RENDERER_CLASSES": ["utils.rest.CamelCaseJSONRenderer"],
-    "DEFAULT_PARSER_CLASSES": ["utils.rest.CamelCaseJSONParser"],
-    "TEST_REQUEST_DEFAULT_FORMAT": "json",
-    "DEFAULT_AUTHENTICATION_CLASSES": ["rest_framework.authentication.TokenAuthentication"],
+# GraphQL
+
+GRAPHENE = {
+    "SCHEMA": "config.schema.schema",  # this file doesn't exist yet
+    "MIDDLEWARE": ["graphql_jwt.middleware.JSONWebTokenMiddleware"],
 }
 
-# REST CORS
+AUTHENTICATION_BACKENDS = [
+    "graphql_auth.backends.GraphQLAuthBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
+
+GRAPHQL_JWT = {
+    "JWT_VERIFY_EXPIRATION": True,
+    "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
+    "JWT_ALLOW_ANY_CLASSES": [
+        "graphql_auth.mutations.VerifyAccount",
+        "graphql_auth.mutations.ResendActivationEmail",
+        "graphql_auth.mutations.SendPasswordResetEmail",
+        "graphql_auth.mutations.PasswordReset",
+        "graphql_auth.mutations.ObtainJSONWebToken",
+        "graphql_auth.mutations.VerifyToken",
+        "graphql_auth.mutations.RefreshToken",
+        "graphql_auth.mutations.RevokeToken",
+    ],
+}
+
+# GraphQL Auth
+
+GRAPHQL_AUTH = {
+    "ALLOW_LOGIN_NOT_VERIFIED": DEBUG,  # allow unverified login locally
+    "ALLOW_LOGIN_WITH_SECONDARY_EMAIL": False,
+    "ALLOW_DELETE_ACCOUNT": False,
+    "LOGIN_ALLOWED_FIELDS": ["email"],
+    "REGISTER_MUTATION_FIELDS": ["email"],
+    "UPDATE_MUTATION_FIELDS": ["email", "name", "avatar"],
+    "USER_NODE_EXCLUDE_FIELDS": ["password", "is_superuser", "secondary_email"],
+    "USER_NODE_FILTER_FIELDS": {
+        "email": ["exact"],
+        "is_active": ["exact"],
+        "status__archived": ["exact"],
+        "status__verified": ["exact"],
+    },
+}
+
+# CORS whitelisting
 CORS_ORIGIN_WHITELIST = ["http://localhost:3000"]
 
-# REST API Auth
-REST_AUTH_SERIALIZERS = {
-    "USER_DETAILS_SERIALIZER": "apps.users.serializer.UserSerializer",
-}
-ACCOUNT_ALLOW_REGISTRATION = False
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_AUTHENTICATION_METHOD = "email"
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-
-ACCOUNT_CONFIRM_EMAIL_ON_GET = True
-ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = "/?verification=1"
-ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "/?verification=1"
-
-SITE_ID = 1
+# Email verification
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-
-# REST Swagger/Redoc
-SWAGGER_SETTINGS = {"DEFAULT_AUTO_SCHEMA_CLASS": "utils.swagger.CustomSwaggerAutoSchema"}
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/

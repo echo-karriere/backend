@@ -1,24 +1,12 @@
-from rest_framework import status
-from rest_framework.test import APITestCase
+from django.test import TestCase
 
 from apps.namespace.models import Namespace
 
 
-class NamespaceTests(APITestCase):
+class NamespaceTests(TestCase):
     def setUp(self) -> None:
         Namespace.objects.create(title="About", description="About us")
         Namespace.objects.create(title="Information", description="Info")
-
-    def test_get_all(self):
-        response = self.client.get("/api/namespace/")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(
-            response.data,
-            [
-                {"id": 1, "title": "About", "description": "About us", "namespace": "about"},
-                {"id": 2, "title": "Information", "description": "Info", "namespace": "information"},
-            ],
-        )
 
     def test_str(self):
         n1 = Namespace.objects.all()[0]

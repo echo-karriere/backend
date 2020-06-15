@@ -15,65 +15,13 @@ Including another URLconf
 """
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path
-from drf_yasg import openapi
-from drf_yasg.views import get_schema_view
-from rest_framework import permissions, routers
+from django.urls import path
+from django.views.decorators.csrf import csrf_exempt
+from graphene_django.views import GraphQLView
 
-from apps.event.views import EventViewSet
-from apps.forms.contact.views import ContactViewSet
-from apps.namespace.views import NamespaceViewSet
-from apps.pages.views import PageViewSet
 from config import settings
 
-schema_view = get_schema_view(
-    openapi.Info(
-        title="echo karriere API",
-        default_version="v1",
-        description="""
-# API Documentation
-This is a automatically generated API reference for the backend service for [echokarriere](https://www.echokarriere.no).
-
-## Casing of request data
-Note that the API understands both `snake_case` and `camelCase` for the request data, so both
-
-```json
-{
-  "contact_person": "string",
-  "contact_email": "user@example.com",
-  "message": "string"
-}
-```
-
-and
-
-```
-{
-  "contactPerson": "string",
-  "contactEmail": "user@example.com",
-  "message": "string"
-}
-```
-
-are valid request objects.""",
-        terms_of_service="",
-        contact=openapi.Contact(email="webmaster@echokarriere.no"),
-        license=(openapi.License(name="MIT License")),
-    ),
-    public=True,
-    permission_classes=(permissions.AllowAny,),
-)
-
-router = routers.DefaultRouter()
-router.register("event", EventViewSet, basename="event")
-router.register("page", PageViewSet, basename="page")
-router.register("namespace", NamespaceViewSet, basename="namespace")
-router.register("contact-us", ContactViewSet, basename="contact")
-
 urlpatterns = [
-    path("auth/", include(("dj_rest_auth.urls", "auth"), namespace="auth")),
-    path("api/", include((router.urls, "api"), namespace="v1"), name="api"),
-    path("api/swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
-    path("api/redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
+    path("graphql", csrf_exempt(GraphQLView.as_view(graphiql=True))),
     path("admin/", admin.site.urls, name="admin"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

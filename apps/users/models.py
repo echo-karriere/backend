@@ -1,5 +1,3 @@
-from uuid import uuid4
-
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from django.utils import timezone
@@ -12,8 +10,8 @@ class UserManager(BaseUserManager):
             is_active=True,
             is_staff=is_staff,
             is_superuser=is_superuser,
-            is_admin=is_superuser,
             registered_at=timezone.now(),
+            **extra_fields,
         )
         user.set_password(password)
         user.save(using=self.db)
@@ -29,12 +27,11 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    username = None
     email = models.EmailField(unique=True, max_length=255)
     name = models.CharField(max_length=255)
     avatar = models.ImageField(blank=True)
-    token = models.UUIDField(default=uuid4, editable=False)
 
-    is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
