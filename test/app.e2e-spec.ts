@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { Test, TestingModule } from "@nestjs/testing";
 import { INestApplication } from "@nestjs/common";
 import request from "supertest";
@@ -18,10 +15,11 @@ describe("AppController (e2e)", () => {
     await app.init();
   });
 
+  afterAll(() => {
+    app.close();
+  });
+
   it("/ (GET)", () => {
-    return request(app.getHttpServer())
-      .get("/")
-      .expect(200)
-      .expect("Hello World!");
+    return request(app.getHttpServer()).get("/").expect(200).expect("Hello World!");
   });
 });
