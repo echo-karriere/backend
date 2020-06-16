@@ -66,12 +66,17 @@
   },
   "prettier": "@sondr3/prettier",
   "husky": {
-    "pre-commit": "lint-staged"
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "lint-staged": {
-    "*.ts,*.js": [
+    "*.{ts,tsx,js,jsx}": [
       "prettier --write",
       "eslint --fix"
+    ],
+    "*.{json,css,md,mdx}": [
+      "prettier --write"
     ]
   },
   "jest": {
