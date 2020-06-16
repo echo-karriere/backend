@@ -3,6 +3,7 @@ from graphql_auth import mutations
 from graphql_auth.schema import MeQuery, UserQuery
 
 from apps.event.schema import EventQuery
+from apps.namespace.schema import NamespaceMutation, NamespaceQuery
 
 
 class AuthMutation(graphene.ObjectType):
@@ -18,11 +19,11 @@ class AuthMutation(graphene.ObjectType):
     revoke_token = mutations.RevokeToken.Field()
 
 
-class Query(UserQuery, MeQuery, EventQuery, graphene.ObjectType):
+class Query(UserQuery, MeQuery, EventQuery, NamespaceQuery, graphene.ObjectType):
     pass
 
 
-class Mutation(AuthMutation, graphene.ObjectType):
+class Mutation(AuthMutation, NamespaceMutation, graphene.ObjectType):
     pass
 
 
