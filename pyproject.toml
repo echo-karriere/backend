@@ -17,6 +17,7 @@ psycopg2 = { version = "^2.8", optional = true }
 graphene-django = "^2.10.1"
 django-graphql-jwt = "0.3.0"
 django-graphql-auth = "^0.3.10"
+graphene-django-extras = "^0.4.9"
 
 [tool.poetry.dev-dependencies]
 black = "^19.10b0"
@@ -58,7 +59,7 @@ skip_glob = "*/migrations/*"
 include_trailing_comma = true
 known_django = "django"
 sections=["FUTURE","STDLIB","DJANGO","THIRDPARTY","FIRSTPARTY","LOCALFOLDER"]
-known_third_party = ["ckeditor", "django", "environ", "graphene", "graphene_django", "graphql_auth"]
+known_third_party = ["ckeditor", "django", "environ", "graphene", "graphene_django", "graphene_django_extras", "graphql_auth"]
 
 [tool.coverage.run]
 source = [ "." ]
