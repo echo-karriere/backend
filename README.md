@@ -1,13 +1,51 @@
 # echo karriere backend ![Pipeline](https://github.com/echo-karriere/backend/workflows/Pipeline/badge.svg) [![codecov](https://codecov.io/gh/echo-karriere/backend/branch/master/graph/badge.svg?token=a1G1xHaXPi)](https://codecov.io/gh/echo-karriere/backend)
 
+## Description
+
+[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+
 ## Installation
 
-This repo requires that you have the `poetry` Python tool installed, once you have that you can simply run `poetry install` and you're good to go.
+```bash
+$ npm install
+```
 
-## Developing
+## Running the app
 
-To start the development environment run `docker-compose build` and `docker-compose up -d` to start the environment.
+```bash
+# development
+$ npm run start
 
-## Adding dependencies
+# watch mode
+$ npm run start:dev
 
-Once you have added dependencies, it's recommended that you update the `requirements.txt` file as it is used by Docker to install dependencies for production. Run the command `poetry export -f requirements.txt -o requirements.txt -E production` to export packages.
+# production mode
+$ npm run start:prod
+```
+
+## Test
+
+```bash
+# unit tests
+$ npm run test
+
+# e2e tests
+$ npm run test:e2e
+
+# test coverage
+$ npm run test:cov
+```
+
+## Support
+
+Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+
+## Stay in touch
+
+- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
+- Website - [https://nestjs.com](https://nestjs.com/)
+- Twitter - [@nestframework](https://twitter.com/nestframework)
+
+## License
+
+Nest is [MIT licensed](LICENSE).
