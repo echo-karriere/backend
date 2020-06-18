@@ -1,18 +1,19 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { UserResolver } from "./user.resolver";
+import { PrismaService } from "../prisma/prisma.service";
 
 describe("UserResolver", () => {
-  let service: UserResolver;
+  let resolver: UserResolver;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UserResolver],
+      providers: [UserResolver, PrismaService],
     }).compile();
 
-    service = module.get<UserResolver>(UserResolver);
+    resolver = module.get<UserResolver>(UserResolver);
   });
 
   it("should be defined", () => {
-    expect(service).toBeDefined();
+    expect(resolver).toBeDefined();
   });
 });
