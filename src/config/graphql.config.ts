@@ -8,6 +8,6 @@ export default registerAs(
     debug: !((process.env.PRODUCTION ?? "true") === "true"),
     playground: !((process.env.PRODUCTION ?? "true") === "true"),
     introspection: !((process.env.PRODUCTION ?? "true") === "true"),
-    autoSchemaFile: join(process.cwd(), "src/schema.gql"),
+    autoSchemaFile: join(process.cwd(), "src/schema.graphql"),
   }),
 );
