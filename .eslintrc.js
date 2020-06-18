@@ -7,4 +7,12 @@ module.exports = {
   env: {
     jest: true,
   },
+  overrides: [
+    {
+      files: ["./src/**/*.model.ts", "./src/**/*.resolver.ts"],
+      rules: {
+        "@typescript-eslint/no-unused-vars": "off",
+      },
+    },
+  ],
 };

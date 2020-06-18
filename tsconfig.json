@@ -1,6 +1,7 @@
 {
   "extends": "@sondr3/tsconfig",
   "compilerOptions": {
+    "noUnusedParameters": false,
     "module": "commonjs",
     "declaration": true,
     "emitDecoratorMetadata": true,
