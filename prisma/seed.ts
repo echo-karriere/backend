@@ -8,6 +8,9 @@ async function main(): Promise<void> {
     data: {
       email: "test@example.org",
       name: "Test Testerson",
+      staff: true,
+      admin: true,
+      active: true,
     },
   });
 
@@ -15,6 +18,9 @@ async function main(): Promise<void> {
     data: {
       email: "ola@nordmann.org",
       name: "Ola Nordmann",
+      staff: true,
+      admin: false,
+      active: true,
     },
   });
 
@@ -22,7 +28,7 @@ async function main(): Promise<void> {
 }
 
 main()
-  .catch(e => console.error(e))
+  .catch((e) => console.error(e))
   .finally(async () => {
     await prisma.disconnect();
   });

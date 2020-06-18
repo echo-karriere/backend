@@ -10,4 +10,16 @@ export class User {
 
   @Field()
   name!: string;
+
+  @Field((type) => String, { nullable: true })
+  avatar?: string | null;
+
+  @Field()
+  staff!: boolean;
+
+  @Field()
+  admin!: boolean;
+
+  @Field()
+  active!: boolean;
 }

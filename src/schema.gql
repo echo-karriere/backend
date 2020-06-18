@@ -6,6 +6,10 @@ type User {
   id: Int!
   email: String!
   name: String!
+  avatar: String
+  staff: Boolean!
+  admin: Boolean!
+  active: Boolean!
 }
 
 type Query {
