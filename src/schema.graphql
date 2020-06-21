@@ -5,6 +5,7 @@
 type User {
   id: Int!
   email: String!
+  password: String!
   name: String!
   avatar: String
   staff: Boolean!
@@ -13,6 +14,10 @@ type User {
 }
 
 type Query {
-  author(id: Int!): User!
-  authors: [User!]!
+  user(id: Int!): User!
+  users: [User!]!
+}
+
+type Mutation {
+  login(email: String!, password: String!): User!
 }
