@@ -5,10 +5,12 @@ import { PrismaService } from "../prisma/prisma.service";
 import { User } from "./models/user.model";
 import { ChangePasswordDTO, UserLoginDTO } from "./dto";
 import UpdateUserDTO from "./dto/update-user.dto";
+import { AuthService } from "../auth/auth.service";
+import { JwtToken } from "../auth/models/jwt.model";
 
 @Resolver((of: void) => User)
 export class UserResolver {
-  constructor(private prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService, private readonly authService: AuthService) {}
 
   @Query((returns) => User)
   async user(@Args("id", { type: () => Int }) id: number): Promise<User | null> {
@@ -20,23 +22,28 @@ export class UserResolver {
     return this.prismaService.user.findMany();
   }
 
-  @Mutation((returns) => User)
-  async login(@Args() args: UserLoginDTO): Promise<User | UnauthorizedException> {
+  @Mutation((returns) => JwtToken)
+  async login(
+    @Args() args: UserLoginDTO,
+  ): Promise<{ accessToken: string; refreshToken: string } | UnauthorizedException> {
     const user = await this.prismaService.user.findOne({
       where: { email: args.email },
     });
 
     if (!user) throw new UnauthorizedException(`Unable to login`);
     try {
-      if (await argon2.verify(user.password, args.password)) return user;
-      else return new UnauthorizedException(`Unable to login`);
+      if (await argon2.verify(user.password, args.password)) {
+        return this.authService.generateToken({ id: user.id, email: user.email });
+      } else return new UnauthorizedException(`Unable to login`);
     } catch (err) {
       throw new InternalServerErrorException(`Internal server error occurred`);
     }
   }
 
   @Mutation((returns) => User)
-  async changePassword(@Args() args: ChangePasswordDTO): Promise<User | Error> {
+  async changePassword(
+    @Args() args: ChangePasswordDTO,
+  ): Promise<{ accessToken: string; refreshToken: string } | Error> {
     let user = await this.prismaService.user.findOne({ where: { id: args.id } });
     if (!user) throw new UnauthorizedException(`User not found`);
 
@@ -47,7 +54,7 @@ export class UserResolver {
           data: { password: await argon2.hash(args.newPassword, { version: argon2id }) },
         });
 
-        return user;
+        return this.authService.generateToken({ id: user.id, email: user.email });
       } else return new Error(`Password mismatch`);
     } catch (err) {
       throw new InternalServerErrorException(`Internal server error occurred`);

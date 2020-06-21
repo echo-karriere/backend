@@ -9,7 +9,7 @@ async function bootstrap(): Promise<void> {
   const port = configService.get<number>("PORT") ?? 3000;
   await app.listen(port, "0.0.0.0");
 
-  console.log(`env: ${process.env.NODE_ENV ?? "wat"}`);
+  console.log(`env: ${process.env.NODE_ENV ?? ""}`);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
 
