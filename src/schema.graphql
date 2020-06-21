@@ -20,4 +20,6 @@ type Query {
 
 type Mutation {
   login(email: String!, password: String!): User!
+  changePassword(id: Int!, password: String!, newPassword: String!): User!
+  change(id: Int!, email: String, name: String, avatar: String, staff: Boolean, admin: Boolean, active: Boolean): User!
 }
