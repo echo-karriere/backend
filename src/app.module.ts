@@ -6,12 +6,21 @@ import { AppService } from "./app.service";
 import { PrismaService } from "./prisma/prisma.service";
 import configurations from "./config";
 import { UserResolver } from "./user/user.resolver";
+import Joi from "@hapi/joi";
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: [".env.development", ".env.production"],
       load: configurations,
+      validationSchema: Joi.object({
+        NODE_ENV: Joi.string().valid("development", "production", "test").default("development"),
+        PORT: Joi.number().default(3000),
+      }),
+      validationOptions: {
+        allowUnknown: true,
+        abortEarly: true,
+      },
     }),
     GraphQLModule.forRootAsync({
       imports: [ConfigModule],

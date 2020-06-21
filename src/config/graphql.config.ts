@@ -5,9 +5,9 @@ import { join } from "path";
 export default registerAs(
   "graphql",
   (): GqlModuleOptions => ({
-    debug: !((process.env.PRODUCTION ?? "true") === "true"),
-    playground: !((process.env.PRODUCTION ?? "true") === "true"),
-    introspection: !((process.env.PRODUCTION ?? "true") === "true"),
+    debug: process.env.NODE_ENV === "development",
+    playground: process.env.NODE_ENV === "development",
+    introspection: process.env.NODE_ENV === "development",
     autoSchemaFile: join(process.cwd(), "src/schema.graphql"),
   }),
 );
