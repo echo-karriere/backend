@@ -13,13 +13,21 @@ type User {
   active: Boolean!
 }
 
+type JwtToken {
+  """JWT access token"""
+  accessToken: String!
+
+  """JWT refresh token"""
+  refreshToken: String!
+}
+
 type Query {
   user(id: Int!): User!
   users: [User!]!
 }
 
 type Mutation {
-  login(email: String!, password: String!): User!
+  login(email: String!, password: String!): JwtToken!
   changePassword(id: Int!, password: String!, newPassword: String!): User!
   change(id: Int!, email: String, name: String, avatar: String, staff: Boolean, admin: Boolean, active: Boolean): User!
 }
