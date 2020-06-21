@@ -1,11 +1,12 @@
-import { Field, ArgsType } from "@nestjs/graphql";
+import { ArgsType, Field } from "@nestjs/graphql";
 
 @ArgsType()
-class UserLogin {
+class UserLoginDTO {
   @Field()
   readonly email!: string;
+
   @Field()
   readonly password!: string;
 }
 
-export default UserLogin;
+export default UserLoginDTO;
