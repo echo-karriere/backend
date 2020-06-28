@@ -1,67 +1,24 @@
 import { Args, Int, Mutation, Query, Resolver } from "@nestjs/graphql";
-import { InternalServerErrorException, UnauthorizedException } from "@nestjs/common";
-import argon2, { argon2id } from "argon2";
+import { UnauthorizedException } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { User } from "./models/user.model";
-import { ChangePasswordDTO, UserLoginDTO } from "./dto";
 import UpdateUserDTO from "./dto/update-user.dto";
-import { AuthService } from "../auth/auth.service";
-import { JwtToken } from "../auth/models/jwt.model";
 
-@Resolver((of: void) => User)
+@Resolver(() => User)
 export class UserResolver {
-  constructor(private readonly prismaService: PrismaService, private readonly authService: AuthService) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
-  @Query((returns) => User)
+  @Query(() => User)
   async user(@Args("id", { type: () => Int }) id: number): Promise<User | null> {
     return this.prismaService.user.findOne({ where: { id } });
   }
 
-  @Query((returns) => [User])
+  @Query(() => [User])
   async users(): Promise<User[]> {
     return this.prismaService.user.findMany();
   }
 
-  @Mutation((returns) => JwtToken)
-  async login(
-    @Args() args: UserLoginDTO,
-  ): Promise<{ accessToken: string; refreshToken: string } | UnauthorizedException> {
-    const user = await this.prismaService.user.findOne({
-      where: { email: args.email },
-    });
-
-    if (!user) throw new UnauthorizedException(`Unable to login`);
-    try {
-      if (await argon2.verify(user.password, args.password)) {
-        return this.authService.generateToken({ id: user.id, email: user.email });
-      } else return new UnauthorizedException(`Unable to login`);
-    } catch (err) {
-      throw new InternalServerErrorException(`Internal server error occurred`);
-    }
-  }
-
-  @Mutation((returns) => User)
-  async changePassword(
-    @Args() args: ChangePasswordDTO,
-  ): Promise<{ accessToken: string; refreshToken: string } | Error> {
-    let user = await this.prismaService.user.findOne({ where: { id: args.id } });
-    if (!user) throw new UnauthorizedException(`User not found`);
-
-    try {
-      if (await argon2.verify(user.password, args.password)) {
-        user = await this.prismaService.user.update({
-          where: { id: args.id },
-          data: { password: await argon2.hash(args.newPassword, { version: argon2id }) },
-        });
-
-        return this.authService.generateToken({ id: user.id, email: user.email });
-      } else return new Error(`Password mismatch`);
-    } catch (err) {
-      throw new InternalServerErrorException(`Internal server error occurred`);
-    }
-  }
-
-  @Mutation((returns) => User)
+  @Mutation(() => User)
   async change(@Args() args: UpdateUserDTO): Promise<User> {
     let user = await this.prismaService.user.findOne({ where: { id: args.id } });
     if (!user) throw new UnauthorizedException(`User not found`);
