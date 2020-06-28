@@ -10,7 +10,9 @@ import { PrismaModule } from "../prisma/prisma.module";
 @Module({
   imports: [
     PrismaModule,
-    PassportModule,
+    PassportModule.register({
+      defaultStrategy: "jwt",
+    }),
     ConfigModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],

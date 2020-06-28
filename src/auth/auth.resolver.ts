@@ -1,19 +1,20 @@
-import { UnauthorizedException, InternalServerErrorException } from "@nestjs/common";
+import { UnauthorizedException, InternalServerErrorException, UseGuards } from "@nestjs/common";
 import { passwordDTO, loginDTO } from "./dto";
 import argon2, { argon2id } from "argon2";
 import { User } from "../user/models/user.model";
 import { Mutation, Args, Resolver } from "@nestjs/graphql";
 import { AuthService } from "./auth.service";
 import { PrismaService } from "../prisma/prisma.service";
-import { GqlRes } from "./auth.decorators";
-import { Response } from "express";
+import { JwtToken } from "./models/jwt.model";
+import { GqlAuthGuard } from "../decorators/gql-auth-guard";
+import { CurrentUser } from "../decorators/current-user";
 
 @Resolver(() => User)
 export class AuthResolver {
   constructor(private readonly authService: AuthService, private readonly prismaService: PrismaService) {}
 
-  @Mutation((returns) => User)
-  async login(@Args() args: loginDTO, @GqlRes() res: Response): Promise<User | UnauthorizedException> {
+  @Mutation(() => JwtToken)
+  async login(@Args() args: loginDTO): Promise<JwtToken | UnauthorizedException> {
     const user = await this.prismaService.user.findOne({
       where: { email: args.email },
     });
@@ -22,11 +23,7 @@ export class AuthResolver {
 
     try {
       if (await argon2.verify(user.password, args.password)) {
-        const { accessToken, refreshToken } = await this.authService.generateToken({ id: user.id, email: user.email });
-        res.cookie("access_token", accessToken, { httpOnly: true });
-        res.cookie("refresh_token", refreshToken, { httpOnly: true });
-
-        return user;
+        return await this.authService.generateToken({ id: user.id, email: user.email });
       } else {
         return new UnauthorizedException(`Unable to login`);
       }
@@ -36,7 +33,8 @@ export class AuthResolver {
     }
   }
 
-  @Mutation((returns) => User)
+  @Mutation(() => User)
+  @UseGuards(GqlAuthGuard)
   async changePassword(@Args() args: passwordDTO): Promise<{ accessToken: string; refreshToken: string } | Error> {
     let user = await this.prismaService.user.findOne({ where: { id: args.id } });
     if (!user) throw new UnauthorizedException(`User not found`);
@@ -53,5 +51,11 @@ export class AuthResolver {
     } catch (err) {
       throw new InternalServerErrorException(`Internal server error occurred`);
     }
+  }
+
+  @Mutation(() => JwtToken)
+  @UseGuards(GqlAuthGuard)
+  async refreshToken(@Args("token") token: string, @CurrentUser() user: User): Promise<JwtToken> {
+    return this.authService.generateToken({ id: user.id, email: user.email });
   }
 }
