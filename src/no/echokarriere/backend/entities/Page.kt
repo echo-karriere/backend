@@ -1,7 +1,7 @@
 package no.echokarriere.backend.entities
 
-import java.time.LocalDateTime
 import org.jdbi.v3.core.mapper.reflect.ColumnName
+import java.time.LocalDateTime
 
 enum class Status {
     PUBLISHED, DRAFT, DELETED
