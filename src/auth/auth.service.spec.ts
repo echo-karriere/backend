@@ -1,9 +1,8 @@
-import { Test, TestingModule } from "@nestjs/testing";
-import { AuthService } from "./auth.service";
-import { ConfigModule, ConfigService } from "@nestjs/config";
-import { JwtStrategy } from "./jwt.strategy";
+import { ConfigModule } from "@nestjs/config";
 import { PassportModule } from "@nestjs/passport";
-import { JwtModule } from "@nestjs/jwt";
+import { Test, TestingModule } from "@nestjs/testing";
+import { PrismaModule } from "../prisma/prisma.module";
+import { AuthService } from "./auth.service";
 
 describe("AuthService", () => {
   let service: AuthService;
@@ -11,21 +10,8 @@ describe("AuthService", () => {
   beforeEach(async () => {
     process.env.JWT_TOKEN = "iamtesting";
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
-        PassportModule,
-        ConfigModule,
-        JwtModule.registerAsync({
-          imports: [ConfigModule],
-          inject: [ConfigService],
-          useFactory: (configService: ConfigService) => {
-            return {
-              secret: configService.get<string>("JWT_TOKEN"),
-              signOptions: { expiresIn: configService.get<string>("JWT_EXPIRY") },
-            };
-          },
-        }),
-      ],
-      providers: [AuthService, JwtStrategy],
+      imports: [PassportModule, ConfigModule, PrismaModule],
+      providers: [AuthService],
     }).compile();
 
     service = module.get<AuthService>(AuthService);

@@ -1,21 +1,18 @@
 import { Injectable } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
-import { ConfigService } from "@nestjs/config";
+import argon2, { argon2id } from "argon2";
+import { PrismaService } from "../prisma/prisma.service";
+import { User } from "../user/models/user.model";
 
 @Injectable()
 export class AuthService {
-  constructor(private jwtService: JwtService, private readonly configService: ConfigService) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
-  validateToken(token: string): boolean {
-    return token !== null;
-  }
+  async validateUser(email: string, password: string): Promise<User | null> {
+    const user = await this.prismaService.user.findOne({ where: { email } });
+    if (user && (await argon2.verify(user.password, password, { type: argon2id }))) {
+      return user;
+    }
 
-  async generateToken(payload: Record<string, unknown>): Promise<{ accessToken: string; refreshToken: string }> {
-    const accessToken = await this.jwtService.signAsync(payload);
-    const refreshToken = await this.jwtService.signAsync(payload, {
-      expiresIn: this.configService.get<string>("JWT_EXPIRY"),
-    });
-
-    return { accessToken, refreshToken };
+    return null;
   }
 }
