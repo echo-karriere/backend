@@ -34,10 +34,8 @@ import io.ktor.sessions.cookie
 import kotlinx.serialization.Serializable
 import no.echokarriere.backend.database.Database
 import no.echokarriere.backend.database.IDatabase
-import no.echokarriere.backend.errors.ErrorResponse
-import no.echokarriere.backend.errors.InternalServerErrorException
 import no.echokarriere.backend.errors.InvalidCredentialsException
-import no.echokarriere.backend.errors.NotFoundException
+import no.echokarriere.backend.errors.configureExceptions
 import no.echokarriere.backend.routing.apiRouter
 import java.util.Collections
 
@@ -73,36 +71,7 @@ fun Application.module(testing: Boolean = false, database: IDatabase = Database(
     }
 
     install(StatusPages) {
-        exception<InvalidCredentialsException> { cause ->
-            call.respond(
-                HttpStatusCode.Unauthorized,
-                ErrorResponse(
-                    HttpStatusCode.Unauthorized.value,
-                    "unauthorized",
-                    cause.message
-                )
-            )
-        }
-        exception<NotFoundException> { cause ->
-            call.respond(
-                HttpStatusCode.NotFound,
-                ErrorResponse(
-                    HttpStatusCode.NotFound.value,
-                    "not_found",
-                    cause.message ?: "Resource not found"
-                )
-            )
-        }
-        exception<InternalServerErrorException> { cause ->
-            call.respond(
-                HttpStatusCode.InternalServerError,
-                ErrorResponse(
-                    HttpStatusCode.InternalServerError.value,
-                    "internal_error",
-                    cause.message
-                )
-            )
-        }
+        configureExceptions()
     }
 
     install(CORS) {
