@@ -12,12 +12,6 @@ export class AuthResolver {
 
   @Mutation(() => Boolean)
   async login(@Args() args: loginDTO): Promise<boolean | UnauthorizedException> {
-    const user = await this.prismaService.user.findOne({
-      where: { email: args.email },
-    });
-
-    if (!user) throw new UnauthorizedException(`Unable to login`);
-
     try {
       if (await this.authService.validateUser(args.email, args.password)) {
         return true;
