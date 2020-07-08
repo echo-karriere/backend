@@ -1,13 +1,13 @@
+import Joi from "@hapi/joi";
 import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import configurations from "./config";
 import { AuthModule } from "./auth/auth.module";
-import { UserModule } from "./user/user.module";
+import configurations from "./config";
 import { PrismaModule } from "./prisma/prisma.module";
-import Joi from "@hapi/joi";
+import { UserModule } from "./user/user.module";
 
 @Module({
   imports: [
@@ -17,8 +17,6 @@ import Joi from "@hapi/joi";
       validationSchema: Joi.object({
         NODE_ENV: Joi.string().valid("development", "production", "test").default("development"),
         PORT: Joi.number().default(3000),
-        JWT_TOKEN: Joi.string().required(),
-        JWT_EXPIRY: Joi.string().required(),
       }),
       validationOptions: {
         allowUnknown: true,
