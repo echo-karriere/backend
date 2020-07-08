@@ -17,6 +17,9 @@ import { UserModule } from "./user/user.module";
       validationSchema: Joi.object({
         NODE_ENV: Joi.string().valid("development", "production", "test").default("development"),
         PORT: Joi.number().default(3000),
+        SESSION_NAME: Joi.string().default("session"),
+        SESSION_SECRET: Joi.string().default("secret"),
+        SESSION_AGE: Joi.number().default(3600),
       }),
       validationOptions: {
         allowUnknown: true,
