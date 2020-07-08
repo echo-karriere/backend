@@ -1,8 +1,7 @@
-import { Test, TestingModule } from "@nestjs/testing";
 import { INestApplication } from "@nestjs/common";
+import { Test, TestingModule } from "@nestjs/testing";
 import request from "supertest";
 import { AppModule } from "../src/app.module";
-import { FastifyAdapter, NestFastifyApplication } from "@nestjs/platform-fastify";
 
 describe("AppController (e2e)", () => {
   let app: INestApplication;
@@ -12,11 +11,8 @@ describe("AppController (e2e)", () => {
       imports: [AppModule],
     }).compile();
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
-    app = moduleFixture.createNestApplication<NestFastifyApplication>(new FastifyAdapter());
+    app = moduleFixture.createNestApplication();
     await app.init();
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-    app.getHttpAdapter().getInstance().ready();
   });
 
   afterAll(async () => {
