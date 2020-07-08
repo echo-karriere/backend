@@ -7,11 +7,11 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
-import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
 import kotlinx.serialization.json.Json
 import no.echokarriere.backend.entities.Namespace
 import org.junit.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
 
 class NamespaceTest {
     private val db = TestDatabase()

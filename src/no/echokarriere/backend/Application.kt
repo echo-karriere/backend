@@ -2,20 +2,22 @@
 
 package no.echokarriere.backend
 
-import com.auth0.jwt.JWT
-import com.auth0.jwt.JWTVerifier
-import com.auth0.jwt.algorithms.Algorithm
 import com.typesafe.config.ConfigFactory
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.auth.Authentication
-import io.ktor.auth.UserIdPrincipal
-import io.ktor.auth.jwt.jwt
+import io.ktor.auth.Principal
+import io.ktor.auth.session
 import io.ktor.config.HoconApplicationConfig
 import io.ktor.features.CORS
+import io.ktor.features.Compression
 import io.ktor.features.ContentNegotiation
+import io.ktor.features.DefaultHeaders
 import io.ktor.features.StatusPages
+import io.ktor.features.deflate
+import io.ktor.features.gzip
+import io.ktor.features.minimumSize
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
@@ -26,7 +28,9 @@ import io.ktor.routing.post
 import io.ktor.routing.routing
 import io.ktor.serialization.json
 import io.ktor.server.netty.EngineMain
-import java.util.Collections
+import io.ktor.sessions.SessionStorageMemory
+import io.ktor.sessions.Sessions
+import io.ktor.sessions.cookie
 import kotlinx.serialization.Serializable
 import no.echokarriere.backend.database.Database
 import no.echokarriere.backend.database.IDatabase
@@ -35,14 +39,9 @@ import no.echokarriere.backend.errors.InternalServerErrorException
 import no.echokarriere.backend.errors.InvalidCredentialsException
 import no.echokarriere.backend.errors.NotFoundException
 import no.echokarriere.backend.routing.apiRouter
+import java.util.Collections
 
 fun main(args: Array<String>): Unit = EngineMain.main(args)
-
-open class SimpleJWT(private val secret: String) {
-    private val algorithm = Algorithm.HMAC256(secret)
-    val verifier: JWTVerifier = JWT.require(algorithm).build()
-    fun sign(name: String): String = JWT.create().withClaim("name", name).sign(algorithm)
-}
 
 @Serializable
 class User(val name: String, val password: String)
@@ -53,12 +52,25 @@ val users: MutableMap<String, User> =
 @Serializable
 class LoginRegister(val user: String, val password: String)
 
+@Serializable
+data class AuthSession(val token: String) : Principal
+
 val config = HoconApplicationConfig(ConfigFactory.load())
 
 @Suppress("unused") // Referenced in application.conf
 @JvmOverloads
 fun Application.module(testing: Boolean = false, database: IDatabase = Database(config)) {
-    val simpleJWT = SimpleJWT("very-secret-ssh")
+    install(DefaultHeaders)
+
+    install(Compression) {
+        gzip {
+            priority = 1.0
+        }
+        deflate {
+            priority = 10.0
+            minimumSize(1024)
+        }
+    }
 
     install(StatusPages) {
         exception<InvalidCredentialsException> { cause ->
@@ -105,11 +117,18 @@ fun Application.module(testing: Boolean = false, database: IDatabase = Database(
         anyHost() // @TODO: Don't do this in production if possible. Try to limit it.
     }
 
+    install(Sessions) {
+        cookie<AuthSession>("SESSION", storage = SessionStorageMemory())
+    }
+
     install(Authentication) {
-        jwt {
-            verifier(simpleJWT.verifier)
-            validate {
-                UserIdPrincipal(it.payload.getClaim("name").asString())
+        session<AuthSession> {
+            challenge {
+                call.respond(HttpStatusCode.Unauthorized)
+            }
+            validate { session ->
+                // TODO: do the actual validation
+                return@validate AuthSession("token")
             }
         }
     }
@@ -125,13 +144,13 @@ fun Application.module(testing: Boolean = false, database: IDatabase = Database(
 
         apiRouter(database)
 
-        post("/login-register") {
+        post("/login/") {
             val post = call.receive<LoginRegister>()
             val user = users.getOrPut(post.user) { User(post.user, post.password) }
             if (user.password != post.password) throw InvalidCredentialsException(
                 "Invalid credentials"
             )
-            call.respond(mapOf("token" to simpleJWT.sign(user.name)))
+            call.respond(mapOf("token" to true))
         }
     }
 }
