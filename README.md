@@ -1,51 +1,5 @@
-# echo karriere backend ![Pipeline](https://github.com/echo-karriere/backend/workflows/Pipeline/badge.svg) [![codecov](https://codecov.io/gh/echo-karriere/backend/branch/master/graph/badge.svg?token=a1G1xHaXPi)](https://codecov.io/gh/echo-karriere/backend)
+# echo karriere backend
 
-## Description
+## Developing
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ npm install
-```
-
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+Run `pip install -r requirements.txt` to install locally. Then to start the development environment run `docker-compose build` and `docker-compose up -d` to start the environment.
