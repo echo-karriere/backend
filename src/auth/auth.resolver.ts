@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { InternalServerErrorException, UnauthorizedException } from "@nestjs/common";
-import { Args, Mutation, Resolver } from "@nestjs/graphql";
+import { Args, Context, Mutation, Resolver } from "@nestjs/graphql";
 import argon2, { argon2id } from "argon2";
+import { Request } from "express";
 import { PrismaService } from "../prisma/prisma.service";
 import { User } from "../user/models/user.model";
 import { AuthService } from "./auth.service";
@@ -11,17 +14,8 @@ export class AuthResolver {
   constructor(private readonly authService: AuthService, private readonly prismaService: PrismaService) {}
 
   @Mutation(() => Boolean)
-  async login(@Args() args: loginDTO): Promise<boolean | UnauthorizedException> {
-    try {
-      if (await this.authService.validateUser(args.email, args.password)) {
-        return true;
-      } else {
-        return new UnauthorizedException(`Unable to login`);
-      }
-    } catch (err) {
-      console.error(err);
-      throw new InternalServerErrorException(`Internal server error occurred`);
-    }
+  async login(@Args() args: loginDTO, @Context() ctx: { req: Request }): Promise<boolean | Error> {
+    return this.authService.login(args, ctx.req);
   }
 
   @Mutation(() => User)
