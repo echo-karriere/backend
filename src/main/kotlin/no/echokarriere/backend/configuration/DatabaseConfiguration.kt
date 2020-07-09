@@ -1,4 +1,4 @@
-package no.echokarriere.backend
+package no.echokarriere.backend.configuration
 
 import com.zaxxer.hikari.HikariDataSource
 import no.echokarriere.backend.namespace.NamespaceRepository
