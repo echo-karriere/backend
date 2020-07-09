@@ -23,8 +23,15 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
 
-      - name: Build
-        run: gradle build
+      - name: Check formatting
+        run: gradle ktlintCheck
 
       - name: Test
         run: gradle test
+
+      - name: Check
+        run: gradle check
+
+      - name: Build
+        run: gradle build
+
