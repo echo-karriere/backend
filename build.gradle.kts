@@ -1,53 +1,48 @@
-val ktor_version: String by project
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 val kotlin_version: String by project
 val logback_version: String by project
 val jdbi_version: String by project
 
 plugins {
-    application
-    kotlin("jvm") version "1.3.70"
-    kotlin("plugin.serialization") version "1.3.70"
+	id("org.springframework.boot") version "2.3.1.RELEASE"
+	id("io.spring.dependency-management") version "1.0.9.RELEASE"
+	kotlin("jvm") version "1.3.72"
+	kotlin("plugin.spring") version "1.3.72"
 }
 
 group = "no.echokarriere"
-version = "0.0.1"
-
-application {
-    mainClassName = "io.ktor.server.netty.EngineMain"
-}
+version = "0.0.1-SNAPSHOT"
+java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
-    mavenLocal()
-    jcenter()
-    maven { url = uri("https://kotlin.bintray.com/ktor") }
+	mavenCentral()
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0")
+	implementation("org.springframework.boot:spring-boot-starter")
+	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version")
 
-    implementation("io.ktor:ktor-server-netty:$ktor_version")
-    implementation("ch.qos.logback:logback-classic:$logback_version")
-    implementation("io.ktor:ktor-server-core:$ktor_version")
-    implementation("io.ktor:ktor-auth:$ktor_version")
-    implementation("io.ktor:ktor-serialization:$ktor_version")
+	implementation("org.jdbi:jdbi3-bom:$jdbi_version")
+	implementation("org.jdbi:jdbi3-sqlobject:$jdbi_version")
+	implementation("org.jdbi:jdbi3-kotlin:$jdbi_version")
+	implementation("org.jdbi:jdbi3-kotlin-sqlobject:$jdbi_version")
+	implementation("org.jdbi:jdbi3-postgres:$jdbi_version")
+	implementation("org.postgresql:postgresql:42.2.12.jre7")
 
-    implementation("org.jdbi:jdbi3-bom:$jdbi_version")
-    implementation("org.jdbi:jdbi3-sqlobject:$jdbi_version")
-    implementation("org.jdbi:jdbi3-kotlin:$jdbi_version")
-    implementation("org.jdbi:jdbi3-kotlin-sqlobject:$jdbi_version")
-    implementation("org.jdbi:jdbi3-postgres:$jdbi_version")
-    implementation("org.postgresql:postgresql:42.2.12.jre7")
-
-    testImplementation("io.ktor:ktor-server-tests:$ktor_version")
-    testImplementation("org.jdbi:jdbi3-testing:$jdbi_version")
-    implementation("com.opentable.components:otj-pg-embedded:0.13.3")
+	testImplementation("org.springframework.boot:spring-boot-starter-test") {
+		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
+	}
 }
 
-kotlin {
-    sourceSets["main"].kotlin.srcDirs("src")
-    sourceSets["test"].kotlin.srcDirs("test")
+tasks.withType<Test> {
+	useJUnitPlatform()
 }
 
-sourceSets["main"].resources.srcDirs("resources")
-sourceSets["test"].resources.srcDirs("testresources")
+tasks.withType<KotlinCompile> {
+	kotlinOptions {
+		freeCompilerArgs = listOf("-Xjsr305=strict")
+		jvmTarget = "11"
+	}
+}
