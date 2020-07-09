@@ -11,11 +11,11 @@ import org.springframework.stereotype.Repository
 @Repository
 interface NamespaceRepository {
     @SqlQuery("SELECT * FROM namespace")
-    fun selectAll(): List<Namespace>
+    fun selectAll(): List<NamespaceEntity>
 
     @SqlQuery("SELECT * FROM namespace WHERE id = :id")
     @SingleValue
-    fun selectOne(id: Int): Namespace?
+    fun selectOne(id: Int): NamespaceEntity?
 
     @SqlUpdate(
         """
@@ -24,8 +24,8 @@ interface NamespaceRepository {
         """
     )
     @GetGeneratedKeys
-    @RegisterKotlinMapper(Namespace::class)
-    fun insert(@BindBean namespace: Namespace): Namespace
+    @RegisterKotlinMapper(NamespaceEntity::class)
+    fun insert(@BindBean namespace: NamespaceEntity): NamespaceEntity
 
     @SqlUpdate(
         """
@@ -36,8 +36,8 @@ interface NamespaceRepository {
     """
     )
     @GetGeneratedKeys
-    @RegisterKotlinMapper(Namespace::class)
-    fun update(id: Int, @BindBean namespace: Namespace): Namespace?
+    @RegisterKotlinMapper(NamespaceEntity::class)
+    fun update(id: Int, @BindBean namespace: NamespaceEntity): NamespaceEntity?
 
     @SqlUpdate("DELETE FROM namespace WHERE ID = :id")
     fun delete(id: Int): Int

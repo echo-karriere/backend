@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 class NamespaceQueryResolver(
     private val namespaceRepository: NamespaceRepository
 ) : Query {
-    fun namespaces(): List<Namespace> = namespaceRepository.selectAll()
+    fun namespaces(): List<NamespaceEntity> = namespaceRepository.selectAll()
 }
 
 @Component
@@ -16,5 +16,5 @@ class NamespaceMutationResolver(
     private val namespaceRepository: NamespaceRepository
 ) : Mutation {
     fun createNamespace(title: String) =
-        namespaceRepository.insert(Namespace(title = title, description = "Test", namespace = title.toLowerCase()))
+        namespaceRepository.insert(NamespaceEntity(title = title, description = "Test", namespace = title.toLowerCase()))
 }
