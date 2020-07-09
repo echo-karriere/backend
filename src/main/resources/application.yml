@@ -3,7 +3,7 @@ graphql:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/echokarriere
+    jdbc-url: jdbc:postgresql://localhost:5432/echokarriere
     username: karriere
     password: password
     driver-class-name: org.postgresql.Driver

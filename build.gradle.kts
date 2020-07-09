@@ -27,12 +27,20 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version")
 
+    implementation("org.jdbi:jdbi3-bom:$jdbi_version")
+    implementation("org.jdbi:jdbi3-spring4:$jdbi_version")
+    implementation("org.jdbi:jdbi3-sqlobject:$jdbi_version")
+    implementation("org.jdbi:jdbi3-kotlin:$jdbi_version")
+    implementation("org.jdbi:jdbi3-kotlin-sqlobject:$jdbi_version")
+    implementation("org.jdbi:jdbi3-postgres:$jdbi_version")
+
     implementation("org.flywaydb:flyway-core")
     implementation("com.zaxxer:HikariCP:3.4.5")
     implementation("org.postgresql:postgresql:42.2.12")
 
     implementation("com.expediagroup:graphql-kotlin-spring-server:3.3.1")
 
+    testImplementation("org.jdbi:jdbi3-testing:$jdbi_version")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
