@@ -1,6 +1,7 @@
 package no.echokarriere.backend.configuration
 
 import com.zaxxer.hikari.HikariDataSource
+import javax.sql.DataSource
 import no.echokarriere.backend.namespace.NamespaceRepository
 import org.jdbi.v3.core.Jdbi
 import org.jdbi.v3.core.kotlin.KotlinPlugin
@@ -15,7 +16,6 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.jdbc.datasource.DataSourceTransactionManager
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy
 import org.springframework.transaction.annotation.EnableTransactionManagement
-import javax.sql.DataSource
 
 @Configuration
 @EnableTransactionManagement

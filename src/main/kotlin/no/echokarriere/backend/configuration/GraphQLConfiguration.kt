@@ -6,12 +6,12 @@ import graphql.scalars.ExtendedScalars
 import graphql.schema.Coercing
 import graphql.schema.GraphQLScalarType
 import graphql.schema.GraphQLType
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
 import java.time.OffsetDateTime
 import java.util.UUID
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 
 @Configuration
 class GraphQLConfiguration {
