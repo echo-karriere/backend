@@ -39,6 +39,7 @@ dependencies {
     implementation("org.postgresql:postgresql:42.2.12")
 
     implementation("com.expediagroup:graphql-kotlin-spring-server:3.3.1")
+    implementation("com.graphql-java:graphql-java-extended-scalars:1.0")
 
     testImplementation("org.jdbi:jdbi3-testing:$jdbi_version")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {

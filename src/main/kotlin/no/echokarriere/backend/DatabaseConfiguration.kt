@@ -1,6 +1,7 @@
 package no.echokarriere.backend
 
 import com.zaxxer.hikari.HikariDataSource
+import no.echokarriere.backend.namespace.NamespaceRepository
 import org.jdbi.v3.core.Jdbi
 import org.jdbi.v3.core.kotlin.KotlinPlugin
 import org.jdbi.v3.postgres.PostgresPlugin
@@ -12,6 +13,7 @@ import org.springframework.boot.jdbc.DataSourceBuilder
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.jdbc.datasource.DataSourceTransactionManager
+import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy
 import org.springframework.transaction.annotation.EnableTransactionManagement
 import javax.sql.DataSource
 
@@ -22,6 +24,9 @@ class DatabaseConfiguration {
     @Qualifier("spring.datasource")
     @ConfigurationProperties(prefix = "spring.datasource")
     fun dataSource(): HikariDataSource = DataSourceBuilder.create().type(HikariDataSource::class.java).build()
+
+    @Bean
+    fun transactionAwareSourceProxy(@Qualifier("spring.datasource") dataSource: DataSource) = TransactionAwareDataSourceProxy(dataSource)
 
     @Bean
     fun dataSourceTransactionManager(@Qualifier("spring.datasource") dataSource: DataSource): DataSourceTransactionManager {
@@ -37,4 +42,7 @@ class DatabaseConfiguration {
         .installPlugin(SqlObjectPlugin())
         .installPlugin(KotlinPlugin())
         .installPlugin(PostgresPlugin())
+
+    @Bean
+    fun namespaceRepository(jdbi: Jdbi): NamespaceRepository = jdbi.onDemand(NamespaceRepository::class.java)
 }
