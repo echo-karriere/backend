@@ -11,9 +11,9 @@ class ApplicationTest {
     @Test
     fun testRoot() {
         withTestApplication({ module(testing = true) }) {
-            handleRequest(HttpMethod.Get, "/").apply {
+            handleRequest(HttpMethod.Get, "/playground").apply {
                 assertEquals(HttpStatusCode.OK, response.status())
-                assertEquals("HELLO WORLD!", response.content)
+                response.content?.contains("GraphQL Playground")?.let { assert(it) }
             }
         }
     }

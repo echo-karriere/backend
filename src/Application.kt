@@ -1,7 +1,6 @@
 package no.echokarriere
 
 import io.ktor.application.Application
-import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.features.AutoHeadResponse
 import io.ktor.features.CORS
@@ -11,14 +10,11 @@ import io.ktor.features.DefaultHeaders
 import io.ktor.features.deflate
 import io.ktor.features.gzip
 import io.ktor.features.minimumSize
-import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
-import io.ktor.http.content.resources
-import io.ktor.http.content.static
-import io.ktor.response.respondText
-import io.ktor.routing.get
-import io.ktor.routing.routing
+import io.ktor.jackson.jackson
+import no.echokarriere.backend.configuration.installGraphQL
+import no.echokarriere.namespace.NamespaceRepository
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -57,16 +53,9 @@ fun Application.module(testing: Boolean = false) {
         header("X-Engine", "Ktor")
     }
 
-    install(ContentNegotiation) {}
-
-    routing {
-        get("/") {
-            call.respondText("HELLO WORLD!", contentType = ContentType.Text.Plain)
-        }
-
-        // Static feature. Try to access `/static/ktor_logo.svg`
-        static("/static") {
-            resources("static")
-        }
+    install(ContentNegotiation) {
+        jackson()
     }
+
+    installGraphQL(NamespaceRepository())
 }
