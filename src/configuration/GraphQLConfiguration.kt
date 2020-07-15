@@ -1,6 +1,5 @@
 package no.echokarriere.backend.configuration
 
-import com.expediagroup.graphql.hooks.SchemaGeneratorHooks
 import graphql.language.StringValue
 import graphql.scalars.ExtendedScalars
 import graphql.schema.Coercing
@@ -10,16 +9,10 @@ import java.time.OffsetDateTime
 import java.util.UUID
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
 
-@Configuration
 class GraphQLConfiguration {
-    @Bean
-    fun hooks() = CustomSchemaGeneratorHooks()
-
-    class CustomSchemaGeneratorHooks : SchemaGeneratorHooks {
-        override fun willGenerateGraphQLType(type: KType): GraphQLType? = when (type.classifier as? KClass<*>) {
+    class CustomSchemaGeneratorHooks {
+        fun willGenerateGraphQLType(type: KType): GraphQLType? = when (type.classifier as? KClass<*>) {
             UUID::class -> graphQLUuidType
             OffsetDateTime::class -> graphqlDateTimeType
             else -> null
