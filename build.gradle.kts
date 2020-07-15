@@ -1,52 +1,59 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
-val kotlin_version: String by project
-val logback_version: String by project
-val jdbi_version: String by project
+val logbackVersion: String by project
+val ktorVersion: String by project
+val kotlinVersion: String by project
+val flywayVersion: String by project
+val hikariVersion: String by project
+val postgresVersion: String by project
+val graphqlScalarsVersion: String by project
+val graphqlVersion: String by project
+val graphqlKotlinVersion: String by project
 
 plugins {
-    id("org.springframework.boot") version "2.3.1.RELEASE"
-    id("io.spring.dependency-management") version "1.0.9.RELEASE"
-    id("org.flywaydb.flyway") version "6.5.0"
-    id("org.jlleitschuh.gradle.ktlint") version "9.2.1"
-    kotlin("jvm") version "1.3.72"
-    kotlin("plugin.spring") version "1.3.72"
+    application
+    id("org.flywaydb.flyway")
+    id("org.jlleitschuh.gradle.ktlint")
+    id("org.jetbrains.kotlin.jvm")
 }
 
 group = "no.echokarriere"
 version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_11
+
+application {
+    mainClassName = "io.ktor.server.netty.EngineMain"
+}
 
 repositories {
     mavenCentral()
+    jcenter()
+    maven { url = uri("https://kotlin.bintray.com/ktor") }
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter")
-    implementation("org.springframework.boot:spring-boot-starter-jdbc")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
 
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version")
+    implementation("io.ktor:ktor-server-netty:$ktorVersion")
+    implementation("io.ktor:ktor-server-core:$ktorVersion")
+    implementation("io.ktor:ktor-server-host-common:$ktorVersion")
+    implementation("io.ktor:ktor-server-sessions:$ktorVersion")
 
-    implementation("org.jdbi:jdbi3-bom:$jdbi_version")
-    implementation("org.jdbi:jdbi3-spring4:$jdbi_version")
-    implementation("org.jdbi:jdbi3-sqlobject:$jdbi_version")
-    implementation("org.jdbi:jdbi3-kotlin:$jdbi_version")
-    implementation("org.jdbi:jdbi3-kotlin-sqlobject:$jdbi_version")
-    implementation("org.jdbi:jdbi3-postgres:$jdbi_version")
+    implementation("org.flywaydb:flyway-core:$flywayVersion")
+    implementation("com.zaxxer:HikariCP:$hikariVersion")
+    implementation("org.postgresql:postgresql:$postgresVersion")
 
-    implementation("org.flywaydb:flyway-core")
-    implementation("com.zaxxer:HikariCP:3.4.5")
-    implementation("org.postgresql:postgresql:42.2.12")
+    implementation("com.graphql-java:graphql-java:$graphqlVersion")
+    implementation("com.expediagroup:graphql-kotlin-schema-generator:$graphqlKotlinVersion")
+    implementation("com.graphql-java:graphql-java-extended-scalars:$graphqlScalarsVersion")
 
-    implementation("com.expediagroup:graphql-kotlin-spring-server:3.3.1")
-    implementation("com.graphql-java:graphql-java-extended-scalars:1.0")
+    implementation("ch.qos.logback:logback-classic:$logbackVersion")
 
-    testImplementation("org.jdbi:jdbi3-testing:$jdbi_version")
-    testImplementation("org.springframework.boot:spring-boot-starter-test") {
-        exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
-    }
+    testImplementation("io.ktor:ktor-server-tests:$ktorVersion")
 }
+
+kotlin.sourceSets["main"].kotlin.srcDirs("src")
+kotlin.sourceSets["test"].kotlin.srcDirs("test")
+
+sourceSets["main"].resources.srcDirs("resources")
+sourceSets["test"].resources.srcDirs("testresources")
 
 sourceSets {
     val flyway by creating {
@@ -58,29 +65,11 @@ sourceSets {
     }
 }
 
-val database = mapOf(
-    "url" to (System.getenv("DB_URL") ?: "jdbc:postgresql://localhost:5432/echokarriere"),
-    "schema" to "public",
-    "user" to (System.getenv("DB_USER") ?: "karriere"),
-    "password" to (System.getenv("DB_PASSWORD") ?: "password")
-)
-
 flyway {
-    url = database["url"]
-    user = database["user"]
-    password = database["password"]
-    schemas = arrayOf(database["schema"])
+    url = (System.getenv("DB_URL") ?: "jdbc:postgresql://localhost:5432/echokarriere")
+    user = (System.getenv("DB_USER") ?: "karriere")
+    password = (System.getenv("DB_PASSWORD") ?: "password")
+    locations = arrayOf("filesystem:resources/db/migrations")
 }
 
 tasks.flywayMigrate { dependsOn("flywayClasses") }
-
-tasks.withType<Test> {
-    useJUnitPlatform()
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "11"
-    }
-}
