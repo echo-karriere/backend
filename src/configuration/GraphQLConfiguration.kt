@@ -1,4 +1,4 @@
-package no.echokarriere.backend.configuration
+package no.echokarriere.configuration
 
 import com.expediagroup.graphql.SchemaGeneratorConfig
 import com.expediagroup.graphql.TopLevelObject
