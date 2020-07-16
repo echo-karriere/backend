@@ -1,7 +1,11 @@
+@file:Suppress("EXPERIMENTAL_API_USAGE")
+
 package no.echokarriere
 
+import com.typesafe.config.ConfigFactory
 import io.ktor.application.Application
 import io.ktor.application.install
+import io.ktor.config.HoconApplicationConfig
 import io.ktor.features.AutoHeadResponse
 import io.ktor.features.CORS
 import io.ktor.features.Compression
@@ -14,13 +18,17 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.jackson.jackson
 import no.echokarriere.backend.configuration.installGraphQL
+import no.echokarriere.configuration.DatabaseConfig
+import no.echokarriere.configuration.DatabaseConfiguration
 import no.echokarriere.namespace.NamespaceRepository
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
+val config = HoconApplicationConfig(ConfigFactory.load())
+
 @Suppress("unused") // Referenced in application.conf
 @kotlin.jvm.JvmOverloads
-fun Application.module(testing: Boolean = false) {
+fun Application.module(testing: Boolean = false, database: DatabaseConfig = DatabaseConfiguration(config)) {
     // install(Sessions) {
     //     cookie<MySession>("MY_SESSION") {
     //         cookie.extensions["SameSite"] = "lax"
