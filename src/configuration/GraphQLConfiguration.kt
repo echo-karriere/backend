@@ -31,8 +31,10 @@ import no.echokarriere.namespace.NamespaceRepository
 data class GraphQLRequest(val query: String, val operationName: String?, val variables: Map<String, Any>?)
 
 fun Application.installGraphQL(namespaceRepository: NamespaceRepository) {
-    val config =
-        SchemaGeneratorConfig(supportedPackages = listOf("no.echokarriere"), hooks = CustomSchemaGeneratorHooks())
+    val config = SchemaGeneratorConfig(
+        supportedPackages = listOf("no.echokarriere"),
+        hooks = CustomSchemaGeneratorHooks()
+    )
     val queries = listOf(TopLevelObject(NamespaceQueryResolver(namespaceRepository)))
     val mutations = listOf(TopLevelObject(NamespaceMutationResolver(namespaceRepository)))
 

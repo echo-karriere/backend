@@ -7,6 +7,7 @@ val postgresVersion: String by project
 val graphqlScalarsVersion: String by project
 val graphqlVersion: String by project
 val graphqlKotlinVersion: String by project
+val exposedVersion: String by project
 
 plugins {
     application
@@ -36,6 +37,10 @@ dependencies {
     implementation("io.ktor:ktor-server-host-common:$ktorVersion")
     implementation("io.ktor:ktor-server-sessions:$ktorVersion")
     implementation("io.ktor:ktor-jackson:$ktorVersion")
+
+    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
 
     implementation("org.flywaydb:flyway-core:$flywayVersion")
     implementation("com.zaxxer:HikariCP:$hikariVersion")
