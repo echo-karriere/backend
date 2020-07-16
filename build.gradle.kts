@@ -50,6 +50,7 @@ dependencies {
     implementation("com.expediagroup:graphql-kotlin-schema-generator:$graphqlKotlinVersion")
     implementation("com.graphql-java:graphql-java-extended-scalars:$graphqlScalarsVersion")
 
+    implementation("io.github.microutils:kotlin-logging:1.8.3")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
 
     testImplementation("io.ktor:ktor-server-tests:$ktorVersion")
