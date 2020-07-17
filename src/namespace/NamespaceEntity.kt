@@ -10,6 +10,11 @@ data class NamespaceEntity(
     val namespace: String
 )
 
+data class NamespaceDTO(
+    val title: String,
+    val description: String
+)
+
 object Namespaces : Table("namespace") {
     val id = uuid("id")
     val title = text("title")

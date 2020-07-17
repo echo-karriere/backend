@@ -14,6 +14,7 @@ class NamespaceQueryResolver(
 class NamespaceMutationResolver(
     private val namespaceRepository: NamespaceRepository
 ) {
-    fun createNamespace(title: String) =
-        namespaceRepository.insert(NamespaceEntity(title = title, description = "Test", namespace = title.toLowerCase()))
+    suspend fun createNamespace(data: NamespaceDTO): NamespaceEntity? = namespaceRepository.insert(data)
+    suspend fun deleteNamespace(id: UUID): Boolean = namespaceRepository.delete(id)
+    suspend fun updateNamespace(id: UUID, data: NamespaceDTO): NamespaceEntity? = namespaceRepository.update(id, data)
 }
