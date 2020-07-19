@@ -1,5 +1,7 @@
 package no.echokarriere.category
 
+import java.time.Instant
+import java.util.UUID
 import no.echokarriere.dbQuery
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.deleteWhere
@@ -7,8 +9,6 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.update
-import java.time.Instant
-import java.util.UUID
 
 class CategoryRepository {
     suspend fun selectAll(): List<CategoryEntity> = dbQuery {

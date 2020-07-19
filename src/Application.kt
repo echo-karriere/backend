@@ -17,10 +17,10 @@ import io.ktor.features.minimumSize
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.jackson.jackson
+import no.echokarriere.category.CategoryRepository
 import no.echokarriere.configuration.DatabaseConfig
 import no.echokarriere.configuration.DatabaseConfiguration
 import no.echokarriere.configuration.installGraphQL
-import no.echokarriere.category.CategoryRepository
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 

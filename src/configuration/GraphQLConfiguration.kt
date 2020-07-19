@@ -20,6 +20,8 @@ import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.post
 import io.ktor.routing.routing
+import java.time.Instant
+import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.util.UUID
 import kotlin.reflect.KClass
@@ -27,8 +29,6 @@ import kotlin.reflect.KType
 import no.echokarriere.category.CategoryMutationResolver
 import no.echokarriere.category.CategoryQueryResolver
 import no.echokarriere.category.CategoryRepository
-import java.time.Instant
-import java.time.LocalDateTime
 
 data class GraphQLRequest(val query: String, val operationName: String?, val variables: Map<String, Any>?)
 
