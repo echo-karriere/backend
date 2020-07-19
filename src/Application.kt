@@ -20,7 +20,7 @@ import io.ktor.jackson.jackson
 import no.echokarriere.configuration.DatabaseConfig
 import no.echokarriere.configuration.DatabaseConfiguration
 import no.echokarriere.configuration.installGraphQL
-import no.echokarriere.namespace.NamespaceRepository
+import no.echokarriere.category.CategoryRepository
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -65,5 +65,5 @@ fun Application.module(testing: Boolean = false, database: DatabaseConfig = Data
         jackson()
     }
 
-    installGraphQL(NamespaceRepository())
+    installGraphQL(CategoryRepository())
 }
