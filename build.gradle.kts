@@ -9,7 +9,7 @@ val graphqlVersion: String by project
 val graphqlKotlinVersion: String by project
 val exposedVersion: String by project
 val spekVersion: String by project
-val testcontainersVersion: String by project
+val testContainersVersion: String by project
 
 plugins {
     application
@@ -56,7 +56,7 @@ dependencies {
     implementation("io.github.microutils:kotlin-logging:1.8.3")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
 
-    implementation(platform("org.testcontainers:testcontainers-bom:$testcontainersVersion"))
+    implementation(platform("org.testcontainers:testcontainers-bom:$testContainersVersion"))
     testImplementation("org.testcontainers:postgresql")
     testImplementation("io.ktor:ktor-server-tests:$ktorVersion")
     testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
