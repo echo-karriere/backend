@@ -3,18 +3,18 @@ package no.echokarriere
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.withTestApplication
-import kotlin.test.Test
 import kotlin.test.assertEquals
+import org.spekframework.spek2.style.specification.describe
 
-class ApplicationTest {
-    @Test
-    fun testRoot() {
-        withTestApplication({ module(testing = true) }) {
-            handleRequest(HttpMethod.Get, "/playground").apply {
-                assertEquals(HttpStatusCode.OK, response.status())
-                response.content?.contains("GraphQL Playground")?.let { assert(it) }
+object ApplicationTest : AppSpek({
+    describe("test root") {
+        it("can get /playground") {
+            withApp {
+                handleRequest(HttpMethod.Get, "/playground").apply {
+                    assertEquals(HttpStatusCode.OK, response.status())
+                    response.content?.contains("GraphQL Playground")?.let { assert(it) }
+                }
             }
         }
     }
-}
+})
