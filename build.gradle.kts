@@ -8,6 +8,8 @@ val graphqlScalarsVersion: String by project
 val graphqlVersion: String by project
 val graphqlKotlinVersion: String by project
 val exposedVersion: String by project
+val spekVersion: String by project
+val testcontainersVersion: String by project
 
 plugins {
     application
@@ -53,7 +55,14 @@ dependencies {
     implementation("io.github.microutils:kotlin-logging:1.8.3")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
 
+    implementation(platform("org.testcontainers:testcontainers-bom:$testcontainersVersion"))
+    testImplementation("org.testcontainers:postgresql")
     testImplementation("io.ktor:ktor-server-tests:$ktorVersion")
+    testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
+
+    // spek requires kotlin-reflect, can be omitted if already in the classpath
+    testRuntimeOnly("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
+    testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
 }
 
 kotlin.sourceSets["main"].kotlin.srcDirs("src")
