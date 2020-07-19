@@ -24,19 +24,21 @@ import java.time.OffsetDateTime
 import java.util.UUID
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
-import no.echokarriere.namespace.NamespaceMutationResolver
-import no.echokarriere.namespace.NamespaceQueryResolver
-import no.echokarriere.namespace.NamespaceRepository
+import no.echokarriere.category.CategoryMutationResolver
+import no.echokarriere.category.CategoryQueryResolver
+import no.echokarriere.category.CategoryRepository
+import java.time.Instant
+import java.time.LocalDateTime
 
 data class GraphQLRequest(val query: String, val operationName: String?, val variables: Map<String, Any>?)
 
-fun Application.installGraphQL(namespaceRepository: NamespaceRepository) {
+fun Application.installGraphQL(categoryRepository: CategoryRepository) {
     val config = SchemaGeneratorConfig(
         supportedPackages = listOf("no.echokarriere"),
         hooks = CustomSchemaGeneratorHooks()
     )
-    val queries = listOf(TopLevelObject(NamespaceQueryResolver(namespaceRepository)))
-    val mutations = listOf(TopLevelObject(NamespaceMutationResolver(namespaceRepository)))
+    val queries = listOf(TopLevelObject(CategoryQueryResolver(categoryRepository)))
+    val mutations = listOf(TopLevelObject(CategoryMutationResolver(categoryRepository)))
 
     val schema = toSchema(config, queries, mutations)
     val graphql = GraphQL.newGraphQL(schema).build()
@@ -68,6 +70,8 @@ class CustomSchemaGeneratorHooks : SchemaGeneratorHooks {
     override fun willGenerateGraphQLType(type: KType): GraphQLType? = when (type.classifier as? KClass<*>) {
         UUID::class -> graphQLUuidType
         OffsetDateTime::class -> graphqlDateTimeType
+        LocalDateTime::class -> graphqlDateTimeType
+        Instant::class -> instantType
         else -> null
     }
 }
@@ -78,6 +82,12 @@ internal val graphQLUuidType: GraphQLScalarType = GraphQLScalarType.newScalar()
     .coercing(UUIDCoercing)
     .build()
 
+internal val instantType: GraphQLScalarType = GraphQLScalarType.newScalar()
+    .name("Instant")
+    .description("A type reresentating a formatted java.time.Instant")
+    .coercing(InstantCoercing)
+    .build()
+
 internal val graphqlDateTimeType: GraphQLScalarType = ExtendedScalars.DateTime
 
 private object UUIDCoercing : Coercing<UUID, String> {
@@ -86,6 +96,17 @@ private object UUIDCoercing : Coercing<UUID, String> {
     override fun parseLiteral(input: Any?): UUID? {
         val uuidString = (input as? StringValue)?.value
         return UUID.fromString(uuidString)
+    }
+
+    override fun serialize(dataFetcherResult: Any?): String = dataFetcherResult.toString()
+}
+
+private object InstantCoercing : Coercing<Instant, String> {
+    override fun parseValue(input: Any?): Instant = Instant.parse(serialize(input))
+
+    override fun parseLiteral(input: Any?): Instant {
+        val instantString = (input as? StringValue)?.value
+        return Instant.parse(instantString)
     }
 
     override fun serialize(dataFetcherResult: Any?): String = dataFetcherResult.toString()
