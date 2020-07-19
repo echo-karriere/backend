@@ -1,9 +1,9 @@
 package no.echokarriere.category
 
+import java.time.Instant
 import java.util.UUID
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.`java-time`.timestamp
-import java.time.Instant
 
 data class CategoryEntity(
     val id: UUID = UUID.randomUUID(),
