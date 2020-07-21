@@ -14,17 +14,28 @@ abstract class AppSpek(val appRoot: Root.() -> Unit) : Spek({
     beforeGroup {
         if (!postgresContainer.isRunning) {
             postgresContainer.start()
-            flyway.migrate()
+            migrate(loadFlyway())
         }
     }
+
+    afterGroup {
+        clean(loadFlyway())
+    }
+
+    appRoot()
 }) {
     companion object {
-        class AppPostgreSQLContainer : PostgreSQLContainer<AppPostgreSQLContainer>(), DatabaseConfig
+        class AppPostgreSQLContainer : PostgreSQLContainer<AppPostgreSQLContainer>("postgres:12"), DatabaseConfig
         val postgresContainer = AppPostgreSQLContainer()
-        val flyway: Flyway = Flyway
-            .configure()
-            .dataSource(postgresContainer.jdbcUrl, postgresContainer.username, postgresContainer.password)
-            .load()
+
+        fun loadFlyway(): Flyway = Flyway
+                .configure()
+                .dataSource(postgresContainer.jdbcUrl, postgresContainer.username, postgresContainer.password)
+                .load()
+
+        fun migrate(flyway: Flyway) = flyway.migrate()
+
+        fun clean(flyway: Flyway) = flyway.clean()
 
         fun <R> withApp(test: suspend TestApplicationEngine.() -> R) = withTestApplication({
             module(testing = true, database = postgresContainer)

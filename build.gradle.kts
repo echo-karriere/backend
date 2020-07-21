@@ -90,3 +90,4 @@ flyway {
 }
 
 tasks.flywayMigrate { dependsOn("flywayClasses") }
+tasks.withType<Test> { useJUnitPlatform() }
