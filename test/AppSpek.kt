@@ -9,7 +9,7 @@ import org.spekframework.spek2.dsl.Root
 @Suppress("unused") // `appRoot` used via indirection
 abstract class AppSpek(appRoot: Root.() -> Unit) : Spek(appRoot) {
     companion object {
-        val testDatabaseConfiguration = TestDatabaseConfiguration()
+        private val testDatabaseConfiguration = TestDatabaseConfiguration()
         fun <R> withApp(test: suspend TestApplicationEngine.() -> R) = withTestApplication({
             module(testing = true, database = testDatabaseConfiguration)
         }) {

@@ -32,7 +32,8 @@ data class Session(val token: String)
 
 @Suppress("unused") // Referenced in application.conf
 @kotlin.jvm.JvmOverloads
-fun Application.module(testing: Boolean = false, database: DatabaseConfig = DatabaseConfiguration(config)) {
+// TODO: Change testing to false for production
+fun Application.module(testing: Boolean = true, database: DatabaseConfig = DatabaseConfiguration(config)) {
     install(Sessions) {
         cookie<Session>("EchoKarriereSession") {
             cookie.secure = !testing
