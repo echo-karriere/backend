@@ -10,6 +10,7 @@ val graphqlKotlinVersion: String by project
 val exposedVersion: String by project
 val spekVersion: String by project
 val testContainersVersion: String by project
+val argonVersion: String by project
 
 plugins {
     application
@@ -39,6 +40,7 @@ dependencies {
     implementation("io.ktor:ktor-server-host-common:$ktorVersion")
     implementation("io.ktor:ktor-server-sessions:$ktorVersion")
     implementation("io.ktor:ktor-jackson:$ktorVersion")
+    implementation("de.mkammerer:argon2-jvm:$argonVersion")
 
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
