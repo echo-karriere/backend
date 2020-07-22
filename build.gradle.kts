@@ -40,6 +40,8 @@ dependencies {
     implementation("io.ktor:ktor-server-host-common:$ktorVersion")
     implementation("io.ktor:ktor-server-sessions:$ktorVersion")
     implementation("io.ktor:ktor-jackson:$ktorVersion")
+    implementation("io.ktor:ktor-auth:$ktorVersion")
+
     implementation("de.mkammerer:argon2-jvm:$argonVersion")
 
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
@@ -68,11 +70,11 @@ dependencies {
     testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
 }
 
-kotlin.sourceSets["main"].kotlin.srcDirs("src")
-kotlin.sourceSets["test"].kotlin.srcDirs("test")
+kotlin.sourceSets["main"].kotlin.srcDir("src")
+kotlin.sourceSets["test"].kotlin.srcDir("test")
 
-sourceSets["main"].resources.srcDirs("resources")
-sourceSets["test"].resources.srcDirs("testresources")
+sourceSets["main"].resources.srcDir("resources")
+sourceSets["test"].resources.srcDir("testresources")
 
 sourceSets {
     val flyway by creating {

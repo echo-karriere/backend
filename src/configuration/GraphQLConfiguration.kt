@@ -29,16 +29,25 @@ import kotlin.reflect.KType
 import no.echokarriere.category.CategoryMutationResolver
 import no.echokarriere.category.CategoryQueryResolver
 import no.echokarriere.category.CategoryRepository
+import no.echokarriere.user.UserMutationResolver
+import no.echokarriere.user.UserQueryResolver
+import no.echokarriere.user.UserRepository
 
 data class GraphQLRequest(val query: String, val operationName: String?, val variables: Map<String, Any>?)
 
-fun Application.installGraphQL(categoryRepository: CategoryRepository) {
+fun Application.installGraphQL(categoryRepository: CategoryRepository, userRepository: UserRepository) {
     val config = SchemaGeneratorConfig(
         supportedPackages = listOf("no.echokarriere"),
         hooks = CustomSchemaGeneratorHooks()
     )
-    val queries = listOf(TopLevelObject(CategoryQueryResolver(categoryRepository)))
-    val mutations = listOf(TopLevelObject(CategoryMutationResolver(categoryRepository)))
+    val queries = listOf(
+        TopLevelObject(CategoryQueryResolver(categoryRepository)),
+        TopLevelObject(UserQueryResolver(userRepository))
+    )
+    val mutations = listOf(
+        TopLevelObject(CategoryMutationResolver(categoryRepository)),
+        TopLevelObject(UserMutationResolver(userRepository))
+    )
 
     val schema = toSchema(config, queries, mutations)
     val graphql = GraphQL.newGraphQL(schema).build()

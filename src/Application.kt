@@ -20,9 +20,11 @@ import io.ktor.jackson.jackson
 import io.ktor.sessions.Sessions
 import io.ktor.sessions.cookie
 import no.echokarriere.category.CategoryRepository
+import no.echokarriere.configuration.Argon2Configuration
 import no.echokarriere.configuration.DatabaseConfig
 import no.echokarriere.configuration.DatabaseConfiguration
 import no.echokarriere.configuration.installGraphQL
+import no.echokarriere.user.UserRepository
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -73,5 +75,8 @@ fun Application.module(testing: Boolean = true, database: DatabaseConfig = Datab
         jackson()
     }
 
-    installGraphQL(CategoryRepository())
+    installGraphQL(
+        CategoryRepository(),
+        UserRepository(Argon2Configuration(testing))
+    )
 }

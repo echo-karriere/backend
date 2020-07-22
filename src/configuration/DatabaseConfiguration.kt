@@ -6,6 +6,7 @@ import io.ktor.config.ApplicationConfig
 import io.ktor.util.KtorExperimentalAPI
 import org.jetbrains.exposed.sql.Database
 import org.postgresql.ds.PGSimpleDataSource
+import org.postgresql.util.PGobject
 
 interface DatabaseConfig
 
@@ -28,5 +29,12 @@ class DatabaseConfiguration(config: ApplicationConfig) : DatabaseConfig {
         hikariConfig.validate()
 
         return HikariDataSource(hikariConfig)
+    }
+}
+
+class PGEnum<T : Enum<T>>(enumTypeName: String, enumValue: T?) : PGobject() {
+    init {
+        value = enumValue?.name
+        type = enumTypeName
     }
 }
