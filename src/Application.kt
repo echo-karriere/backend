@@ -17,33 +17,22 @@ import io.ktor.features.minimumSize
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.jackson.jackson
-import io.ktor.sessions.Sessions
-import io.ktor.sessions.cookie
+import no.echokarriere.auth.installAuth
 import no.echokarriere.category.CategoryRepository
 import no.echokarriere.configuration.Argon2Configuration
 import no.echokarriere.configuration.DatabaseConfig
 import no.echokarriere.configuration.DatabaseConfiguration
-import no.echokarriere.configuration.installGraphQL
+import no.echokarriere.graphql.installGraphQL
 import no.echokarriere.user.UserRepository
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
 val config = HoconApplicationConfig(ConfigFactory.load())
 
-data class Session(val token: String)
-
 @Suppress("unused") // Referenced in application.conf
 @kotlin.jvm.JvmOverloads
 // TODO: Change testing to false for production
 fun Application.module(testing: Boolean = true, database: DatabaseConfig = DatabaseConfiguration(config)) {
-    install(Sessions) {
-        cookie<Session>("EchoKarriereSession") {
-            cookie.secure = !testing
-            cookie.httpOnly = !testing
-            cookie.extensions["SameSite"] = "lax"
-            cookie.path = "/"
-        }
-    }
 
     install(Compression) {
         gzip {
@@ -75,8 +64,7 @@ fun Application.module(testing: Boolean = true, database: DatabaseConfig = Datab
         jackson()
     }
 
-    installGraphQL(
-        CategoryRepository(),
-        UserRepository(Argon2Configuration(testing))
-    )
+    installGraphQL(CategoryRepository(), UserRepository(Argon2Configuration(testing)))
+
+    installAuth(testing, config)
 }

@@ -1,4 +1,4 @@
-package no.echokarriere.configuration
+package no.echokarriere.graphql
 
 import com.expediagroup.graphql.SchemaGeneratorConfig
 import com.expediagroup.graphql.TopLevelObject
@@ -55,7 +55,7 @@ fun Application.installGraphQL(categoryRepository: CategoryRepository, userRepos
     suspend fun ApplicationCall.executeQuery() {
         val request = receive<GraphQLRequest>()
         val executionInput = ExecutionInput.newExecutionInput()
-            // .context(ApplicationCallContext(this))
+            .context(ApplicationCallContext(this))
             .query(request.query)
             .operationName(request.operationName)
             .variables(request.variables)
