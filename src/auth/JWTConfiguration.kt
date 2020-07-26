@@ -6,6 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm
 import io.ktor.config.HoconApplicationConfig
 import io.ktor.util.KtorExperimentalAPI
 import java.util.Date
+import java.util.UUID
 
 @KtorExperimentalAPI
 class JWTConfiguration(testing: Boolean, config: HoconApplicationConfig) {
@@ -20,9 +21,9 @@ class JWTConfiguration(testing: Boolean, config: HoconApplicationConfig) {
         .withIssuer(jwtIssuer)
         .build()
 
-    fun makeToken(user: String): String {
+    fun makeToken(user: UUID): String {
         return JWT.create()
-            .withSubject(user)
+            .withSubject(user.toString())
             .withIssuer(jwtIssuer)
             .withExpiresAt(expiration())
             .sign(algorithm)

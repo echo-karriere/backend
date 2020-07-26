@@ -21,6 +21,13 @@ class UserRepository(private val argon: Argon2Configuration) {
             .singleOrNull()
     }
 
+    suspend fun selectByEmail(email: String): UserEntity? = dbQuery {
+        Users
+            .select { Users.email eq email }
+            .mapNotNull { toUser(it) }
+            .singleOrNull()
+    }
+
     suspend fun create(user: UserDTO): UserEntity? {
         val generatedId = UUID.randomUUID()
         val created = dbQuery {
@@ -30,6 +37,7 @@ class UserRepository(private val argon: Argon2Configuration) {
                     it[name] = user.name
                     it[email] = user.email
                     it[password] = argon.hash(user.password.toCharArray())
+                    it[active] = true
                     it[type] = user.type
                     it[createdAt] = Instant.now()
                 }
@@ -49,6 +57,7 @@ private fun toUser(row: ResultRow): UserEntity = UserEntity(
     name = row[Users.name],
     email = row[Users.email],
     password = row[Users.password],
+    active = row[Users.active],
     type = row[Users.type],
     createdAt = row[Users.createdAt],
     modifiedAt = row[Users.modifiedAt]

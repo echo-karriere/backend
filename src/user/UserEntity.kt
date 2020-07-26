@@ -18,6 +18,7 @@ data class UserEntity(
     val name: String,
     val email: String,
     val password: String,
+    val active: Boolean,
     val type: UserType,
     val createdAt: Instant,
     val modifiedAt: Instant? = null
@@ -35,6 +36,7 @@ object Users : Table("user") {
     val name = text("name")
     val email = text("email")
     val password = text("password")
+    val active = bool("active")
     val type = customEnumeration("type", "UserType", { value -> UserType.valueOf(value as String) }, { PGEnum("UserType", it) })
     val createdAt = timestamp("created_at")
     val modifiedAt = timestamp("modified_at").nullable()

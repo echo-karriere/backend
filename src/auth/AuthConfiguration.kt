@@ -3,24 +3,28 @@ package no.echokarriere.auth
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.auth.Authentication
-import io.ktor.auth.Principal
-import io.ktor.auth.jwt.JWTPrincipal
 import io.ktor.auth.jwt.jwt
-import io.ktor.auth.session
 import io.ktor.config.HoconApplicationConfig
 import io.ktor.routing.routing
 import io.ktor.sessions.Sessions
 import io.ktor.sessions.cookie
-import io.ktor.sessions.get
-import io.ktor.sessions.sessions
 import io.ktor.util.KtorExperimentalAPI
+import java.util.UUID
+import kotlin.collections.set
+import no.echokarriere.configuration.Argon2Configuration
+import no.echokarriere.user.UserPrincipal
+import no.echokarriere.user.UserRepository
 
 data class Session(val token: String)
 
-data class UserPrincipal(val token: String) : Principal
-
 @KtorExperimentalAPI
-fun Application.installAuth(testing: Boolean, config: HoconApplicationConfig) {
+fun Application.installAuth(
+    testing: Boolean,
+    config: HoconApplicationConfig,
+    userRepository: UserRepository,
+    authRepository: AuthRepository,
+    argon2Configuration: Argon2Configuration
+) {
     val jwtRealm = config.propertyOrNull("jwt.realm")?.getString() ?: error("Missing `jwt.realm` property")
     val jwtConfiguration = JWTConfiguration(testing, config)
 
@@ -38,25 +42,18 @@ fun Application.installAuth(testing: Boolean, config: HoconApplicationConfig) {
             realm = jwtRealm
             verifier(jwtConfiguration.makeJwtVerifier())
             validate { credentials ->
-                if (credentials.payload.audience.contains(jwtConfiguration.makeToken("test"))) {
-                    JWTPrincipal(credentials.payload)
+                val user = userRepository.select(UUID.fromString(credentials.payload.subject))
+
+                if (user != null) {
+                    UserPrincipal(user)
                 } else {
                     null
-                }
-            }
-        }
-
-        session<Session>("echo_karriere_session") {
-            validate {
-                sessions.get<Session>()?.let {
-                    val token = it.token
-                    UserPrincipal(token)
                 }
             }
         }
     }
 
     routing {
-        authRoutes(jwtConfiguration)
+        authRoutes(jwtConfiguration, userRepository, authRepository, argon2Configuration)
     }
 }
