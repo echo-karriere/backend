@@ -17,6 +17,8 @@ import no.echokarriere.user.UserRepository
 
 data class Session(val token: String)
 
+const val REFRESH_TOKEN_DURATION: Long = 60 * 60 * 24 * 30 // 30 days
+
 @KtorExperimentalAPI
 fun Application.installAuth(
     testing: Boolean,
@@ -34,6 +36,7 @@ fun Application.installAuth(
             cookie.httpOnly = !testing
             cookie.extensions["SameSite"] = if (!testing) "strict" else "lax"
             cookie.path = "/"
+            cookie.maxAgeInSeconds = REFRESH_TOKEN_DURATION
         }
     }
 
