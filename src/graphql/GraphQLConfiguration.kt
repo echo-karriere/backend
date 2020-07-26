@@ -33,7 +33,11 @@ import no.echokarriere.user.UserMutationResolver
 import no.echokarriere.user.UserQueryResolver
 import no.echokarriere.user.UserRepository
 
-data class GraphQLRequest(val query: String, val operationName: String?, val variables: Map<String, Any>?)
+data class GraphQLRequest(
+    val query: String,
+    val operationName: String? = null,
+    val variables: Map<String, Any>? = mapOf()
+)
 
 fun Application.installGraphQL(categoryRepository: CategoryRepository, userRepository: UserRepository) {
     val config = SchemaGeneratorConfig(
@@ -65,6 +69,7 @@ fun Application.installGraphQL(categoryRepository: CategoryRepository, userRepos
     }
 
     routing {
+        // authenticate {
         post("/graphql") {
             call.executeQuery()
         }
@@ -72,6 +77,7 @@ fun Application.installGraphQL(categoryRepository: CategoryRepository, userRepos
         static("playground") {
             defaultResource("static/playground.html")
         }
+        // }
     }
 }
 

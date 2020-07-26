@@ -71,7 +71,7 @@ fun Application.module(testing: Boolean = true, database: DatabaseConfig = Datab
 
     installExceptionHandling()
 
-    installGraphQL(categoryRepository, userRepository)
-
     installAuth(testing, config, userRepository, authRepository, argon2Configuration)
+
+    installGraphQL(categoryRepository, userRepository)
 }
