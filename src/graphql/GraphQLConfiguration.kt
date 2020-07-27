@@ -20,18 +20,19 @@ import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.post
 import io.ktor.routing.routing
+import io.ktor.util.KtorExperimentalAPI
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.util.UUID
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
+import no.echokarriere.ServiceRegistry
+import no.echokarriere.auth.AuthMutationResolver
 import no.echokarriere.category.CategoryMutationResolver
 import no.echokarriere.category.CategoryQueryResolver
-import no.echokarriere.category.CategoryRepository
 import no.echokarriere.user.UserMutationResolver
 import no.echokarriere.user.UserQueryResolver
-import no.echokarriere.user.UserRepository
 
 data class GraphQLRequest(
     val query: String,
@@ -39,18 +40,27 @@ data class GraphQLRequest(
     val variables: Map<String, Any>? = mapOf()
 )
 
-fun Application.installGraphQL(categoryRepository: CategoryRepository, userRepository: UserRepository) {
+@KtorExperimentalAPI
+fun Application.installGraphQL(serviceRegistry: ServiceRegistry) {
     val config = SchemaGeneratorConfig(
         supportedPackages = listOf("no.echokarriere"),
         hooks = CustomSchemaGeneratorHooks()
     )
     val queries = listOf(
-        TopLevelObject(CategoryQueryResolver(categoryRepository)),
-        TopLevelObject(UserQueryResolver(userRepository))
+        TopLevelObject(CategoryQueryResolver(serviceRegistry.categoryRepository)),
+        TopLevelObject(UserQueryResolver(serviceRegistry.userRepository))
     )
     val mutations = listOf(
-        TopLevelObject(CategoryMutationResolver(categoryRepository)),
-        TopLevelObject(UserMutationResolver(userRepository))
+        TopLevelObject(CategoryMutationResolver(serviceRegistry.categoryRepository)),
+        TopLevelObject(UserMutationResolver(serviceRegistry.userRepository)),
+        TopLevelObject(
+            AuthMutationResolver(
+                serviceRegistry.jwtConfiguration,
+                serviceRegistry.userRepository,
+                serviceRegistry.authRepository,
+                serviceRegistry.argon2Configuration
+            )
+        )
     )
 
     val schema = toSchema(config, queries, mutations)

@@ -18,6 +18,7 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.jackson.jackson
 import no.echokarriere.auth.AuthRepository
+import no.echokarriere.auth.JWTConfiguration
 import no.echokarriere.auth.installAuth
 import no.echokarriere.category.CategoryRepository
 import no.echokarriere.configuration.Argon2Configuration
@@ -34,10 +35,15 @@ val config = HoconApplicationConfig(ConfigFactory.load())
 @kotlin.jvm.JvmOverloads
 // TODO: Change testing to false for production
 fun Application.module(testing: Boolean = true, database: DatabaseConfig = DatabaseConfiguration(config)) {
+    val jwtConfiguration = JWTConfiguration(testing, config)
     val argon2Configuration = Argon2Configuration(testing)
     val categoryRepository = CategoryRepository()
     val userRepository = UserRepository(argon2Configuration)
     val authRepository = AuthRepository()
+
+    val serviceRegistry = ServiceRegistry(
+        userRepository, categoryRepository, authRepository, argon2Configuration, jwtConfiguration
+    )
 
     install(Compression) {
         gzip {
@@ -71,7 +77,7 @@ fun Application.module(testing: Boolean = true, database: DatabaseConfig = Datab
 
     installExceptionHandling()
 
-    installAuth(testing, config, userRepository, authRepository, argon2Configuration)
+    installAuth(testing, config, serviceRegistry)
 
-    installGraphQL(categoryRepository, userRepository)
+    installGraphQL(serviceRegistry)
 }

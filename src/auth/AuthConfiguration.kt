@@ -5,15 +5,13 @@ import io.ktor.application.install
 import io.ktor.auth.Authentication
 import io.ktor.auth.jwt.jwt
 import io.ktor.config.HoconApplicationConfig
-import io.ktor.routing.routing
 import io.ktor.sessions.Sessions
 import io.ktor.sessions.cookie
 import io.ktor.util.KtorExperimentalAPI
 import java.util.UUID
 import kotlin.collections.set
-import no.echokarriere.configuration.Argon2Configuration
+import no.echokarriere.ServiceRegistry
 import no.echokarriere.user.UserPrincipal
-import no.echokarriere.user.UserRepository
 
 data class Session(val token: String)
 
@@ -23,12 +21,11 @@ const val REFRESH_TOKEN_DURATION: Long = 60 * 60 * 24 * 30 // 30 days
 fun Application.installAuth(
     testing: Boolean,
     config: HoconApplicationConfig,
-    userRepository: UserRepository,
-    authRepository: AuthRepository,
-    argon2Configuration: Argon2Configuration
+    serviceRegistry: ServiceRegistry
 ) {
     val jwtRealm = config.propertyOrNull("jwt.realm")?.getString() ?: error("Missing `jwt.realm` property")
-    val jwtConfiguration = JWTConfiguration(testing, config)
+    val userRepository = serviceRegistry.userRepository
+    val jwtConfiguration = serviceRegistry.jwtConfiguration
 
     install(Sessions) {
         cookie<Session>("echo_karriere_session") {
@@ -54,9 +51,5 @@ fun Application.installAuth(
                 }
             }
         }
-    }
-
-    routing {
-        authRoutes(jwtConfiguration, userRepository, authRepository, argon2Configuration)
     }
 }

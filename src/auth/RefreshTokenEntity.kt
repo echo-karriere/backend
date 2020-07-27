@@ -21,6 +21,15 @@ data class RefreshTokenDTO(
     val createdAt: Instant
 )
 
+data class LoginInput(
+    val email: String,
+    val password: String
+)
+
+data class LoginPayload(
+    val token: String
+)
+
 object RefreshTokens : Table("refresh_token") {
     val id = integer("id").autoIncrement()
     val refreshToken = text("refresh_token")
