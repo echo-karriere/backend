@@ -48,7 +48,7 @@ class AuthRepository {
 
 fun toRefreshToken(row: ResultRow): RefreshTokenEntity = RefreshTokenEntity(
     id = row[RefreshTokens.id],
-    refetchToken = row[RefreshTokens.refreshToken],
+    refreshToken = row[RefreshTokens.refreshToken],
     userId = row[RefreshTokens.userId],
     expiresAt = row[RefreshTokens.expiresAt],
     createdAt = row[RefreshTokens.createdAt]

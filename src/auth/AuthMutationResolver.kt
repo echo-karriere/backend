@@ -35,7 +35,7 @@ class AuthMutationResolver(
 
         val resp = authRepository.insert(dto)
 
-        context.call.sessions.set(Session(resp?.refetchToken!!))
+        context.call.sessions.set(Session(resp?.refreshToken!!))
         return LoginPayload(jwtConfiguration.makeToken(user.id))
     }
 
@@ -54,7 +54,7 @@ class AuthMutationResolver(
         val resp = authRepository.insert(refreshToken)
         if (!authRepository.delete(previousToken.id)) throw RuntimeException("Unable to delete token")
 
-        context.call.sessions.set(Session(resp?.refetchToken!!))
+        context.call.sessions.set(Session(resp?.refreshToken!!))
         return LoginPayload(jwtConfiguration.makeToken(previousToken.userId))
     }
 }

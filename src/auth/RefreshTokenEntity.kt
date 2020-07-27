@@ -8,7 +8,7 @@ import org.jetbrains.exposed.sql.`java-time`.timestamp
 
 data class RefreshTokenEntity(
     val id: Int,
-    val refetchToken: String,
+    val refreshToken: String,
     val userId: UUID,
     val expiresAt: Instant,
     val createdAt: Instant
