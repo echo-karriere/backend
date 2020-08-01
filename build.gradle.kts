@@ -11,6 +11,7 @@ val exposedVersion: String by project
 val spekVersion: String by project
 val testContainersVersion: String by project
 val argonVersion: String by project
+val koinVersion: String by project
 
 plugins {
     application
@@ -33,42 +34,44 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
+    implementation("org.jetbrains.kotlin", "kotlin-stdlib-jdk8", kotlinVersion)
 
-    implementation("io.ktor:ktor-server-netty:$ktorVersion")
-    implementation("io.ktor:ktor-server-core:$ktorVersion")
-    implementation("io.ktor:ktor-server-host-common:$ktorVersion")
-    implementation("io.ktor:ktor-server-sessions:$ktorVersion")
-    implementation("io.ktor:ktor-jackson:$ktorVersion")
-    implementation("io.ktor:ktor-auth:$ktorVersion")
-    implementation("io.ktor:ktor-auth-jwt:$ktorVersion")
+    implementation("io.ktor", "ktor-server-netty", ktorVersion)
+    implementation("io.ktor", "ktor-server-core", ktorVersion)
+    implementation("io.ktor", "ktor-server-host-common", ktorVersion)
+    implementation("io.ktor", "ktor-server-sessions", ktorVersion)
+    implementation("io.ktor", "ktor-jackson", ktorVersion)
+    implementation("io.ktor", "ktor-auth", ktorVersion)
+    implementation("io.ktor", "ktor-auth-jwt", ktorVersion)
 
-    implementation("de.mkammerer:argon2-jvm:$argonVersion")
+    implementation("org.koin", "koin-ktor", koinVersion)
+    implementation("de.mkammerer", "argon2-jvm", argonVersion)
 
-    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
+    implementation("org.jetbrains.exposed", "exposed-core", exposedVersion)
+    implementation("org.jetbrains.exposed", "exposed-dao", exposedVersion)
+    implementation("org.jetbrains.exposed", "exposed-jdbc", exposedVersion)
+    implementation("org.jetbrains.exposed", "exposed-java-time", exposedVersion)
 
-    implementation("org.flywaydb:flyway-core:$flywayVersion")
-    implementation("com.zaxxer:HikariCP:$hikariVersion")
-    implementation("org.postgresql:postgresql:$postgresVersion")
+    implementation("org.flywaydb", "flyway-core", flywayVersion)
+    implementation("com.zaxxer", "HikariCP", hikariVersion)
+    implementation("org.postgresql", "postgresql", postgresVersion)
 
-    implementation("com.graphql-java:graphql-java:$graphqlVersion")
-    implementation("com.expediagroup:graphql-kotlin-schema-generator:$graphqlKotlinVersion")
-    implementation("com.graphql-java:graphql-java-extended-scalars:$graphqlScalarsVersion")
+    implementation("com.graphql-java", "graphql-java", graphqlVersion)
+    implementation("com.expediagroup", "graphql-kotlin-schema-generator", graphqlKotlinVersion)
+    implementation("com.graphql-java", "graphql-java-extended-scalars", graphqlScalarsVersion)
 
-    implementation("io.github.microutils:kotlin-logging:1.8.3")
-    implementation("ch.qos.logback:logback-classic:$logbackVersion")
+    implementation("io.github.microutils", "kotlin-logging", "1.8.3")
+    implementation("ch.qos.logback", "logback-classic", logbackVersion)
 
     implementation(platform("org.testcontainers:testcontainers-bom:$testContainersVersion"))
-    testImplementation("org.testcontainers:postgresql")
-    testImplementation("io.ktor:ktor-server-tests:$ktorVersion")
-    testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
+    testImplementation("org.testcontainers", "postgresql")
+    testImplementation("io.ktor", "ktor-server-tests", ktorVersion)
+    testImplementation("org.spekframework.spek2", "spek-dsl-jvm", spekVersion)
+    implementation("org.koin", "koin-ktor", koinVersion)
 
     // spek requires kotlin-reflect, can be omitted if already in the classpath
-    testRuntimeOnly("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
-    testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
+    testRuntimeOnly("org.jetbrains.kotlin", "kotlin-reflect", kotlinVersion)
+    testRuntimeOnly("org.spekframework.spek2", "spek-runner-junit5", spekVersion)
 }
 
 kotlin.sourceSets["main"].kotlin.srcDir("src")
