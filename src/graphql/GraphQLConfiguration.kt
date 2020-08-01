@@ -71,7 +71,7 @@ fun Application.installGraphQL() {
             .context(ApplicationCallContext(this))
             .query(request.query)
             .operationName(request.operationName)
-            .variables(request.variables)
+            .variables(request.variables ?: mapOf())
             .build()
 
         respond(graphql.execute(executionInput))
@@ -85,6 +85,10 @@ fun Application.installGraphQL() {
 
         static("playground") {
             defaultResource("static/playground.html")
+        }
+
+        static("graphiql") {
+            defaultResource("static/graphiql.html")
         }
         // }
     }
