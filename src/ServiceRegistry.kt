@@ -2,7 +2,7 @@ package no.echokarriere
 
 import io.ktor.util.KtorExperimentalAPI
 import no.echokarriere.auth.AuthRepository
-import no.echokarriere.auth.JWTConfiguration
+import no.echokarriere.auth.jwt.JWTConfiguration
 import no.echokarriere.category.CategoryRepository
 import no.echokarriere.configuration.Argon2Configuration
 import no.echokarriere.user.UserRepository

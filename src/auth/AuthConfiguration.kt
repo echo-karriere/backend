@@ -4,14 +4,16 @@ import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.auth.Authentication
 import io.ktor.auth.jwt.jwt
-import io.ktor.config.HoconApplicationConfig
+import io.ktor.config.ApplicationConfig
 import io.ktor.sessions.Sessions
 import io.ktor.sessions.cookie
 import io.ktor.util.KtorExperimentalAPI
 import java.util.UUID
 import kotlin.collections.set
-import no.echokarriere.ServiceRegistry
+import no.echokarriere.auth.jwt.JWTConfiguration
 import no.echokarriere.user.UserPrincipal
+import no.echokarriere.user.UserRepository
+import org.koin.ktor.ext.inject
 
 data class Session(val token: String)
 
@@ -19,19 +21,18 @@ const val REFRESH_TOKEN_DURATION: Long = 60 * 60 * 24 * 30 // 30 days
 
 @KtorExperimentalAPI
 fun Application.installAuth(
-    testing: Boolean,
-    config: HoconApplicationConfig,
-    serviceRegistry: ServiceRegistry
+    config: ApplicationConfig
 ) {
+    val prod = config.propertyOrNull("prod") != null
     val jwtRealm = config.propertyOrNull("jwt.realm")?.getString() ?: error("Missing `jwt.realm` property")
-    val userRepository = serviceRegistry.userRepository
-    val jwtConfiguration = serviceRegistry.jwtConfiguration
+    val userRepository: UserRepository by inject()
+    val jwtConfiguration: JWTConfiguration by inject()
 
     install(Sessions) {
         cookie<Session>("echo_karriere_session") {
-            cookie.secure = !testing
-            cookie.httpOnly = !testing
-            cookie.extensions["SameSite"] = if (!testing) "strict" else "lax"
+            cookie.secure = prod
+            cookie.httpOnly = prod
+            cookie.extensions["SameSite"] = if (prod) "strict" else "lax"
             cookie.path = "/"
             cookie.maxAgeInSeconds = REFRESH_TOKEN_DURATION
         }

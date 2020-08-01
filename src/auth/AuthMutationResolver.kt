@@ -3,15 +3,14 @@ package no.echokarriere.auth
 import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 import io.ktor.sessions.set
-import io.ktor.util.KtorExperimentalAPI
 import java.security.SecureRandom
 import java.time.Instant
+import no.echokarriere.auth.jwt.JWTConfiguration
 import no.echokarriere.configuration.Argon2Configuration
 import no.echokarriere.graphql.ApplicationCallContext
 import no.echokarriere.user.UserRepository
 
 @Suppress("unused") // Used by GraphQL via reflection
-@KtorExperimentalAPI
 class AuthMutationResolver(
     private val jwtConfiguration: JWTConfiguration,
     private val userRepository: UserRepository,

@@ -3,9 +3,11 @@ package no.echokarriere
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
+import io.ktor.util.KtorExperimentalAPI
 import kotlin.test.assertEquals
 import org.spekframework.spek2.style.specification.describe
 
+@KtorExperimentalAPI
 object ApplicationTest : AppSpek({
     describe("test root") {
         it("can get /playground") {

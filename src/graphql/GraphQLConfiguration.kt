@@ -27,12 +27,12 @@ import java.time.OffsetDateTime
 import java.util.UUID
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
-import no.echokarriere.ServiceRegistry
 import no.echokarriere.auth.AuthMutationResolver
 import no.echokarriere.category.CategoryMutationResolver
 import no.echokarriere.category.CategoryQueryResolver
 import no.echokarriere.user.UserMutationResolver
 import no.echokarriere.user.UserQueryResolver
+import org.koin.ktor.ext.inject
 
 data class GraphQLRequest(
     val query: String,
@@ -41,26 +41,25 @@ data class GraphQLRequest(
 )
 
 @KtorExperimentalAPI
-fun Application.installGraphQL(serviceRegistry: ServiceRegistry) {
+fun Application.installGraphQL() {
+    val userQueryResolver: UserQueryResolver by inject()
+    val userMutationResolver: UserMutationResolver by inject()
+    val authMutationResolver: AuthMutationResolver by inject()
+    val categoryQueryResolver: CategoryQueryResolver by inject()
+    val categoryMutationResolver: CategoryMutationResolver by inject()
+
     val config = SchemaGeneratorConfig(
         supportedPackages = listOf("no.echokarriere"),
         hooks = CustomSchemaGeneratorHooks()
     )
     val queries = listOf(
-        TopLevelObject(CategoryQueryResolver(serviceRegistry.categoryRepository)),
-        TopLevelObject(UserQueryResolver(serviceRegistry.userRepository))
+        TopLevelObject(categoryQueryResolver),
+        TopLevelObject(userQueryResolver)
     )
     val mutations = listOf(
-        TopLevelObject(CategoryMutationResolver(serviceRegistry.categoryRepository)),
-        TopLevelObject(UserMutationResolver(serviceRegistry.userRepository)),
-        TopLevelObject(
-            AuthMutationResolver(
-                serviceRegistry.jwtConfiguration,
-                serviceRegistry.userRepository,
-                serviceRegistry.authRepository,
-                serviceRegistry.argon2Configuration
-            )
-        )
+        TopLevelObject(categoryMutationResolver),
+        TopLevelObject(userMutationResolver),
+        TopLevelObject(authMutationResolver)
     )
 
     val schema = toSchema(config, queries, mutations)

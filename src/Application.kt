@@ -2,10 +2,8 @@
 
 package no.echokarriere
 
-import com.typesafe.config.ConfigFactory
 import io.ktor.application.Application
 import io.ktor.application.install
-import io.ktor.config.HoconApplicationConfig
 import io.ktor.features.AutoHeadResponse
 import io.ktor.features.CORS
 import io.ktor.features.Compression
@@ -17,34 +15,29 @@ import io.ktor.features.minimumSize
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.jackson.jackson
-import no.echokarriere.auth.AuthRepository
-import no.echokarriere.auth.JWTConfiguration
+import no.echokarriere.auth.authModule
 import no.echokarriere.auth.installAuth
-import no.echokarriere.category.CategoryRepository
-import no.echokarriere.configuration.Argon2Configuration
+import no.echokarriere.auth.jwt.jwtModule
+import no.echokarriere.category.categoryModule
 import no.echokarriere.configuration.DatabaseConfig
 import no.echokarriere.configuration.DatabaseConfiguration
+import no.echokarriere.configuration.configModule
 import no.echokarriere.graphql.installGraphQL
-import no.echokarriere.user.UserRepository
+import no.echokarriere.user.userModule
+import org.koin.ktor.ext.Koin
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
-val config = HoconApplicationConfig(ConfigFactory.load())
+fun Application.installKoin() {
+    install(Koin) {
+        modules(configModule, jwtModule, authModule, userModule, categoryModule)
+    }
+}
 
 @Suppress("unused") // Referenced in application.conf
 @kotlin.jvm.JvmOverloads
 // TODO: Change testing to false for production
-fun Application.module(testing: Boolean = true, database: DatabaseConfig = DatabaseConfiguration(config)) {
-    val jwtConfiguration = JWTConfiguration(testing, config)
-    val argon2Configuration = Argon2Configuration(testing)
-    val categoryRepository = CategoryRepository()
-    val userRepository = UserRepository(argon2Configuration)
-    val authRepository = AuthRepository()
-
-    val serviceRegistry = ServiceRegistry(
-        userRepository, categoryRepository, authRepository, argon2Configuration, jwtConfiguration
-    )
-
+fun Application.module(database: DatabaseConfig = DatabaseConfiguration(this.environment.config)) {
     install(Compression) {
         gzip {
             priority = 1.0
@@ -77,7 +70,9 @@ fun Application.module(testing: Boolean = true, database: DatabaseConfig = Datab
 
     installExceptionHandling()
 
-    installAuth(testing, config, serviceRegistry)
+    installKoin()
 
-    installGraphQL(serviceRegistry)
+    installAuth(this.environment.config)
+
+    installGraphQL()
 }
