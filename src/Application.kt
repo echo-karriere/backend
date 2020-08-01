@@ -68,8 +68,6 @@ fun Application.module(database: DatabaseConfig = DatabaseConfiguration(this.env
         jackson()
     }
 
-    installExceptionHandling()
-
     installKoin()
 
     installAuth(this.environment.config)
