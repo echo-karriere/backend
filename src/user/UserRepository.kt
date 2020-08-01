@@ -28,17 +28,17 @@ class UserRepository(private val argon: Argon2Configuration) {
             .singleOrNull()
     }
 
-    suspend fun create(user: UserDTO): UserEntity? {
+    suspend fun create(createUser: CreateUserInput): UserEntity? {
         val generatedId = UUID.randomUUID()
         val created = dbQuery {
             Users
                 .insertIgnore {
                     it[id] = generatedId
-                    it[name] = user.name
-                    it[email] = user.email
-                    it[password] = argon.hash(user.password.toCharArray())
+                    it[name] = createUser.name
+                    it[email] = createUser.email
+                    it[password] = argon.hash(createUser.password.toCharArray())
                     it[active] = true
-                    it[type] = user.type
+                    it[type] = createUser.type
                     it[createdAt] = Instant.now()
                 }
                 .resultedValues

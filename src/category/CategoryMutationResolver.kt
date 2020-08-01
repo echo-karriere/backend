@@ -6,7 +6,7 @@ import java.util.UUID
 class CategoryMutationResolver(
     private val categoryRepository: CategoryRepository
 ) {
-    suspend fun createCategory(data: CategoryDTO): CategoryEntity? = categoryRepository.insert(data)
+    suspend fun createCategory(input: CreateCategoryInput): CategoryEntity? = categoryRepository.insert(input)
     suspend fun deleteCategory(id: UUID): Boolean = categoryRepository.delete(id)
-    suspend fun updateCategory(id: UUID, data: CategoryDTO): CategoryEntity? = categoryRepository.update(id, data)
+    suspend fun updateCategory(input: UpdateCategoryInput): CategoryEntity? = categoryRepository.update(input)
 }

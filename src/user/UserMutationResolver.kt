@@ -4,5 +4,5 @@ package no.echokarriere.user
 class UserMutationResolver(
     private val userRepository: UserRepository
 ) {
-    suspend fun createUser(user: UserDTO): UserEntity? = userRepository.create(user)
+    suspend fun createUser(input: CreateUserInput): UserEntity? = userRepository.create(input)
 }

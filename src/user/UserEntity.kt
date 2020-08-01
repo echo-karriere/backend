@@ -24,7 +24,7 @@ data class UserEntity(
     val modifiedAt: Instant? = null
 )
 
-data class UserDTO(
+data class CreateUserInput(
     val name: String,
     val email: String,
     val password: String,

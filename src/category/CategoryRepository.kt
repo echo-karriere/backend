@@ -22,32 +22,32 @@ class CategoryRepository {
             .singleOrNull()
     }
 
-    suspend fun insert(data: CategoryDTO): CategoryEntity? {
+    suspend fun insert(input: CreateCategoryInput): CategoryEntity? {
         val generatedId = UUID.randomUUID()
         dbQuery {
             Categories
                 .insert {
                     it[id] = generatedId
-                    it[title] = data.title
-                    it[description] = data.description
-                    it[slug] = data.title.toLowerCase()
+                    it[title] = input.title
+                    it[description] = input.description
+                    it[slug] = input.title.toLowerCase()
                 }
         }
 
         return this.selectOne(generatedId)
     }
 
-    suspend fun update(id: UUID, data: CategoryDTO): CategoryEntity? {
+    suspend fun update(input: UpdateCategoryInput): CategoryEntity? {
         dbQuery {
-            Categories.update({ Categories.id eq id }) {
-                it[title] = data.title
-                it[description] = data.description
-                it[slug] = data.title.toLowerCase()
+            Categories.update({ Categories.id eq input.id }) {
+                it[title] = input.category.title
+                it[description] = input.category.description
+                it[slug] = input.category.title.toLowerCase()
                 it[modifiedAt] = Instant.now()
             }
         }
 
-        return this.selectOne(id)
+        return this.selectOne(input.id)
     }
 
     suspend fun delete(id: UUID): Boolean = dbQuery {

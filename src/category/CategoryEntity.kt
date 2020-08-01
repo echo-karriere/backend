@@ -14,10 +14,20 @@ data class CategoryEntity(
     val modifiedAt: Instant?
 )
 
-data class CategoryDTO(
+data class CreateCategoryInput(
     val title: String,
     val description: String
 )
+
+data class UpdateCategoryInput(
+    val id: UUID,
+    val category: CategoryData
+) {
+    data class CategoryData(
+        val title: String,
+        val description: String
+    )
+}
 
 object Categories : Table("category") {
     val id = uuid("id")
