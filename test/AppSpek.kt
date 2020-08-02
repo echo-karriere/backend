@@ -12,12 +12,12 @@ import org.spekframework.spek2.dsl.Root
 abstract class AppSpek(appRoot: Root.() -> Unit) : Spek(appRoot) {
     @KtorExperimentalAPI
     companion object {
-        private val testDatabaseConfiguration = TestDatabaseConfiguration()
         fun <R> withApp(test: suspend TestApplicationEngine.() -> R) = withTestApplication({
+            TestDatabaseConfiguration()
             (environment.config as MapApplicationConfig).apply {
                 put("jwt.realm", "testing")
             }
-            module(database = testDatabaseConfiguration)
+            module()
         }) {
             runBlocking {
                 test.invoke(this@withTestApplication)

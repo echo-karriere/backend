@@ -1,12 +1,11 @@
 package no.echokarriere
 
-import no.echokarriere.configuration.DatabaseConfig
 import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.sql.Database
 import org.testcontainers.containers.PostgreSQLContainer
 
-class TestDatabaseConfiguration : DatabaseConfig {
-    class AppPostgreSQLContainer : PostgreSQLContainer<AppPostgreSQLContainer>("postgres:12"), DatabaseConfig
+class TestDatabaseConfiguration {
+    class AppPostgreSQLContainer : PostgreSQLContainer<AppPostgreSQLContainer>("postgres:12")
 
     init {
         val postgreSQLContainer = AppPostgreSQLContainer()

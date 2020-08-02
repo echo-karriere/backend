@@ -1,18 +1,19 @@
 package no.echokarriere.configuration
 
+import com.typesafe.config.ConfigFactory
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.config.ApplicationConfig
+import io.ktor.config.HoconApplicationConfig
 import io.ktor.util.KtorExperimentalAPI
 import org.jetbrains.exposed.sql.Database
 import org.postgresql.ds.PGSimpleDataSource
 import org.postgresql.util.PGobject
 
-interface DatabaseConfig
-
 @KtorExperimentalAPI
-class DatabaseConfiguration(config: ApplicationConfig) : DatabaseConfig {
+class DatabaseConfiguration {
     init {
+        val config = HoconApplicationConfig(ConfigFactory.load())
         Database.connect(this.dataSource(config))
     }
 

@@ -15,18 +15,26 @@ import io.ktor.features.minimumSize
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.jackson.jackson
+import io.ktor.server.engine.commandLineEnvironment
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.netty.Netty
 import no.echokarriere.auth.authModule
 import no.echokarriere.auth.installAuth
 import no.echokarriere.auth.jwt.jwtModule
 import no.echokarriere.category.categoryModule
-import no.echokarriere.configuration.DatabaseConfig
 import no.echokarriere.configuration.DatabaseConfiguration
 import no.echokarriere.configuration.configModule
 import no.echokarriere.graphql.installGraphQL
 import no.echokarriere.user.userModule
 import org.koin.ktor.ext.Koin
 
-fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
+fun main(args: Array<String>) {
+    DatabaseConfiguration()
+    embeddedServer(
+        Netty,
+        commandLineEnvironment(args)
+    ).start(wait = true)
+}
 
 fun Application.installKoin() {
     install(Koin) {
@@ -34,10 +42,7 @@ fun Application.installKoin() {
     }
 }
 
-@Suppress("unused") // Referenced in application.conf
-@kotlin.jvm.JvmOverloads
-// TODO: Change testing to false for production
-fun Application.module(database: DatabaseConfig = DatabaseConfiguration(this.environment.config)) {
+fun Application.module() {
     install(Compression) {
         gzip {
             priority = 1.0
