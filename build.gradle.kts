@@ -24,7 +24,7 @@ group = "no.echokarriere"
 version = "0.0.1-SNAPSHOT"
 
 application {
-    mainClassName = "io.ktor.server.netty.EngineMain"
+    mainClassName = "no.echokarriere.ApplicationKt"
 }
 
 repositories {
