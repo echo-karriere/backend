@@ -19,7 +19,8 @@
     },
     {
       "packagePatterns": ["^com.graphql-java"],
-      "groupName": "Graphql-Java packages"
+      "groupName": "Graphql-Java packages",
+      "versioning": "semver"
     }
   ]
 }
