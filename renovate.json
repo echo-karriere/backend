@@ -1,5 +1,26 @@
 {
-  "extends": [
-    "config:base"
+  "extends": ["github>echo-karriere/renovate-config:default"],
+  "packageRules": [
+    {
+      "packagePatterns": ["^io.ktor"],
+      "groupName": "Ktor packages"
+    },
+    {
+      "packagePatterns": ["^org.flywaydb"],
+      "groupName": "Flyway packages"
+    },
+    {
+      "packagePatterns": ["^org.jetbrains.exposed"],
+      "groupName": "Exposed packages"
+    },
+    {
+      "packagePatterns": ["^org.jetbrains.kotlin"],
+      "groupName": "Kotlin packages"
+    },
+    {
+      "packagePatterns": ["^com.graphql-java"],
+      "groupName": "Graphql-Java packages",
+      "versioning": "semver"
+    }
   ]
 }
