@@ -14,15 +14,13 @@
 <br />
 
 <!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
-
 **Table of Contents**
 
-- [Installation](#installation)
-  - [Configuration](#configuration)
-  - [Production](#production)
-  - [Developing](#developing)
-- [Inspiration, help](#inspiration-help)
-- [License](#license)
+- [Developing](#developing)
+    - [Configuration](#configuration)
+    - [Starting the database](#starting-the-database)
+    - [Running](#running)
+- [LICENSE](#license)
 
 <!-- markdown-toc end -->
 
