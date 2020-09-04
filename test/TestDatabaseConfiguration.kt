@@ -5,7 +5,7 @@ import org.jetbrains.exposed.sql.Database
 import org.testcontainers.containers.PostgreSQLContainer
 
 class TestDatabaseConfiguration {
-    class AppPostgreSQLContainer : PostgreSQLContainer<AppPostgreSQLContainer>("postgres:12")
+    class AppPostgreSQLContainer : PostgreSQLContainer<AppPostgreSQLContainer>("postgres:12.4")
 
     init {
         val postgreSQLContainer = AppPostgreSQLContainer()

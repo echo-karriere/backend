@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 val logbackVersion: String by project
 val ktorVersion: String by project
 val kotlinVersion: String by project
@@ -12,16 +14,25 @@ val spekVersion: String by project
 val testContainersVersion: String by project
 val argonVersion: String by project
 val koinVersion: String by project
+val kotlinLoggingVersion: String by project
 
 plugins {
     application
+    kotlin("jvm")
     id("org.flywaydb.flyway")
     id("org.jlleitschuh.gradle.ktlint")
-    id("org.jetbrains.kotlin.jvm")
 }
 
 group = "no.echokarriere"
 version = "0.0.1-SNAPSHOT"
+
+tasks {
+    withType<KotlinCompile> {
+        kotlinOptions.jvmTarget = "11"
+        sourceCompatibility = JavaVersion.VERSION_11.toString()
+        targetCompatibility = JavaVersion.VERSION_11.toString()
+    }
+}
 
 application {
     mainClassName = "no.echokarriere.ApplicationKt"
@@ -34,8 +45,6 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin", "kotlin-stdlib-jdk8", kotlinVersion)
-
     implementation("io.ktor", "ktor-server-netty", ktorVersion)
     implementation("io.ktor", "ktor-server-core", ktorVersion)
     implementation("io.ktor", "ktor-server-host-common", ktorVersion)
@@ -60,14 +69,13 @@ dependencies {
     implementation("com.expediagroup", "graphql-kotlin-schema-generator", graphqlKotlinVersion)
     implementation("com.graphql-java", "graphql-java-extended-scalars", graphqlScalarsVersion)
 
-    implementation("io.github.microutils", "kotlin-logging", "1.8.3")
+    implementation("io.github.microutils", "kotlin-logging", kotlinLoggingVersion)
     implementation("ch.qos.logback", "logback-classic", logbackVersion)
 
     implementation(platform("org.testcontainers:testcontainers-bom:$testContainersVersion"))
     testImplementation("org.testcontainers", "postgresql")
     testImplementation("io.ktor", "ktor-server-tests", ktorVersion)
     testImplementation("org.spekframework.spek2", "spek-dsl-jvm", spekVersion)
-    implementation("org.koin", "koin-ktor", koinVersion)
 
     // spek requires kotlin-reflect, can be omitted if already in the classpath
     testRuntimeOnly("org.jetbrains.kotlin", "kotlin-reflect", kotlinVersion)
