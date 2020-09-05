@@ -20,19 +20,18 @@ import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.post
 import io.ktor.routing.routing
-import io.ktor.util.KtorExperimentalAPI
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.OffsetDateTime
-import java.util.UUID
-import kotlin.reflect.KClass
-import kotlin.reflect.KType
 import no.echokarriere.auth.AuthMutationResolver
 import no.echokarriere.category.CategoryMutationResolver
 import no.echokarriere.category.CategoryQueryResolver
 import no.echokarriere.user.UserMutationResolver
 import no.echokarriere.user.UserQueryResolver
 import org.koin.ktor.ext.inject
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.OffsetDateTime
+import java.util.UUID
+import kotlin.reflect.KClass
+import kotlin.reflect.KType
 
 data class GraphQLRequest(
     val query: String,
@@ -40,7 +39,6 @@ data class GraphQLRequest(
     val variables: Map<String, Any>? = mapOf()
 )
 
-@KtorExperimentalAPI
 fun Application.installGraphQL() {
     val userQueryResolver: UserQueryResolver by inject()
     val userMutationResolver: UserMutationResolver by inject()

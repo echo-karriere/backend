@@ -7,19 +7,17 @@ import io.ktor.auth.jwt.jwt
 import io.ktor.config.ApplicationConfig
 import io.ktor.sessions.Sessions
 import io.ktor.sessions.cookie
-import io.ktor.util.KtorExperimentalAPI
-import java.util.UUID
-import kotlin.collections.set
 import no.echokarriere.auth.jwt.JWTConfiguration
 import no.echokarriere.user.UserPrincipal
 import no.echokarriere.user.UserRepository
 import org.koin.ktor.ext.inject
+import java.util.UUID
+import kotlin.collections.set
 
 data class Session(val token: String)
 
 const val REFRESH_TOKEN_DURATION: Long = 60 * 60 * 24 * 30 // 30 days
 
-@KtorExperimentalAPI
 fun Application.installAuth(
     config: ApplicationConfig
 ) {

@@ -4,11 +4,10 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
 import io.ktor.config.HoconApplicationConfig
-import io.ktor.util.KtorExperimentalAPI
 import java.util.Date
 import java.util.UUID
 
-class JWTConfiguration @KtorExperimentalAPI constructor(config: HoconApplicationConfig) {
+class JWTConfiguration constructor(config: HoconApplicationConfig) {
     private val jwtIssuer = config.propertyOrNull("jwt.domain")?.getString() ?: error("Missing `jwt.domain` property")
     private val jwtAudience = config.propertyOrNull("jwt.audience")?.getString() ?: error("Missing `jwt.audience` property")
     private val validity = if (config.propertyOrNull("prod")?.getString().equals("true")) 900 else 3600

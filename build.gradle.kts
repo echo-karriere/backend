@@ -26,12 +26,14 @@ plugins {
 group = "no.echokarriere"
 version = "0.0.1-SNAPSHOT"
 
-tasks {
-    withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "11"
-        sourceCompatibility = JavaVersion.VERSION_11.toString()
-        targetCompatibility = JavaVersion.VERSION_11.toString()
+tasks.withType<KotlinCompile>().all {
+    kotlinOptions {
+        jvmTarget = "11"
+        // This might unexpectedly break our code in the future, fingers crossed
+        freeCompilerArgs = freeCompilerArgs + "-Xopt-in=io.ktor.util.KtorExperimentalAPI"
     }
+    sourceCompatibility = JavaVersion.VERSION_11.toString()
+    targetCompatibility = JavaVersion.VERSION_11.toString()
 }
 
 application {
