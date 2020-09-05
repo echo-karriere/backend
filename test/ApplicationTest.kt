@@ -1,20 +1,21 @@
 package no.echokarriere
 
+import io.kotest.assertions.ktor.shouldHaveStatus
+import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.matchers.string.shouldContain
+import io.ktor.application.Application
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
-import io.ktor.util.KtorExperimentalAPI
-import kotlin.test.assertEquals
-import org.spekframework.spek2.style.specification.describe
+import io.ktor.server.testing.withTestApplication
 
-@KtorExperimentalAPI
-object ApplicationTest : AppSpek({
+class ApplicationTest : DescribeSpec({
     describe("test root") {
         it("can get /playground") {
-            withApp {
+            withTestApplication(Application::testWithDatabase) {
                 handleRequest(HttpMethod.Get, "/playground").apply {
-                    assertEquals(HttpStatusCode.OK, response.status())
-                    response.content?.contains("GraphQL Playground")?.let { assert(it) }
+                    response shouldHaveStatus HttpStatusCode.OK
+                    response.content shouldContain "GraphQL Playground"
                 }
             }
         }

@@ -1,20 +1,20 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val logbackVersion: String by project
-val ktorVersion: String by project
-val kotlinVersion: String by project
+val argonVersion: String by project
+val exposedVersion: String by project
 val flywayVersion: String by project
-val hikariVersion: String by project
-val postgresVersion: String by project
+val graphqlKotlinVersion: String by project
 val graphqlScalarsVersion: String by project
 val graphqlVersion: String by project
-val graphqlKotlinVersion: String by project
-val exposedVersion: String by project
-val spekVersion: String by project
-val testContainersVersion: String by project
-val argonVersion: String by project
+val hikariVersion: String by project
 val koinVersion: String by project
+val kotestVersion: String by project
 val kotlinLoggingVersion: String by project
+val kotlinVersion: String by project
+val ktorVersion: String by project
+val logbackVersion: String by project
+val postgresVersion: String by project
+val testContainersVersion: String by project
 
 plugins {
     application
@@ -75,11 +75,12 @@ dependencies {
     implementation(platform("org.testcontainers:testcontainers-bom:$testContainersVersion"))
     testImplementation("org.testcontainers", "postgresql")
     testImplementation("io.ktor", "ktor-server-tests", ktorVersion)
-    testImplementation("org.spekframework.spek2", "spek-dsl-jvm", spekVersion)
 
-    // spek requires kotlin-reflect, can be omitted if already in the classpath
-    testRuntimeOnly("org.jetbrains.kotlin", "kotlin-reflect", kotlinVersion)
-    testRuntimeOnly("org.spekframework.spek2", "spek-runner-junit5", spekVersion)
+    testImplementation("io.kotest", "kotest-runner-junit5", kotestVersion)
+    testImplementation("io.kotest", "kotest-assertions-core", kotestVersion)
+    testImplementation("io.kotest", "kotest-property", kotestVersion)
+    testImplementation("io.kotest", "kotest-assertions-ktor", kotestVersion)
+    testImplementation("io.kotest", "kotest-extensions-koin", kotestVersion)
 }
 
 kotlin.sourceSets["main"].kotlin.srcDir("src")
