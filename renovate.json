@@ -21,6 +21,10 @@
       "packagePatterns": ["^com.graphql-java"],
       "groupName": "Graphql-Java packages",
       "versioning": "semver"
+    },
+    {
+      "packagePatterns": ["^io.kotest"],
+      "groupName": "Kotest packages"
     }
   ]
 }
