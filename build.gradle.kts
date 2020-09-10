@@ -7,6 +7,7 @@ val graphqlKotlinVersion: String by project
 val graphqlScalarsVersion: String by project
 val graphqlVersion: String by project
 val hikariVersion: String by project
+val jsonPathVersion: String by project
 val kotestVersion: String by project
 val kotlinLoggingVersion: String by project
 val kotlinVersion: String by project
@@ -80,6 +81,9 @@ dependencies {
     testImplementation("io.kotest", "kotest-assertions-core", kotestVersion)
     testImplementation("io.kotest", "kotest-property", kotestVersion)
     testImplementation("io.kotest", "kotest-assertions-ktor", kotestVersion)
+    testImplementation("io.kotest", "kotest-assertions-json", kotestVersion)
+
+    testImplementation("io.rest-assured", "json-path", jsonPathVersion)
 }
 
 kotlin.sourceSets["main"].kotlin.srcDir("src")
