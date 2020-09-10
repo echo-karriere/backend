@@ -21,11 +21,13 @@ class TestDatabaseConfiguration {
         val postgreSQLContainer = AppPostgreSQLContainer()
 
         postgreSQLContainer.start()
-        val flyway = Flyway.configure()
+
+        Flyway.configure()
+            .locations("filesystem:resources/db/migrations")
             .dataSource(postgreSQLContainer.jdbcUrl, postgreSQLContainer.username, postgreSQLContainer.password)
             .load()
+            .migrate()
 
-        flyway.migrate()
         Database.connect(
             postgreSQLContainer.jdbcUrl,
             postgreSQLContainer.driverClassName,

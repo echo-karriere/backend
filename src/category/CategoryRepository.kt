@@ -1,6 +1,5 @@
 package no.echokarriere.category
 
-import java.time.Instant
 import java.util.UUID
 import no.echokarriere.dbQuery
 import org.jetbrains.exposed.sql.ResultRow
@@ -22,28 +21,27 @@ class CategoryRepository {
             .singleOrNull()
     }
 
-    suspend fun insert(input: CreateCategoryInput): CategoryEntity? {
-        val generatedId = UUID.randomUUID()
+    suspend fun insert(input: CategoryEntity): CategoryEntity? {
         dbQuery {
             Categories
                 .insert {
-                    it[id] = generatedId
+                    it[id] = input.id
                     it[title] = input.title
                     it[description] = input.description
-                    it[slug] = input.title.toLowerCase()
+                    it[slug] = input.slug
                 }
         }
 
-        return this.selectOne(generatedId)
+        return this.selectOne(input.id)
     }
 
-    suspend fun update(input: UpdateCategoryInput): CategoryEntity? {
+    suspend fun update(input: CategoryEntity): CategoryEntity? {
         dbQuery {
             Categories.update({ Categories.id eq input.id }) {
-                it[title] = input.category.title
-                it[description] = input.category.description
-                it[slug] = input.category.title.toLowerCase()
-                it[modifiedAt] = Instant.now()
+                it[title] = input.title
+                it[description] = input.description
+                it[slug] = input.slug
+                it[modifiedAt] = input.modifiedAt
             }
         }
 
@@ -55,7 +53,7 @@ class CategoryRepository {
     }
 }
 
-private fun toNamespace(row: ResultRow): CategoryEntity = CategoryEntity(
+private fun toNamespace(row: ResultRow): CategoryEntity = CategoryEntity.create(
     id = row[Categories.id],
     title = row[Categories.title],
     description = row[Categories.description],
