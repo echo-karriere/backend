@@ -6,8 +6,10 @@ import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.sql.Database
 import org.testcontainers.containers.PostgreSQLContainer
 
-fun Application.testWithDatabase() {
-    TestDatabaseConfiguration()
+fun Application.testWithDatabase(
+    databaseConfiguration: () -> TestDatabaseConfiguration
+) {
+    databaseConfiguration()
     (environment.config as MapApplicationConfig).apply {
         put("jwt.realm", "testing")
     }
