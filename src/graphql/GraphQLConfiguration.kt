@@ -20,12 +20,12 @@ import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.post
 import io.ktor.routing.routing
+import no.echokarriere.ServiceRegistry
 import no.echokarriere.auth.AuthMutationResolver
 import no.echokarriere.category.CategoryMutationResolver
 import no.echokarriere.category.CategoryQueryResolver
 import no.echokarriere.user.UserMutationResolver
 import no.echokarriere.user.UserQueryResolver
-import org.koin.ktor.ext.inject
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
@@ -39,26 +39,27 @@ data class GraphQLRequest(
     val variables: Map<String, Any>? = mapOf()
 )
 
-fun Application.installGraphQL() {
-    val userQueryResolver: UserQueryResolver by inject()
-    val userMutationResolver: UserMutationResolver by inject()
-    val authMutationResolver: AuthMutationResolver by inject()
-    val categoryQueryResolver: CategoryQueryResolver by inject()
-    val categoryMutationResolver: CategoryMutationResolver by inject()
-
+fun Application.installGraphQL(serviceRegistry: ServiceRegistry) {
     val config = SchemaGeneratorConfig(
         supportedPackages = listOf("no.echokarriere"),
         hooks = CustomSchemaGeneratorHooks()
     )
+
     val queries = listOf(
-        TopLevelObject(categoryQueryResolver),
-        TopLevelObject(userQueryResolver)
-    )
+        CategoryQueryResolver(serviceRegistry.categoryRepository),
+        UserQueryResolver(serviceRegistry.userRepository)
+    ).map { TopLevelObject(it) }
+
     val mutations = listOf(
-        TopLevelObject(categoryMutationResolver),
-        TopLevelObject(userMutationResolver),
-        TopLevelObject(authMutationResolver)
-    )
+        CategoryMutationResolver(serviceRegistry.categoryRepository),
+        UserMutationResolver(serviceRegistry.userRepository),
+        AuthMutationResolver(
+            serviceRegistry.jwtConfiguration,
+            serviceRegistry.userRepository,
+            serviceRegistry.authRepository,
+            serviceRegistry.argon2Configuration
+        )
+    ).map { TopLevelObject(it) }
 
     val schema = toSchema(config, queries, mutations)
     val graphql = GraphQL.newGraphQL(schema).build()

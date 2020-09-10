@@ -2,8 +2,10 @@
 
 package no.echokarriere
 
+import com.typesafe.config.ConfigFactory
 import io.ktor.application.Application
 import io.ktor.application.install
+import io.ktor.config.HoconApplicationConfig
 import io.ktor.features.AutoHeadResponse
 import io.ktor.features.CORS
 import io.ktor.features.Compression
@@ -18,15 +20,14 @@ import io.ktor.jackson.jackson
 import io.ktor.server.engine.commandLineEnvironment
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import no.echokarriere.auth.authModule
+import no.echokarriere.auth.AuthRepository
 import no.echokarriere.auth.installAuth
-import no.echokarriere.auth.jwt.jwtModule
-import no.echokarriere.category.categoryModule
+import no.echokarriere.auth.jwt.JWTConfiguration
+import no.echokarriere.category.CategoryRepository
+import no.echokarriere.configuration.Argon2Configuration
 import no.echokarriere.configuration.DatabaseConfiguration
-import no.echokarriere.configuration.configModule
 import no.echokarriere.graphql.installGraphQL
-import no.echokarriere.user.userModule
-import org.koin.ktor.ext.Koin
+import no.echokarriere.user.UserRepository
 
 fun main(args: Array<String>) {
     DatabaseConfiguration()
@@ -36,13 +37,24 @@ fun main(args: Array<String>) {
     ).start(wait = true)
 }
 
-fun Application.installKoin() {
-    install(Koin) {
-        modules(configModule, jwtModule, authModule, userModule, categoryModule)
-    }
-}
-
 fun Application.module() {
+    val applicationConfiguration = HoconApplicationConfig(ConfigFactory.load())
+    val argon2Configuration = Argon2Configuration(applicationConfiguration)
+    val jwtConfiguration = JWTConfiguration(applicationConfiguration)
+
+    val authRepository = AuthRepository()
+    val categoryRepository = CategoryRepository()
+    val userRepository = UserRepository(argon2Configuration)
+
+    val serviceRegistry = ServiceRegistry(
+        authRepository = authRepository,
+        categoryRepository = categoryRepository,
+        userRepository = userRepository,
+        jwtConfiguration = jwtConfiguration,
+        applicationConfig = applicationConfiguration,
+        argon2Configuration = argon2Configuration
+    )
+
     install(Compression) {
         gzip {
             priority = 1.0
@@ -73,9 +85,7 @@ fun Application.module() {
         jackson()
     }
 
-    installKoin()
+    installAuth(serviceRegistry)
 
-    installAuth(this.environment.config)
-
-    installGraphQL()
+    installGraphQL(serviceRegistry)
 }

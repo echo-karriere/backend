@@ -7,9 +7,17 @@ import io.ktor.config.HoconApplicationConfig
 import java.util.Date
 import java.util.UUID
 
-class JWTConfiguration constructor(config: HoconApplicationConfig) {
-    private val jwtIssuer = config.propertyOrNull("jwt.domain")?.getString() ?: error("Missing `jwt.domain` property")
-    private val jwtAudience = config.propertyOrNull("jwt.audience")?.getString() ?: error("Missing `jwt.audience` property")
+class JWTConfiguration(config: HoconApplicationConfig) {
+    private val jwtIssuer = config
+        .propertyOrNull("jwt.domain")
+        ?.getString()
+        ?: error("Missing `jwt.domain` property")
+
+    private val jwtAudience = config
+        .propertyOrNull("jwt.audience")
+        ?.getString()
+        ?: error("Missing `jwt.audience` property")
+
     private val validity = if (config.propertyOrNull("prod")?.getString().equals("true")) 900 else 3600
     private val algorithm = Algorithm.HMAC256("secret")
 

@@ -7,7 +7,6 @@ val graphqlKotlinVersion: String by project
 val graphqlScalarsVersion: String by project
 val graphqlVersion: String by project
 val hikariVersion: String by project
-val koinVersion: String by project
 val kotestVersion: String by project
 val kotlinLoggingVersion: String by project
 val kotlinVersion: String by project
@@ -55,7 +54,6 @@ dependencies {
     implementation("io.ktor", "ktor-auth", ktorVersion)
     implementation("io.ktor", "ktor-auth-jwt", ktorVersion)
 
-    implementation("org.koin", "koin-ktor", koinVersion)
     implementation("de.mkammerer", "argon2-jvm", argonVersion)
 
     implementation("org.jetbrains.exposed", "exposed-core", exposedVersion)
@@ -82,7 +80,6 @@ dependencies {
     testImplementation("io.kotest", "kotest-assertions-core", kotestVersion)
     testImplementation("io.kotest", "kotest-property", kotestVersion)
     testImplementation("io.kotest", "kotest-assertions-ktor", kotestVersion)
-    testImplementation("io.kotest", "kotest-extensions-koin", kotestVersion)
 }
 
 kotlin.sourceSets["main"].kotlin.srcDir("src")
