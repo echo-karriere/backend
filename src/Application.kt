@@ -1,5 +1,3 @@
-@file:Suppress("EXPERIMENTAL_API_USAGE")
-
 package no.echokarriere
 
 import com.typesafe.config.ConfigFactory
@@ -17,9 +15,6 @@ import io.ktor.features.minimumSize
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.jackson.jackson
-import io.ktor.server.engine.commandLineEnvironment
-import io.ktor.server.engine.embeddedServer
-import io.ktor.server.netty.Netty
 import no.echokarriere.auth.AuthRepository
 import no.echokarriere.auth.installAuth
 import no.echokarriere.auth.jwt.JWTConfiguration
@@ -31,10 +26,7 @@ import no.echokarriere.user.UserRepository
 
 fun main(args: Array<String>) {
     DatabaseConfiguration()
-    embeddedServer(
-        Netty,
-        commandLineEnvironment(args)
-    ).start(wait = true)
+    io.ktor.server.netty.EngineMain.main(args)
 }
 
 fun Application.module() {
