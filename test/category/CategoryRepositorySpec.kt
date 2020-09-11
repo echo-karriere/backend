@@ -1,13 +1,11 @@
 package no.echokarriere.category
 
-import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-import no.echokarriere.TestDatabaseConfiguration
+import no.echokarriere.utils.DatabaseDescribeSpec
 import java.util.UUID
 
-class CategoryRepositorySpec : DescribeSpec({
-    TestDatabaseConfiguration()
+class CategoryRepositorySpec : DatabaseDescribeSpec({
     val categoryRepository = CategoryRepository()
     val categoryId = UUID.randomUUID()
 
