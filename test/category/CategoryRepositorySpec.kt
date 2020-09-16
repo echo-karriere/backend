@@ -16,7 +16,10 @@ class CategoryRepositorySpec : DatabaseDescribeSpec({
             val slug = "test-category"
 
             val category = CategoryEntity.create(
-                id = categoryId, title, description, slug
+                id = categoryId,
+                title,
+                description,
+                slug
             )
 
             val created = categoryRepository.insert(category)
