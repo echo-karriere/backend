@@ -22,6 +22,7 @@ plugins {
     kotlin("jvm")
     id("org.flywaydb.flyway")
     id("org.jlleitschuh.gradle.ktlint")
+    id("org.sonarqube")
 }
 
 group = "no.echokarriere"
@@ -117,5 +118,13 @@ tasks.jacocoTestReport {
     reports {
         xml.isEnabled = true
         html.isEnabled = false
+    }
+}
+
+sonarqube {
+    properties {
+        property("sonar.projectKey", "echo-karriere_backend")
+        property("sonar.organization", "echo-karriere")
+        property("sonar.host.url", "https://sonarcloud.io")
     }
 }

@@ -16,6 +16,12 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
 
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+
       - name: Cache Gradle packages
         uses: actions/cache@v1
         with:
@@ -36,3 +42,9 @@ jobs:
 
       - name: Build
         run: gradle build
+
+      - name: SonarQube analysis
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew build sonarqube --info
