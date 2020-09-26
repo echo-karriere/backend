@@ -7,7 +7,7 @@ import org.flywaydb.core.Flyway
 abstract class DatabaseDescribeSpec(body: DescribeSpec.() -> Unit = {}) : DescribeSpec(body) {
     private val flyway: Flyway = Flyway
         .configure()
-        .locations("filesystem:resources/db/migrations")
+        .locations("filesystem:src/main/resources/db/migrations")
         .dataSource(
             System.getProperty("database.default.url"),
             System.getProperty("database.default.username"),

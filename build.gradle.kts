@@ -88,12 +88,6 @@ dependencies {
     testImplementation("io.rest-assured", "json-path", jsonPathVersion)
 }
 
-kotlin.sourceSets["main"].kotlin.srcDir("src")
-kotlin.sourceSets["test"].kotlin.srcDir("test")
-
-sourceSets["main"].resources.srcDir("resources")
-sourceSets["test"].resources.srcDir("testresources")
-
 sourceSets {
     val flyway by creating {
         compileClasspath += sourceSets.main.get().compileClasspath
@@ -108,18 +102,25 @@ flyway {
     url = (System.getenv("DB_URL") ?: "jdbc:postgresql://localhost:5432/echokarriere")
     user = (System.getenv("DB_USER") ?: "karriere")
     password = (System.getenv("DB_PASSWORD") ?: "password")
-    locations = arrayOf("filesystem:resources/db/migrations")
+    locations = arrayOf("filesystem:src/main/resources/db/migrations")
 }
 
 tasks.flywayMigrate { dependsOn("flywayClasses") }
-tasks.withType<Test> { useJUnitPlatform() }
+tasks.withType<Test> {
+    useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
+}
 
 tasks.jacocoTestReport {
+    dependsOn(tasks.test)
     reports {
         xml.isEnabled = true
-        xml.destination = file("$buildDir/jacoco.xml")
-        html.isEnabled = false
+        html.isEnabled = true
     }
+}
+
+tasks.sonarqube {
+    dependsOn(tasks.test)
 }
 
 sonarqube {
@@ -127,6 +128,5 @@ sonarqube {
         property("sonar.projectKey", "echo-karriere_backend")
         property("sonar.organization", "echo-karriere")
         property("sonar.host.url", "https://sonarcloud.io")
-        property("sonar.coverage.jacoco.xmlReportPaths", "$buildDir/jacoco.xml")
     }
 }

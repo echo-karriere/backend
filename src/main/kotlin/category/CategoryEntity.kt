@@ -25,7 +25,7 @@ class CategoryEntity private constructor(
         title: String = this.title,
         description: String = this.description,
         slug: String = this.slug,
-        createdAt: Instant = this.createdAt,
+        createdAt: Instant = this.createdAt
     ): CategoryEntity = CategoryEntity(
         id = id,
         title = title,
