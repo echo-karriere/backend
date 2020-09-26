@@ -27,11 +27,12 @@ jobs:
         run: gradle ktlintCheck
 
       - name: Test
-        run: gradle test
+        run: |
+          gradle test
+          gradle jacocoTestReport
 
       - name: Check
         run: gradle check
 
       - name: Build
         run: gradle build
-

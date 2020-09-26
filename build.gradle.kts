@@ -17,6 +17,7 @@ val postgresVersion: String by project
 val testContainersVersion: String by project
 
 plugins {
+    jacoco
     application
     kotlin("jvm")
     id("org.flywaydb.flyway")
@@ -111,3 +112,10 @@ flyway {
 
 tasks.flywayMigrate { dependsOn("flywayClasses") }
 tasks.withType<Test> { useJUnitPlatform() }
+
+tasks.jacocoTestReport {
+    reports {
+        xml.isEnabled = true
+        html.isEnabled = false
+    }
+}
