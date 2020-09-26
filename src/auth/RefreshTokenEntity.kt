@@ -1,25 +1,31 @@
 package no.echokarriere.auth
 
-import java.time.Instant
-import java.util.UUID
 import no.echokarriere.user.Users
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.`java-time`.timestamp
+import java.time.Instant
+import java.util.UUID
 
-data class RefreshTokenEntity(
-    val id: Int,
+class RefreshTokenEntity private constructor(
     val refreshToken: String,
     val userId: UUID,
     val expiresAt: Instant,
     val createdAt: Instant
-)
-
-data class RefreshTokenDTO(
-    val refreshToken: String,
-    val userId: UUID,
-    val expiresAt: Instant,
-    val createdAt: Instant
-)
+) {
+    companion object {
+        fun create(
+            refreshToken: String,
+            userId: UUID,
+            expiresAt: Instant,
+            createdAt: Instant
+        ): RefreshTokenEntity = RefreshTokenEntity(
+            refreshToken = refreshToken,
+            userId = userId,
+            expiresAt = expiresAt,
+            createdAt = createdAt
+        )
+    }
+}
 
 data class LoginInput(
     val email: String,
@@ -31,10 +37,9 @@ data class LoginPayload(
 )
 
 object RefreshTokens : Table("refresh_token") {
-    val id = integer("id").autoIncrement()
     val refreshToken = text("refresh_token")
     val userId = uuid("user_id").references(Users.id)
     val expiresAt = timestamp("expires_at")
     val createdAt = timestamp("created_at")
-    override val primaryKey = PrimaryKey(id)
+    override val primaryKey = PrimaryKey(userId)
 }

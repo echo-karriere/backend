@@ -1,39 +1,42 @@
 package no.echokarriere.auth
 
+import no.echokarriere.configuration.CrudRepository
 import no.echokarriere.dbQuery
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.update
+import java.util.UUID
 
-class AuthRepository {
-    suspend fun selectAll(): List<RefreshTokenEntity> = dbQuery {
+class AuthRepository : CrudRepository<RefreshTokenEntity, UUID> {
+    override suspend fun selectAll(): List<RefreshTokenEntity> = dbQuery {
         RefreshTokens.selectAll().map { toRefreshToken(it) }
     }
 
-    suspend fun select(id: Int): RefreshTokenEntity? = dbQuery {
+    override suspend fun select(id: UUID): RefreshTokenEntity? = dbQuery {
         RefreshTokens
-            .select { RefreshTokens.id eq id }
+            .select { RefreshTokens.userId eq id }
             .mapNotNull { toRefreshToken(it) }
             .singleOrNull()
     }
 
-    suspend fun select(token: String): RefreshTokenEntity? = dbQuery {
+    suspend fun selectByToken(token: String): RefreshTokenEntity? = dbQuery {
         RefreshTokens
             .select { RefreshTokens.refreshToken eq token }
             .mapNotNull { toRefreshToken(it) }
             .singleOrNull()
     }
 
-    suspend fun insert(data: RefreshTokenDTO): RefreshTokenEntity? {
+    override suspend fun insert(value: RefreshTokenEntity): RefreshTokenEntity? {
         return dbQuery {
             RefreshTokens
                 .insert {
-                    it[refreshToken] = data.refreshToken
-                    it[userId] = data.userId
-                    it[expiresAt] = data.expiresAt
-                    it[createdAt] = data.createdAt
+                    it[refreshToken] = value.refreshToken
+                    it[userId] = value.userId
+                    it[expiresAt] = value.expiresAt
+                    it[createdAt] = value.createdAt
                 }
                 .resultedValues
                 ?.map { toRefreshToken(it) }
@@ -41,13 +44,24 @@ class AuthRepository {
         }
     }
 
-    suspend fun delete(id: Int): Boolean = dbQuery {
-        RefreshTokens.deleteWhere { RefreshTokens.id eq id } == 1
+    override suspend fun delete(id: UUID): Boolean = dbQuery {
+        RefreshTokens.deleteWhere { RefreshTokens.userId eq id } == 1
+    }
+
+    override suspend fun update(value: RefreshTokenEntity): RefreshTokenEntity? {
+        dbQuery {
+            RefreshTokens.update({ RefreshTokens.userId eq value.userId }) {
+                it[refreshToken] = value.refreshToken
+                it[expiresAt] = value.expiresAt
+                it[createdAt] = value.createdAt
+            }
+        }
+
+        return this.select(value.userId)
     }
 }
 
-fun toRefreshToken(row: ResultRow): RefreshTokenEntity = RefreshTokenEntity(
-    id = row[RefreshTokens.id],
+fun toRefreshToken(row: ResultRow): RefreshTokenEntity = RefreshTokenEntity.create(
     refreshToken = row[RefreshTokens.refreshToken],
     userId = row[RefreshTokens.userId],
     expiresAt = row[RefreshTokens.expiresAt],

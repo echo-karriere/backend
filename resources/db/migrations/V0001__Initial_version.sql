@@ -26,9 +26,8 @@ CREATE TABLE IF NOT EXISTS "user"
 
 CREATE TABLE IF NOT EXISTS refresh_token
 (
-    id            serial      NOT NULL PRIMARY KEY,
+    user_id       uuid        NOT NULL PRIMARY KEY,
     refresh_token text        NOT NULL,
-    user_id       uuid        NOT NULL,
     expires_at    timestamptz NOT NULL,
     created_at    timestamptz NOT NULL DEFAULT now(),
     FOREIGN KEY (user_id) REFERENCES "user" (id) ON UPDATE RESTRICT ON DELETE CASCADE
