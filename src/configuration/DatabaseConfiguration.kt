@@ -8,6 +8,15 @@ import io.ktor.config.HoconApplicationConfig
 import org.jetbrains.exposed.sql.Database
 import org.postgresql.ds.PGSimpleDataSource
 import org.postgresql.util.PGobject
+import java.util.UUID
+
+interface CrudDatabase<E> {
+    suspend fun selectAll(): List<E>
+    suspend fun select(id: UUID): E?
+    suspend fun insert(value: E): E?
+    suspend fun update(value: E): E?
+    suspend fun delete(id: UUID): Boolean
+}
 
 class DatabaseConfiguration {
     init {
