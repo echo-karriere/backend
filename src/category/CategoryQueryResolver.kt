@@ -11,6 +11,6 @@ class CategoryQueryResolver(
     }
 
     suspend fun categoryById(id: UUID): Category? {
-        return categoryRepository.selectOne(id)?.let { Category(it) }
+        return categoryRepository.select(id)?.let { Category(it) }
     }
 }

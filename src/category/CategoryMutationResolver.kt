@@ -17,7 +17,7 @@ class CategoryMutationResolver(
     suspend fun deleteCategory(id: UUID): Boolean = categoryRepository.delete(id)
 
     suspend fun updateCategory(input: UpdateCategoryInput): Category? {
-        val category = categoryRepository.selectOne(input.id) ?: throw NotFoundException("Category $input.id not found")
+        val category = categoryRepository.select(input.id) ?: throw NotFoundException("Category $input.id not found")
 
         val updated = category.updateDetails(
             title = input.category.title,

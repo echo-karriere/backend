@@ -1,5 +1,6 @@
 package no.echokarriere.category
 
+import no.echokarriere.configuration.CrudDatabase
 import java.util.UUID
 import no.echokarriere.dbQuery
 import org.jetbrains.exposed.sql.ResultRow
@@ -9,46 +10,46 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.update
 
-class CategoryRepository {
-    suspend fun selectAll(): List<CategoryEntity> = dbQuery {
+class CategoryRepository : CrudDatabase<CategoryEntity> {
+    override suspend fun selectAll(): List<CategoryEntity> = dbQuery {
         Categories.selectAll().map { toNamespace(it) }
     }
 
-    suspend fun selectOne(id: UUID): CategoryEntity? = dbQuery {
+    override suspend fun select(id: UUID): CategoryEntity? = dbQuery {
         Categories
             .select { Categories.id eq id }
             .mapNotNull { toNamespace(it) }
             .singleOrNull()
     }
 
-    suspend fun insert(input: CategoryEntity): CategoryEntity? {
+    override suspend fun insert(value: CategoryEntity): CategoryEntity? {
         dbQuery {
             Categories
                 .insert {
-                    it[id] = input.id
-                    it[title] = input.title
-                    it[description] = input.description
-                    it[slug] = input.slug
+                    it[id] = value.id
+                    it[title] = value.title
+                    it[description] = value.description
+                    it[slug] = value.slug
                 }
         }
 
-        return this.selectOne(input.id)
+        return this.select(value.id)
     }
 
-    suspend fun update(input: CategoryEntity): CategoryEntity? {
+    override suspend fun update(value: CategoryEntity): CategoryEntity? {
         dbQuery {
-            Categories.update({ Categories.id eq input.id }) {
-                it[title] = input.title
-                it[description] = input.description
-                it[slug] = input.slug
-                it[modifiedAt] = input.modifiedAt
+            Categories.update({ Categories.id eq value.id }) {
+                it[title] = value.title
+                it[description] = value.description
+                it[slug] = value.slug
+                it[modifiedAt] = value.modifiedAt
             }
         }
 
-        return this.selectOne(input.id)
+        return this.select(value.id)
     }
 
-    suspend fun delete(id: UUID): Boolean = dbQuery {
+    override suspend fun delete(id: UUID): Boolean = dbQuery {
         Categories.deleteWhere { Categories.id eq id } == 1
     }
 }

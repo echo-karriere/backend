@@ -35,7 +35,7 @@ private val body: DescribeSpec.() -> Unit = {
         }
 
         it("can find created entity") {
-            val found = categoryRepository.selectOne(categoryId)
+            val found = categoryRepository.select(categoryId)
 
             found shouldNotBe null
             found?.id shouldBe categoryId
@@ -54,7 +54,7 @@ private val body: DescribeSpec.() -> Unit = {
             val newDescription = "The bestest category"
             val newSlug = "the-best"
 
-            val old = categoryRepository.selectOne(categoryId)!!
+            val old = categoryRepository.select(categoryId)!!
 
             val new = old.updateDetails(
                 title = newTitle,
@@ -79,7 +79,7 @@ private val body: DescribeSpec.() -> Unit = {
             val doubleDeleted = categoryRepository.delete(categoryId)
             doubleDeleted shouldBe false
 
-            val itIsGone = categoryRepository.selectOne(categoryId)
+            val itIsGone = categoryRepository.select(categoryId)
             itIsGone shouldBe null
         }
     }
