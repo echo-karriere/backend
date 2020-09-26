@@ -1,6 +1,7 @@
 package no.echokarriere.category
 
 import io.kotest.assertions.ktor.shouldHaveStatus
+import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.ktor.application.Application
@@ -12,7 +13,9 @@ import no.echokarriere.utils.DatabaseDescribeSpec
 import no.echokarriere.utils.graphqlQuery
 import java.util.UUID
 
-class CategoryResolverSpec : DatabaseDescribeSpec({
+class CategoryResolverSpec : DatabaseDescribeSpec({ body() })
+
+private val body: DescribeSpec.() -> Unit = {
     lateinit var id: UUID
 
     describe("CategoryResolver") {
@@ -72,4 +75,4 @@ class CategoryResolverSpec : DatabaseDescribeSpec({
             }
         }
     }
-})
+}

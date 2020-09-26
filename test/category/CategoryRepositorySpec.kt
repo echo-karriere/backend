@@ -1,11 +1,14 @@
 package no.echokarriere.category
 
+import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import no.echokarriere.utils.DatabaseDescribeSpec
 import java.util.UUID
 
-class CategoryRepositorySpec : DatabaseDescribeSpec({
+class CategoryRepositorySpec : DatabaseDescribeSpec({ body() })
+
+private val body: DescribeSpec.() -> Unit = {
     val categoryRepository = CategoryRepository()
     val categoryId = UUID.randomUUID()
 
@@ -80,4 +83,4 @@ class CategoryRepositorySpec : DatabaseDescribeSpec({
             itIsGone shouldBe null
         }
     }
-})
+}
