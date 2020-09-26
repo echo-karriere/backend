@@ -3,14 +3,14 @@ package no.echokarriere.user
 import java.time.Instant
 import java.util.UUID
 import no.echokarriere.configuration.Argon2Configuration
-import no.echokarriere.configuration.CrudDatabase
+import no.echokarriere.configuration.CrudRepository
 import no.echokarriere.dbQuery
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insertIgnore
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 
-class UserRepository(private val argon: Argon2Configuration) : CrudDatabase<UserEntity> {
+class UserRepository(private val argon: Argon2Configuration) : CrudRepository<UserEntity, UUID> {
     override suspend fun selectAll(): List<UserEntity> = dbQuery {
         Users.selectAll().map { toUser(it) }
     }

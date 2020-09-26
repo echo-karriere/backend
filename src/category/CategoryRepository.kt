@@ -1,6 +1,6 @@
 package no.echokarriere.category
 
-import no.echokarriere.configuration.CrudDatabase
+import no.echokarriere.configuration.CrudRepository
 import java.util.UUID
 import no.echokarriere.dbQuery
 import org.jetbrains.exposed.sql.ResultRow
@@ -10,7 +10,7 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.update
 
-class CategoryRepository : CrudDatabase<CategoryEntity> {
+class CategoryRepository : CrudRepository<CategoryEntity, UUID> {
     override suspend fun selectAll(): List<CategoryEntity> = dbQuery {
         Categories.selectAll().map { toNamespace(it) }
     }
