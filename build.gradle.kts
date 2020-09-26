@@ -117,6 +117,7 @@ tasks.withType<Test> { useJUnitPlatform() }
 tasks.jacocoTestReport {
     reports {
         xml.isEnabled = true
+        xml.destination = file("$buildDir/jacoco.xml")
         html.isEnabled = false
     }
 }
@@ -126,5 +127,6 @@ sonarqube {
         property("sonar.projectKey", "echo-karriere_backend")
         property("sonar.organization", "echo-karriere")
         property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.coverage.jacoco.xmlReportPaths", "$buildDir/jacoco.xml")
     }
 }
