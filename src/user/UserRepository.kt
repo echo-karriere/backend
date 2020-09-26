@@ -3,18 +3,19 @@ package no.echokarriere.user
 import java.time.Instant
 import java.util.UUID
 import no.echokarriere.configuration.Argon2Configuration
+import no.echokarriere.configuration.CrudDatabase
 import no.echokarriere.dbQuery
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insertIgnore
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 
-class UserRepository(private val argon: Argon2Configuration) {
-    suspend fun selectAll(): List<UserEntity> = dbQuery {
+class UserRepository(private val argon: Argon2Configuration) : CrudDatabase<UserEntity> {
+    override suspend fun selectAll(): List<UserEntity> = dbQuery {
         Users.selectAll().map { toUser(it) }
     }
 
-    suspend fun select(id: UUID): UserEntity? = dbQuery {
+    override suspend fun select(id: UUID): UserEntity? = dbQuery {
         Users
             .select { Users.id eq id }
             .mapNotNull { toUser(it) }
@@ -28,17 +29,16 @@ class UserRepository(private val argon: Argon2Configuration) {
             .singleOrNull()
     }
 
-    suspend fun create(createUser: CreateUserInput): UserEntity? {
-        val generatedId = UUID.randomUUID()
+    override suspend fun insert(value: UserEntity): UserEntity? {
         val created = dbQuery {
             Users
                 .insertIgnore {
-                    it[id] = generatedId
-                    it[name] = createUser.name
-                    it[email] = createUser.email
-                    it[password] = argon.hash(createUser.password.toCharArray())
+                    it[id] = value.id
+                    it[name] = value.name
+                    it[email] = value.email
+                    it[password] = argon.hash(value.password.toCharArray())
                     it[active] = true
-                    it[type] = createUser.type
+                    it[type] = value.type
                     it[createdAt] = Instant.now()
                 }
                 .resultedValues
@@ -48,11 +48,19 @@ class UserRepository(private val argon: Argon2Configuration) {
             throw RuntimeException("User not created")
         }
 
-        return this.select(generatedId)
+        return this.select(value.id)
+    }
+
+    override suspend fun update(value: UserEntity): UserEntity? {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun delete(id: UUID): Boolean {
+        TODO("Not yet implemented")
     }
 }
 
-private fun toUser(row: ResultRow): UserEntity = UserEntity(
+private fun toUser(row: ResultRow): UserEntity = UserEntity.create(
     id = row[Users.id],
     name = row[Users.name],
     email = row[Users.email],
