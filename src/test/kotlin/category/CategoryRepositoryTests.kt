@@ -2,6 +2,7 @@ package no.echokarriere.category
 
 import kotlinx.coroutines.runBlocking
 import no.echokarriere.utils.DatabaseExtension
+import no.echokarriere.utils.TestDatabaseConfiguration
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
@@ -16,7 +17,7 @@ import kotlin.test.assertTrue
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 @ExtendWith(DatabaseExtension::class)
 class CategoryRepositoryTests {
-    private val categoryRepository = CategoryRepository()
+    private val categoryRepository = CategoryRepository(TestDatabaseConfiguration.create())
     private val categoryId = UUID.randomUUID()
 
     @Test
