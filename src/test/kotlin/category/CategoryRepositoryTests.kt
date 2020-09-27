@@ -5,7 +5,6 @@ import no.echokarriere.utils.DatabaseExtension
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestMethodOrder
 import org.junit.jupiter.api.extension.ExtendWith
 import java.util.UUID
@@ -16,7 +15,6 @@ import kotlin.test.assertTrue
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 @ExtendWith(DatabaseExtension::class)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CategoryRepositoryTests {
     private val categoryRepository = CategoryRepository()
     private val categoryId = UUID.randomUUID()

@@ -4,13 +4,14 @@ import io.ktor.http.ContentType
 import io.ktor.http.Cookie
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
+import io.ktor.http.encodeURLParameter
 import io.ktor.server.testing.TestApplicationCall
 import io.ktor.server.testing.TestApplicationEngine
 import io.ktor.server.testing.TestApplicationResponse
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 
-private fun buildCookie(cookie: Cookie): String = "${cookie.name}=${cookie.value}; "
+private fun buildCookie(cookie: Cookie): String = "${cookie.name}=${cookie.value.encodeURLParameter()}; "
 
 fun TestApplicationEngine.graphqlQuery(request: String, authCookie: Cookie? = null): TestApplicationCall =
     this.handleRequest(HttpMethod.Post, "/graphql") {

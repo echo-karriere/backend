@@ -11,7 +11,6 @@ import no.echokarriere.utils.graphqlQuery
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestMethodOrder
 import org.junit.jupiter.api.extension.ExtendWith
 import java.util.UUID
@@ -20,7 +19,6 @@ import kotlin.test.assertNotNull
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 @ExtendWith(DatabaseExtension::class)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class UserResolverTests {
     lateinit var id: UUID
 

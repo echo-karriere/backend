@@ -1,3 +1,5 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val argonVersion: String by project
@@ -101,6 +103,15 @@ flyway {
 tasks.flywayMigrate { dependsOn("flywayClasses") }
 tasks.withType<Test> {
     useJUnitPlatform()
+    failFast = true
+    systemProperty("junit.jupiter.testinstance.lifecycle.default", "per_class")
+    testLogging {
+        events(TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED)
+        exceptionFormat = TestExceptionFormat.FULL
+        showExceptions = true
+        showStackTraces = true
+        showCauses = true
+    }
     finalizedBy(tasks.jacocoTestReport)
 }
 

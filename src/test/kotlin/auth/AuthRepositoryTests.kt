@@ -11,7 +11,6 @@ import no.echokarriere.utils.DatabaseExtension
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestMethodOrder
 import org.junit.jupiter.api.extension.ExtendWith
 import java.security.SecureRandom
@@ -23,7 +22,6 @@ import kotlin.test.assertNull
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 @ExtendWith(DatabaseExtension::class)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AuthRepositoryTests {
     private val applicationConfiguration = HoconApplicationConfig(ConfigFactory.load())
     private val userRepository = UserRepository(Argon2Configuration(applicationConfiguration))
