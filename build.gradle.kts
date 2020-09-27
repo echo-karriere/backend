@@ -9,6 +9,7 @@ val graphqlKotlinVersion: String by project
 val graphqlScalarsVersion: String by project
 val graphqlVersion: String by project
 val hikariVersion: String by project
+val jdbiVersion: String by project
 val jsonPathVersion: String by project
 val junitVersion: String by project
 val kotlinLoggingVersion: String by project
@@ -60,6 +61,12 @@ dependencies {
     implementation("io.ktor", "ktor-auth-jwt", ktorVersion)
 
     implementation("de.mkammerer", "argon2-jvm", argonVersion)
+
+    implementation(platform("org.jdbi:jdbi3-bom:$jdbiVersion"))
+    implementation("org.jdbi", "jdbi3-core")
+    implementation("org.jdbi", "jdbi3-kotlin")
+    implementation("org.jdbi", "jdbi3-kotlin-sqlobject")
+    implementation("org.jdbi", "jdbi3-postgres")
 
     implementation("org.jetbrains.exposed", "exposed-core", exposedVersion)
     implementation("org.jetbrains.exposed", "exposed-dao", exposedVersion)
