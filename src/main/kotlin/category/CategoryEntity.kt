@@ -1,7 +1,10 @@
 package no.echokarriere.category
 
+import org.jdbi.v3.core.mapper.RowMapper
+import org.jdbi.v3.core.statement.StatementContext
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.`java-time`.timestamp
+import java.sql.ResultSet
 import java.time.Instant
 import java.util.UUID
 
@@ -45,7 +48,7 @@ class CategoryEntity private constructor(
         slug = slug
     )
 
-    companion object {
+    companion object : RowMapper<CategoryEntity> {
         fun create(
             id: UUID = UUID.randomUUID(),
             title: String,
@@ -61,6 +64,17 @@ class CategoryEntity private constructor(
             createdAt = createdAt,
             modifiedAt = modifiedAt
         )
+
+        override fun map(rs: ResultSet?, ctx: StatementContext?): CategoryEntity? = rs?.let {
+            create(
+                id = UUID.fromString(it.getString("id")),
+                title = it.getString("title"),
+                description = it.getString("description"),
+                slug = it.getString("slug"),
+                createdAt = it.getTimestamp("created_at").toInstant(),
+                modifiedAt = it.getTimestamp("modified_at")?.toInstant()
+            )
+        }
     }
 }
 
