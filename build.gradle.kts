@@ -15,6 +15,8 @@ val ktorVersion: String by project
 val logbackVersion: String by project
 val postgresVersion: String by project
 val testContainersVersion: String by project
+val junitVersion: String by project
+val atriumVersion: String by project
 
 plugins {
     jacoco
@@ -75,7 +77,12 @@ dependencies {
     implementation("io.github.microutils", "kotlin-logging", kotlinLoggingVersion)
     implementation("ch.qos.logback", "logback-classic", logbackVersion)
 
+    testImplementation(platform("org.junit:junit-bom:$junitVersion"))
+    testImplementation("org.junit.jupiter", "junit-jupiter")
+    testImplementation("ch.tutteli.atrium", "atrium-fluent-en_GB", atriumVersion)
+
     implementation(platform("org.testcontainers:testcontainers-bom:$testContainersVersion"))
+    testImplementation("org.testcontainers", "junit-jupiter")
     testImplementation("org.testcontainers", "postgresql")
     testImplementation("io.ktor", "ktor-server-tests", ktorVersion)
 
@@ -108,6 +115,9 @@ flyway {
 tasks.flywayMigrate { dependsOn("flywayClasses") }
 tasks.withType<Test> {
     useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
     finalizedBy(tasks.jacocoTestReport)
 }
 
