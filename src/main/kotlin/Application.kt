@@ -21,6 +21,7 @@ import no.echokarriere.auth.jwt.JWTConfiguration
 import no.echokarriere.category.CategoryRepository
 import no.echokarriere.configuration.Argon2Configuration
 import no.echokarriere.configuration.DatabaseConfiguration
+import no.echokarriere.configuration.DatabaseConfigurator
 import no.echokarriere.graphql.installGraphQL
 import no.echokarriere.user.UserRepository
 
@@ -34,8 +35,10 @@ fun Application.module() {
     val argon2Configuration = Argon2Configuration(applicationConfiguration)
     val jwtConfiguration = JWTConfiguration(applicationConfiguration)
 
+    val jdbi = DatabaseConfigurator.create(DatabaseConfigurator.buildDataSource(applicationConfiguration))
+
     val authRepository = AuthRepository()
-    val categoryRepository = CategoryRepository()
+    val categoryRepository = CategoryRepository(jdbi)
     val userRepository = UserRepository(argon2Configuration)
 
     val serviceRegistry = ServiceRegistry(

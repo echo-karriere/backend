@@ -8,3 +8,8 @@ suspend fun <T> dbQuery(block: () -> T): T =
     withContext(Dispatchers.IO) {
         transaction { block() }
     }
+
+suspend fun <T> jdbiQuery(block: () -> T): T =
+    withContext(Dispatchers.IO) {
+        block()
+    }
