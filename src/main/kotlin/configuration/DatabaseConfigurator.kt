@@ -13,29 +13,24 @@ import org.postgresql.ds.PGSimpleDataSource
 import javax.sql.DataSource
 
 object DatabaseConfigurator : KLogging() {
-    fun create(dataSource: DataSource, resetDatabase: Boolean): Jdbi {
+    fun create(dataSource: DataSource): Jdbi {
         val jdbi = Jdbi.create(dataSource)
             .installPlugin(KotlinPlugin())
             .installPlugin(KotlinSqlObjectPlugin())
             .installPlugin(PostgresPlugin())
 
-        migrate(dataSource, resetDatabase)
+        migrate(dataSource)
 
         return jdbi
     }
 
-    private fun migrate(dataSource: DataSource, resetDatabase: Boolean) {
+    private fun migrate(dataSource: DataSource) {
         val flyway = Flyway.configure()
             .baselineOnMigrate(true)
             .baselineDescription("InitialMigration")
             .dataSource(dataSource)
             .locations("filesystem:src/main/resources/db/migrations")
             .load()
-
-        if (resetDatabase) {
-            logger.warn { "Resetting database by cleaning before migrations" }
-            flyway.clean()
-        }
 
         logger.info { "Migrating database" }
         flyway.migrate()
