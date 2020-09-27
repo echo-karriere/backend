@@ -54,7 +54,7 @@ class AuthResolverTests {
             val json = JsonPath(call.response.content).setRootPath("data.refreshToken")
             val token = json.getString("token")
 
-            assertNotEquals(token, loginToken)
+            assertNotEquals(token.trim(), loginToken.trim())
         }
     }
 
