@@ -8,15 +8,12 @@ val graphqlScalarsVersion: String by project
 val graphqlVersion: String by project
 val hikariVersion: String by project
 val jsonPathVersion: String by project
-val kotestVersion: String by project
+val junitVersion: String by project
 val kotlinLoggingVersion: String by project
 val kotlinVersion: String by project
 val ktorVersion: String by project
 val logbackVersion: String by project
 val postgresVersion: String by project
-val testContainersVersion: String by project
-val junitVersion: String by project
-val atriumVersion: String by project
 
 plugins {
     jacoco
@@ -25,6 +22,7 @@ plugins {
     id("org.flywaydb.flyway")
     id("org.jlleitschuh.gradle.ktlint")
     id("org.sonarqube")
+    id("com.avast.gradle.docker-compose")
 }
 
 group = "no.echokarriere"
@@ -79,19 +77,7 @@ dependencies {
 
     testImplementation(platform("org.junit:junit-bom:$junitVersion"))
     testImplementation("org.junit.jupiter", "junit-jupiter")
-    testImplementation("ch.tutteli.atrium", "atrium-fluent-en_GB", atriumVersion)
-
-    implementation(platform("org.testcontainers:testcontainers-bom:$testContainersVersion"))
-    testImplementation("org.testcontainers", "junit-jupiter")
-    testImplementation("org.testcontainers", "postgresql")
     testImplementation("io.ktor", "ktor-server-tests", ktorVersion)
-
-    testImplementation("io.kotest", "kotest-runner-junit5", kotestVersion)
-    testImplementation("io.kotest", "kotest-assertions-core", kotestVersion)
-    testImplementation("io.kotest", "kotest-property", kotestVersion)
-    testImplementation("io.kotest", "kotest-assertions-ktor", kotestVersion)
-    testImplementation("io.kotest", "kotest-assertions-json", kotestVersion)
-
     testImplementation("io.rest-assured", "json-path", jsonPathVersion)
 }
 
@@ -115,9 +101,6 @@ flyway {
 tasks.flywayMigrate { dependsOn("flywayClasses") }
 tasks.withType<Test> {
     useJUnitPlatform()
-    testLogging {
-        events("passed", "skipped", "failed")
-    }
     finalizedBy(tasks.jacocoTestReport)
 }
 
@@ -139,4 +122,10 @@ sonarqube {
         property("sonar.organization", "echo-karriere")
         property("sonar.host.url", "https://sonarcloud.io")
     }
+}
+
+dockerCompose.isRequiredBy(tasks.test)
+
+dockerCompose {
+    useComposeFiles = listOf("docker-compose.test.yml")
 }

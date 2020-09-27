@@ -1,0 +1,13 @@
+version: "3.7"
+
+services:
+  db:
+    container_name: "echo_backend_test_db"
+    image: postgres:12.4
+    ports:
+      - 32782:5432
+    environment:
+      - POSTGRES_DB=echokarriere
+      - POSTGRES_USER=karriere
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_HOST=localhost
