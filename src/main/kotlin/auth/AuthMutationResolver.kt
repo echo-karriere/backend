@@ -58,6 +58,6 @@ class AuthMutationResolver(
         val resp = authRepository.update(refreshToken) ?: throw Exception("Database error occured")
 
         context.call.sessions.set(Session(resp.refreshToken))
-        return LoginPayload(jwtConfiguration.makeToken(previousToken.userId))
+        return LoginPayload(jwtConfiguration.makeToken(refreshToken.userId))
     }
 }
