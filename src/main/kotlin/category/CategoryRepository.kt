@@ -60,7 +60,7 @@ class CategoryRepository(private val jdbi: Jdbi) : CrudRepository<CategoryEntity
                 UPDATE category
                 SET title = :title, description = :description, slug = :slug, modified_at = now()
                 WHERE id = :id
-                RETURNING *;
+                RETURNING *
                 """.trimIndent()
             )
                 .bind("id", value.id)
