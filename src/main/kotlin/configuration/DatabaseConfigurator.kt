@@ -44,6 +44,8 @@ object DatabaseConfigurator : KLogging() {
                 ?: error("Missing `database.username` property")
             password = config.propertyOrNull("database.password")?.getString()
                 ?: error("Missing `database.password` property")
+            portNumbers = config.propertyOrNull("database.port")?.getList()?.map { it.toInt() }?.toIntArray()
+                ?: error("Missing `database.port` property")
         }
         val hikariConfig = HikariConfig().apply {
             dataSourceClassName = config.propertyOrNull("database.datasource")?.getString()
