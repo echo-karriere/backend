@@ -39,7 +39,7 @@ fun Application.module() {
 
     val authRepository = AuthRepository()
     val categoryRepository = CategoryRepository(jdbi)
-    val userRepository = UserRepository(argon2Configuration)
+    val userRepository = UserRepository(argon2Configuration, jdbi)
 
     val serviceRegistry = ServiceRegistry(
         authRepository = authRepository,
