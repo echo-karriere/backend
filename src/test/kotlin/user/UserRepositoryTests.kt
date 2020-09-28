@@ -5,6 +5,7 @@ import io.ktor.config.HoconApplicationConfig
 import kotlinx.coroutines.runBlocking
 import no.echokarriere.configuration.Argon2Configuration
 import no.echokarriere.utils.DatabaseExtension
+import no.echokarriere.utils.TestDatabase
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
@@ -16,9 +17,9 @@ import kotlin.test.assertNotNull
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 @ExtendWith(DatabaseExtension::class)
-class UserRepositoryTests {
+class UserRepositoryTests : TestDatabase() {
     private val applicationConfiguration = HoconApplicationConfig(ConfigFactory.load())
-    private val userRepository = UserRepository(Argon2Configuration(applicationConfiguration))
+    private val userRepository = UserRepository(Argon2Configuration(applicationConfiguration), jdbi())
     private val userId = UUID.randomUUID()
 
     @Test

@@ -8,6 +8,7 @@ import no.echokarriere.user.UserEntity
 import no.echokarriere.user.UserRepository
 import no.echokarriere.user.UserType
 import no.echokarriere.utils.DatabaseExtension
+import no.echokarriere.utils.TestDatabase
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
@@ -22,9 +23,9 @@ import kotlin.test.assertNull
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 @ExtendWith(DatabaseExtension::class)
-class AuthRepositoryTests {
+class AuthRepositoryTests : TestDatabase() {
     private val applicationConfiguration = HoconApplicationConfig(ConfigFactory.load())
-    private val userRepository = UserRepository(Argon2Configuration(applicationConfiguration))
+    private val userRepository = UserRepository(Argon2Configuration(applicationConfiguration), jdbi())
     private val authRepository = AuthRepository()
 
     private val userId = UUID.randomUUID()

@@ -1,54 +1,76 @@
 package no.echokarriere.user
 
-import java.time.Instant
-import java.util.UUID
 import no.echokarriere.configuration.Argon2Configuration
 import no.echokarriere.configuration.CrudRepository
-import no.echokarriere.dbQuery
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insertIgnore
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
+import no.echokarriere.jdbiQuery
+import org.jdbi.v3.core.Jdbi
+import java.util.UUID
 
-class UserRepository(private val argon: Argon2Configuration) : CrudRepository<UserEntity, UUID> {
-    override suspend fun selectAll(): List<UserEntity> = dbQuery {
-        Users.selectAll().map { toUser(it) }
-    }
-
-    override suspend fun select(id: UUID): UserEntity? = dbQuery {
-        Users
-            .select { Users.id eq id }
-            .mapNotNull { toUser(it) }
-            .singleOrNull()
-    }
-
-    suspend fun selectByEmail(email: String): UserEntity? = dbQuery {
-        Users
-            .select { Users.email eq email }
-            .mapNotNull { toUser(it) }
-            .singleOrNull()
-    }
-
-    override suspend fun insert(value: UserEntity): UserEntity? {
-        val created = dbQuery {
-            Users
-                .insertIgnore {
-                    it[id] = value.id
-                    it[name] = value.name
-                    it[email] = value.email
-                    it[password] = argon.hash(value.password.toCharArray())
-                    it[active] = true
-                    it[type] = value.type
-                    it[createdAt] = Instant.now()
-                }
-                .resultedValues
+class UserRepository(private val argon: Argon2Configuration, private val jdbi: Jdbi) :
+    CrudRepository<UserEntity, UUID> {
+    override suspend fun selectAll(): List<UserEntity> = jdbiQuery {
+        jdbi.withHandle<List<UserEntity>, Exception> { handle ->
+            handle.select(
+                """
+                SELECT id, name, email, password, active, type, created_at, modified_at
+                FROM "user"
+                """.trimIndent()
+            )
+                .map(UserEntity.Companion::map)
+                .filterNotNull()
+                .toList()
         }
+    }
 
-        if (created.isNullOrEmpty()) {
-            throw RuntimeException("User not created")
+    override suspend fun select(id: UUID): UserEntity? = jdbiQuery {
+        jdbi.withHandle<UserEntity, Exception> { handle ->
+            handle.select(
+                """
+                SELECT id, name, email, password, active, type, created_at, modified_at
+                FROM "user"
+                WHERE id = :id
+                """.trimIndent()
+            )
+                .bind("id", id)
+                .map(UserEntity.Companion::map)
+                .firstOrNull()
         }
+    }
 
-        return this.select(value.id)
+    suspend fun selectByEmail(email: String): UserEntity? = jdbiQuery {
+        jdbi.withHandle<UserEntity, Exception> { handle ->
+            handle.select(
+                """
+                SELECT id, name, email, password, active, type, created_at, modified_at
+                FROM "user"
+                WHERE email = :email
+                """.trimIndent()
+            )
+                .bind("email", email)
+                .map(UserEntity.Companion::map)
+                .firstOrNull()
+        }
+    }
+
+    override suspend fun insert(value: UserEntity): UserEntity? = jdbiQuery {
+        jdbi.withHandle<UserEntity, Exception> { handle ->
+            handle.createQuery(
+                """
+                INSERT INTO "user"
+                VALUES (:id, :name, :email, :password, :active, :type, :created_at)
+                RETURNING *
+                """.trimIndent()
+            )
+                .bind("id", value.id)
+                .bind("name", value.name)
+                .bind("email", value.email)
+                .bind("password", argon.hash(value.password.toCharArray()))
+                .bind("active", value.active)
+                .bind("type", value.type)
+                .bind("created_at", value.createdAt)
+                .map(UserEntity.Companion::map)
+                .firstOrNull()
+        }
     }
 
     override suspend fun update(value: UserEntity): UserEntity? {
@@ -59,14 +81,3 @@ class UserRepository(private val argon: Argon2Configuration) : CrudRepository<Us
         TODO("Not yet implemented")
     }
 }
-
-private fun toUser(row: ResultRow): UserEntity = UserEntity.create(
-    id = row[Users.id],
-    name = row[Users.name],
-    email = row[Users.email],
-    password = row[Users.password],
-    active = row[Users.active],
-    type = row[Users.type],
-    createdAt = row[Users.createdAt],
-    modifiedAt = row[Users.modifiedAt]
-)

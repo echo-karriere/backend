@@ -2,8 +2,11 @@ package no.echokarriere.user
 
 import no.echokarriere.category.Categories
 import no.echokarriere.configuration.PGEnum
+import org.jdbi.v3.core.mapper.RowMapper
+import org.jdbi.v3.core.statement.StatementContext
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.`java-time`.timestamp
+import java.sql.ResultSet
 import java.time.Instant
 import java.util.UUID
 
@@ -31,7 +34,7 @@ class UserEntity private constructor(
     val createdAt: Instant,
     val modifiedAt: Instant? = null
 ) {
-    companion object {
+    companion object : RowMapper<UserEntity> {
         fun create(
             id: UUID = UUID.randomUUID(),
             name: String,
@@ -51,6 +54,19 @@ class UserEntity private constructor(
             createdAt = createdAt,
             modifiedAt = modifiedAt
         )
+
+        override fun map(rs: ResultSet?, ctx: StatementContext?): UserEntity? = rs?.let {
+            create(
+                id = UUID.fromString(it.getString("id")),
+                name = it.getString("name"),
+                email = it.getString("email"),
+                password = it.getString("password"),
+                active = it.getBoolean("active"),
+                type = UserType.valueOf(it.getString("type")),
+                createdAt = it.getTimestamp("created_at").toInstant(),
+                modifiedAt = it.getTimestamp("modified_at")?.toInstant()
+            )
+        }
     }
 }
 
