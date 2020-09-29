@@ -24,8 +24,6 @@ object TestDatabaseConfiguration {
         val hikariConfig = HikariConfig().apply {
             dataSourceClassName = "org.postgresql.ds.PGSimpleDataSource"
             dataSource = pgSimpleDataSource
-            maximumPoolSize = 1
-            minimumIdle = 5
         }
         hikariConfig.validate()
 
