@@ -23,17 +23,16 @@ import no.echokarriere.configuration.Argon2Configuration
 import no.echokarriere.configuration.DatabaseConfigurator
 import no.echokarriere.graphql.installGraphQL
 import no.echokarriere.user.UserRepository
+import org.jdbi.v3.core.Jdbi
 
 fun main(args: Array<String>) {
     io.ktor.server.netty.EngineMain.main(args)
 }
 
-fun Application.module() {
+fun Application.module(jdbi: Jdbi = DatabaseConfigurator.create(DatabaseConfigurator.buildDataSource())) {
     val applicationConfiguration = HoconApplicationConfig(ConfigFactory.load())
     val argon2Configuration = Argon2Configuration(applicationConfiguration)
     val jwtConfiguration = JWTConfiguration(applicationConfiguration)
-
-    val jdbi = DatabaseConfigurator.create(DatabaseConfigurator.buildDataSource(applicationConfiguration))
 
     val authRepository = AuthRepository(jdbi)
     val categoryRepository = CategoryRepository(jdbi)

@@ -1,8 +1,9 @@
 package no.echokarriere.configuration
 
+import com.typesafe.config.ConfigFactory
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import io.ktor.config.ApplicationConfig
+import io.ktor.config.HoconApplicationConfig
 import mu.KLogging
 import org.flywaydb.core.Flyway
 import org.jdbi.v3.core.Jdbi
@@ -36,7 +37,8 @@ object DatabaseConfigurator : KLogging() {
         flyway.migrate()
     }
 
-    fun buildDataSource(config: ApplicationConfig): HikariDataSource {
+    fun buildDataSource(): HikariDataSource {
+        val config = HoconApplicationConfig(ConfigFactory.load())
         val pgSimpleDataSource = PGSimpleDataSource().apply {
             databaseName = config.propertyOrNull("database.database")?.getString()
                 ?: error("Missing `database.database` property")

@@ -1,12 +1,12 @@
 package no.echokarriere.user
 
-import io.ktor.application.Application
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.withTestApplication
 import io.restassured.path.json.JsonPath
 import kotlinx.coroutines.runBlocking
 import no.echokarriere.module
 import no.echokarriere.utils.DatabaseExtension
+import no.echokarriere.utils.TestDatabase
 import no.echokarriere.utils.graphqlQuery
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.Order
@@ -19,13 +19,13 @@ import kotlin.test.assertNotNull
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 @ExtendWith(DatabaseExtension::class)
-class UserResolverTests {
+class UserResolverTests : TestDatabase() {
     lateinit var id: UUID
 
     @Test
     @Order(1)
     fun `can create a user`() = runBlocking {
-        withTestApplication(Application::module) {
+        withTestApplication({ module(jdbi()) }) {
             val call =
                 graphqlQuery("{\"query\":\"mutation CreateUser {\\n  createUser(input: {email: \\\"test@example.org\\\", name: \\\"Test User\\\", password: \\\"password123\\\", type: USER}) {\\n\\t\\tactive\\n    email\\n    id\\n    name\\n    type\\n  }\\n}\\n\",\"variables\":null,\"operationName\":\"CreateUser\"}")
             assertEquals(HttpStatusCode.OK, call.response.status()!!)
@@ -47,7 +47,7 @@ class UserResolverTests {
     @Test
     @Order(2)
     fun `can list users`() = runBlocking {
-        withTestApplication(Application::module) {
+        withTestApplication({ module(jdbi()) }) {
             val call =
                 graphqlQuery("{\"query\":\"query Users {\\n  users {\\n    active\\n    email\\n    id\\n    name\\n    type\\n  }\\n}\\n\",\"variables\":null,\"operationName\":\"Users\"}")
             assertEquals(HttpStatusCode.OK, call.response.status()!!)
@@ -65,7 +65,7 @@ class UserResolverTests {
     @Test
     @Order(3)
     fun `can get a single user`() = runBlocking {
-        withTestApplication(Application::module) {
+        withTestApplication({ module(jdbi()) }) {
             val call =
                 graphqlQuery("{\"query\":\"\\nquery User {\\n  user(id: \\\"$id\\\") {\\n    id\\n    name\\n    email\\n    type\\n  }\\n}\",\"variables\":null,\"operationName\":\"User\"}")
             assertEquals(HttpStatusCode.OK, call.response.status()!!)
