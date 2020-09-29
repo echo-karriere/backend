@@ -2,6 +2,8 @@
 
 <p align="center">
    <a href="https://github.com/echo-karriere/backend/actions"><img alt="GitHub Actions Status" src="https://github.com/echo-karriere/backend/workflows/Pipeline/badge.svg" /></a>
+   <a href="https://sonarcloud.io/dashboard?id=echo-karriere_backend"><img alt="Quality Gate Status" src="https://sonarcloud.io/api/project_badges/measure?project=echo-karriere_backend&metric=alert_status" /></a>
+   <a href="https://sonarcloud.io/dashboard?id=echo-karriere_backend"><img alt="Code Coverage" src="https://sonarcloud.io/api/project_badges/measure?project=echo-karriere_backend&metric=coverage" /></a>
    <br />
 </p>
 
