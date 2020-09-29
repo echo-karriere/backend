@@ -3,6 +3,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val argonVersion: String by project
+val detektVersion: String by project
 val flywayVersion: String by project
 val graphqlKotlinVersion: String by project
 val graphqlScalarsVersion: String by project
@@ -25,6 +26,7 @@ plugins {
     id("org.jlleitschuh.gradle.ktlint")
     id("org.sonarqube")
     id("com.avast.gradle.docker-compose")
+    id("io.gitlab.arturbosch.detekt")
 }
 
 group = "no.echokarriere"
@@ -82,6 +84,8 @@ dependencies {
     testImplementation("org.junit.jupiter", "junit-jupiter")
     testImplementation("io.ktor", "ktor-server-tests", ktorVersion)
     testImplementation("io.rest-assured", "json-path", jsonPathVersion)
+
+    detektPlugins("io.gitlab.arturbosch.detekt", "detekt-formatting", detektVersion)
 }
 
 sourceSets {
@@ -120,6 +124,7 @@ tasks.jacocoTestReport {
     dependsOn(tasks.test)
     reports {
         xml.isEnabled = true
+        xml.destination = File("$buildDir/reports/jacoco/test/jacoco.xml")
         html.isEnabled = true
     }
 }
@@ -133,6 +138,8 @@ sonarqube {
         property("sonar.projectKey", "echo-karriere_backend")
         property("sonar.organization", "echo-karriere")
         property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.sources", "$rootDir/src/main/kotlin")
+        property("sonar.coverage.jacoco.xmlReportPaths", "$buildDir/reports/jacoco/test/jacoco.xml")
     }
 }
 
@@ -140,4 +147,13 @@ dockerCompose.isRequiredBy(tasks.test)
 
 dockerCompose {
     useComposeFiles = listOf("docker-compose.test.yml")
+}
+
+detekt {
+    toolVersion = detektVersion
+    config = files(".detekt.yml")
+    input = files("src/main/kotlin")
+    parallel = true
+    buildUponDefaultConfig = true
+    autoCorrect = true
 }
