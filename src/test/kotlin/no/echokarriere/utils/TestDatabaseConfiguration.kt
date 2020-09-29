@@ -10,7 +10,7 @@ import org.postgresql.ds.PGSimpleDataSource
 import javax.sql.DataSource
 
 object TestDatabaseConfiguration {
-    fun create(): Jdbi = Jdbi.create(this.buildDataSource())
+    fun create(): Jdbi = Jdbi.create(buildDataSource())
         .installPlugin(KotlinPlugin())
         .installPlugin(KotlinSqlObjectPlugin())
         .installPlugin(PostgresPlugin())

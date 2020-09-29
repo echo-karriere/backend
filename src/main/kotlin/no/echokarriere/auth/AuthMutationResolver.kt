@@ -3,10 +3,10 @@ package no.echokarriere.auth
 import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 import io.ktor.sessions.set
-import no.echokarriere.Errors
 import no.echokarriere.auth.jwt.JWTConfiguration
 import no.echokarriere.configuration.Argon2Configuration
 import no.echokarriere.graphql.ApplicationCallContext
+import no.echokarriere.Errors
 import no.echokarriere.user.UserRepository
 import java.security.SecureRandom
 import java.time.Instant

@@ -1,4 +1,4 @@
-package no.echokarriere.utils
+package no.echokarriere.no.echokarriere
 
 import io.ktor.http.ContentType
 import io.ktor.http.Cookie

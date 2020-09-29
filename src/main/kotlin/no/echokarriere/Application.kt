@@ -15,11 +15,11 @@ import io.ktor.features.minimumSize
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.jackson.jackson
-import no.echokarriere.auth.AuthRepository
-import no.echokarriere.auth.installAuth
 import no.echokarriere.auth.jwt.JWTConfiguration
 import no.echokarriere.category.CategoryRepository
 import no.echokarriere.configuration.Argon2Configuration
+import no.echokarriere.auth.AuthRepository
+import no.echokarriere.auth.installAuth
 import no.echokarriere.configuration.DatabaseConfigurator
 import no.echokarriere.graphql.installGraphQL
 import no.echokarriere.user.UserRepository

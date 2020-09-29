@@ -7,8 +7,8 @@ import kotlinx.coroutines.runBlocking
 import no.echokarriere.module
 import no.echokarriere.utils.DatabaseExtension
 import no.echokarriere.utils.TestDatabase
-import no.echokarriere.utils.createAdminUserAndLogin
-import no.echokarriere.utils.graphqlQuery
+import no.echokarriere.no.echokarriere.createAdminUserAndLogin
+import no.echokarriere.no.echokarriere.graphqlQuery
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
