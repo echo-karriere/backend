@@ -66,7 +66,7 @@ fun Application.module(jdbi: Jdbi = DatabaseConfigurator.create(DatabaseConfigur
         method(HttpMethod.Patch)
         header(HttpHeaders.Authorization)
         allowCredentials = true
-        anyHost() // @TODO: Don't do this in production if possible. Try to limit it.
+        anyHost() // TODO: Don't do this in production if possible. Try to limit it.
     }
 
     install(DefaultHeaders) {

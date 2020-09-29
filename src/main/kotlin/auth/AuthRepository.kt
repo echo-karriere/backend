@@ -57,7 +57,10 @@ class AuthRepository(private val jdbi: Jdbi) : CrudRepository<RefreshTokenEntity
                 INSERT INTO refresh_token
                 VALUES (:user_id, :refresh_token, :expires_at, :created_at)
                 ON CONFLICT (user_id) DO UPDATE
-                SET user_id = :user_id, refresh_token = :refresh_token, expires_at = :expires_at, created_at = :created_at
+                    SET user_id       = :user_id,
+                        refresh_token = :refresh_token,
+                        expires_at    = :expires_at,
+                        created_at    = :created_at
                 RETURNING *
                 """.trimIndent()
             )
@@ -87,7 +90,10 @@ class AuthRepository(private val jdbi: Jdbi) : CrudRepository<RefreshTokenEntity
             it.createQuery(
                 """
                 UPDATE refresh_token
-                SET user_id = :user_id, refresh_token = :refresh_token, expires_at = :expires_at, created_at = :created_at
+                SET user_id       = :user_id,
+                    refresh_token = :refresh_token,
+                    expires_at    = :expires_at,
+                    created_at    = :created_at
                 WHERE user_id = :user_id
                 RETURNING *
                 """.trimIndent()
