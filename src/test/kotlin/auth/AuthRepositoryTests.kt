@@ -18,6 +18,7 @@ import java.security.SecureRandom
 import java.time.Instant
 import java.util.UUID
 import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
@@ -107,6 +108,7 @@ class AuthRepositoryTests : TestDatabase() {
         assertNotNull(updated)
         assertEquals(userId, updated.userId)
         assertEquals(nextToken, updated.refreshToken)
+        assertNotEquals(token, updated.refreshToken)
     }
 
     @Test

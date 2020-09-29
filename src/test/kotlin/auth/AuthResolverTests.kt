@@ -44,6 +44,9 @@ class AuthResolverTests : TestDatabase() {
     @Order(2)
     fun `can refresh tokens when authenticated`() = runBlocking {
         withTestApplication({ module(jdbi()) }) {
+            // Required because JWT generates "duplicate" tokens if they are both created
+            // with the same payload and within the same second, this was a bitch to figure out
+            Thread.sleep(1000)
             val call = graphqlQuery(
                 request = "{\"query\":\"mutation RefreshToken {\\n  refreshToken {\\n    token\\n  }\\n}\\n\",\"variables\":null,\"operationName\":\"RefreshToken\"}",
                 authCookie = cookie
