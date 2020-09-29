@@ -11,8 +11,6 @@ import no.echokarriere.user.UserPrincipal
 import java.util.UUID
 import kotlin.collections.set
 
-data class Session(val token: String)
-
 const val REFRESH_TOKEN_DURATION: Long = 60 * 60 * 24 * 30 // 30 days
 
 fun Application.installAuth(
@@ -26,7 +24,7 @@ fun Application.installAuth(
     val jwtRealm = config.propertyOrNull("jwt.realm")?.getString() ?: error("Missing `jwt.realm` property")
 
     install(Sessions) {
-        cookie<Session>("echo_karriere_session") {
+        cookie<SessionCookie>("echo_karriere_session") {
             cookie.secure = prod
             cookie.httpOnly = prod
             cookie.extensions["SameSite"] = if (prod) "strict" else "lax"
