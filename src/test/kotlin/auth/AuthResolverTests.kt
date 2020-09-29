@@ -1,12 +1,12 @@
 package no.echokarriere.auth
 
-import io.ktor.application.Application
 import io.ktor.http.Cookie
 import io.ktor.server.testing.withTestApplication
 import io.restassured.path.json.JsonPath
 import kotlinx.coroutines.runBlocking
 import no.echokarriere.module
 import no.echokarriere.utils.DatabaseExtension
+import no.echokarriere.utils.TestDatabase
 import no.echokarriere.utils.createAdminUserAndLogin
 import no.echokarriere.utils.graphqlQuery
 import org.junit.jupiter.api.MethodOrderer
@@ -21,14 +21,14 @@ import kotlin.test.assertTrue
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 @ExtendWith(DatabaseExtension::class)
-class AuthResolverTests {
+class AuthResolverTests : TestDatabase() {
     lateinit var loginToken: String
     lateinit var cookie: Cookie
 
     @Test
     @Order(1)
     fun `can login`() = runBlocking {
-        withTestApplication(Application::module) {
+        withTestApplication({ module(jdbi()) }) {
             val resp = createAdminUserAndLogin()
             val json = JsonPath(resp.content).setRootPath("data.login")
 
@@ -43,7 +43,7 @@ class AuthResolverTests {
     @Test
     @Order(2)
     fun `can refresh tokens when authenticated`() = runBlocking {
-        withTestApplication(Application::module) {
+        withTestApplication({ module(jdbi()) }) {
             val call = graphqlQuery(
                 request = "{\"query\":\"mutation RefreshToken {\\n  refreshToken {\\n    token\\n  }\\n}\\n\",\"variables\":null,\"operationName\":\"RefreshToken\"}",
                 authCookie = cookie
@@ -59,7 +59,7 @@ class AuthResolverTests {
     @Test
     @Order(3)
     fun `can not refresh tokens when not authenticated`() = runBlocking {
-        withTestApplication(Application::module) {
+        withTestApplication({ module(jdbi()) }) {
             val call = graphqlQuery(
                 request = "{\"query\":\"mutation RefreshToken {\\n  refreshToken {\\n    token\\n  }\\n}\\n\",\"variables\":null,\"operationName\":\"RefreshToken\"}",
             )

@@ -1,12 +1,12 @@
 package no.echokarriere.category
 
-import io.ktor.application.Application
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.withTestApplication
 import io.restassured.path.json.JsonPath
 import kotlinx.coroutines.runBlocking
 import no.echokarriere.module
 import no.echokarriere.utils.DatabaseExtension
+import no.echokarriere.utils.TestDatabase
 import no.echokarriere.utils.graphqlQuery
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.Order
@@ -19,13 +19,13 @@ import kotlin.test.assertNotNull
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 @ExtendWith(DatabaseExtension::class)
-class CategoryResolverTests {
+class CategoryResolverTests : TestDatabase() {
     lateinit var id: UUID
 
     @Test
     @Order(1)
     fun `can create a new category`() = runBlocking {
-        withTestApplication(Application::module) {
+        withTestApplication({ module(jdbi()) }) {
             val title = "Test Category"
             val description = "A test category"
             val slug = "test-category"
@@ -48,7 +48,7 @@ class CategoryResolverTests {
     @Test
     @Order(2)
     fun `can update an existing category`() = runBlocking {
-        withTestApplication(Application::module) {
+        withTestApplication({ module(jdbi()) }) {
             val title = "Updated category"
             val description = "New description"
             val slug = "updated-category"
@@ -66,7 +66,7 @@ class CategoryResolverTests {
     @Test
     @Order(3)
     fun `can delete a category`() = runBlocking {
-        withTestApplication(Application::module) {
+        withTestApplication({ module(jdbi()) }) {
             val delete =
                 graphqlQuery("{\"query\":\"mutation DeleteCategory {\\n  deleteCategory(id:\\\"$id\\\")\\n}\\n\",\"variables\":null,\"operationName\":\"DeleteCategory\"}")
 
@@ -78,7 +78,7 @@ class CategoryResolverTests {
     @Test
     @Order(4)
     fun `cannot delete a previously deleted category`() = runBlocking {
-        withTestApplication(Application::module) {
+        withTestApplication({ module(jdbi()) }) {
             val delete =
                 graphqlQuery("{\"query\":\"mutation DeleteCategory {\\n  deleteCategory(id:\\\"$id\\\")\\n}\\n\",\"variables\":null,\"operationName\":\"DeleteCategory\"}")
 
