@@ -3,7 +3,6 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val argonVersion: String by project
-val exposedVersion: String by project
 val flywayVersion: String by project
 val graphqlKotlinVersion: String by project
 val graphqlScalarsVersion: String by project
@@ -67,11 +66,6 @@ dependencies {
     implementation("org.jdbi", "jdbi3-kotlin")
     implementation("org.jdbi", "jdbi3-kotlin-sqlobject")
     implementation("org.jdbi", "jdbi3-postgres")
-
-    implementation("org.jetbrains.exposed", "exposed-core", exposedVersion)
-    implementation("org.jetbrains.exposed", "exposed-dao", exposedVersion)
-    implementation("org.jetbrains.exposed", "exposed-jdbc", exposedVersion)
-    implementation("org.jetbrains.exposed", "exposed-java-time", exposedVersion)
 
     implementation("org.flywaydb", "flyway-core", flywayVersion)
     implementation("com.zaxxer", "HikariCP", hikariVersion)

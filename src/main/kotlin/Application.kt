@@ -20,13 +20,11 @@ import no.echokarriere.auth.installAuth
 import no.echokarriere.auth.jwt.JWTConfiguration
 import no.echokarriere.category.CategoryRepository
 import no.echokarriere.configuration.Argon2Configuration
-import no.echokarriere.configuration.DatabaseConfiguration
 import no.echokarriere.configuration.DatabaseConfigurator
 import no.echokarriere.graphql.installGraphQL
 import no.echokarriere.user.UserRepository
 
 fun main(args: Array<String>) {
-    DatabaseConfiguration()
     io.ktor.server.netty.EngineMain.main(args)
 }
 
