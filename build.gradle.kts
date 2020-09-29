@@ -140,6 +140,7 @@ sonarqube {
         property("sonar.host.url", "https://sonarcloud.io")
         property("sonar.sources", "$rootDir/src/main/kotlin")
         property("sonar.coverage.jacoco.xmlReportPaths", "$buildDir/reports/jacoco/test/jacoco.xml")
+        property("sonar.kotlin.detekt.reportPaths", "$buildDir/reports/detekt/detekt.xml")
     }
 }
 
