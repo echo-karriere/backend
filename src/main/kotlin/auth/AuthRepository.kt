@@ -1,69 +1,101 @@
 package no.echokarriere.auth
 
 import no.echokarriere.configuration.CrudRepository
-import no.echokarriere.dbQuery
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.update
+import no.echokarriere.jdbiQuery
+import org.jdbi.v3.core.Jdbi
 import java.util.UUID
 
-class AuthRepository : CrudRepository<RefreshTokenEntity, UUID> {
-    override suspend fun selectAll(): List<RefreshTokenEntity> = dbQuery {
-        RefreshTokens.selectAll().map { toRefreshToken(it) }
-    }
-
-    override suspend fun select(id: UUID): RefreshTokenEntity? = dbQuery {
-        RefreshTokens
-            .select { RefreshTokens.userId eq id }
-            .mapNotNull { toRefreshToken(it) }
-            .singleOrNull()
-    }
-
-    suspend fun selectByToken(token: String): RefreshTokenEntity? = dbQuery {
-        RefreshTokens
-            .select { RefreshTokens.refreshToken eq token }
-            .mapNotNull { toRefreshToken(it) }
-            .singleOrNull()
-    }
-
-    override suspend fun insert(value: RefreshTokenEntity): RefreshTokenEntity? {
-        return dbQuery {
-            RefreshTokens
-                .insert {
-                    it[refreshToken] = value.refreshToken
-                    it[userId] = value.userId
-                    it[expiresAt] = value.expiresAt
-                    it[createdAt] = value.createdAt
-                }
-                .resultedValues
-                ?.map { toRefreshToken(it) }
-                ?.singleOrNull()
+class AuthRepository(private val jdbi: Jdbi) : CrudRepository<RefreshTokenEntity, UUID> {
+    override suspend fun selectAll(): List<RefreshTokenEntity> = jdbiQuery {
+        jdbi.withHandle<List<RefreshTokenEntity>, Exception> {
+            it.select(
+                """
+                SELECT user_id, refresh_token, expires_at, created_at
+                FROM refresh_token
+                """.trimIndent()
+            )
+                .map(RefreshTokenEntity.Companion::map)
+                .filterNotNull()
+                .toList()
         }
     }
 
-    override suspend fun delete(id: UUID): Boolean = dbQuery {
-        RefreshTokens.deleteWhere { RefreshTokens.userId eq id } == 1
+    override suspend fun select(id: UUID): RefreshTokenEntity? = jdbiQuery {
+        jdbi.withHandle<RefreshTokenEntity?, Exception> {
+            it.select(
+                """
+                SELECT user_id, refresh_token, expires_at, created_at
+                FROM refresh_token
+                WHERE user_id = :id
+                """.trimIndent()
+            )
+                .bind("id", id)
+                .map(RefreshTokenEntity.Companion::map)
+                .firstOrNull()
+        }
     }
 
-    override suspend fun update(value: RefreshTokenEntity): RefreshTokenEntity? {
-        dbQuery {
-            RefreshTokens.update({ RefreshTokens.userId eq value.userId }) {
-                it[refreshToken] = value.refreshToken
-                it[expiresAt] = value.expiresAt
-                it[createdAt] = value.createdAt
-            }
+    suspend fun selectByToken(token: String): RefreshTokenEntity? = jdbiQuery {
+        jdbi.withHandle<RefreshTokenEntity?, Exception> {
+            it.select(
+                """
+                SELECT user_id, refresh_token, expires_at, created_at
+                FROM refresh_token
+                WHERE refresh_token = :token
+                """.trimIndent()
+            )
+                .bind("token", token)
+                .map(RefreshTokenEntity.Companion::map)
+                .firstOrNull()
         }
+    }
 
-        return this.select(value.userId)
+    override suspend fun insert(value: RefreshTokenEntity): RefreshTokenEntity? = jdbiQuery {
+        jdbi.withHandle<RefreshTokenEntity?, Exception> {
+            it.createQuery(
+                """
+                INSERT INTO refresh_token
+                VALUES (:user_id, :refresh_token, :expires_at, :created_at)
+                RETURNING *
+                """.trimIndent()
+            )
+                .bind("user_id", value.userId)
+                .bind("refresh_token", value.refreshToken)
+                .bind("expires_at", value.expiresAt)
+                .bind("created_at", value.createdAt)
+                .map(RefreshTokenEntity.Companion::map)
+                .firstOrNull()
+        }
+    }
+
+    override suspend fun delete(id: UUID): Boolean = jdbiQuery {
+        jdbi.withHandle<Boolean, Exception> { handle ->
+            handle.createUpdate(
+                """
+                DELETE FROM refresh_token WHERE user_id = :id
+                """.trimIndent()
+            )
+                .bind("id", id)
+                .execute() == 1
+        }
+    }
+
+    override suspend fun update(value: RefreshTokenEntity): RefreshTokenEntity? = jdbiQuery {
+        jdbi.withHandle<RefreshTokenEntity?, Exception> {
+            it.createQuery(
+                """
+                UPDATE refresh_token
+                SET user_id = :user_id, refresh_token = :refresh_token, expires_at = :expires_at, created_at = :created_at
+                WHERE user_id = :user_id
+                RETURNING *
+                """.trimIndent()
+            )
+                .bind("user_id", value.userId)
+                .bind("refresh_token", value.refreshToken)
+                .bind("expires_at", value.expiresAt)
+                .bind("created_at", value.createdAt)
+                .map(RefreshTokenEntity.Companion::map)
+                .firstOrNull()
+        }
     }
 }
-
-fun toRefreshToken(row: ResultRow): RefreshTokenEntity = RefreshTokenEntity.create(
-    refreshToken = row[RefreshTokens.refreshToken],
-    userId = row[RefreshTokens.userId],
-    expiresAt = row[RefreshTokens.expiresAt],
-    createdAt = row[RefreshTokens.createdAt]
-)
