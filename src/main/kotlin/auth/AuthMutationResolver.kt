@@ -3,6 +3,7 @@ package no.echokarriere.auth
 import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 import io.ktor.sessions.set
+import no.echokarriere.Errors
 import no.echokarriere.auth.jwt.JWTConfiguration
 import no.echokarriere.configuration.Argon2Configuration
 import no.echokarriere.graphql.ApplicationCallContext
@@ -33,18 +34,14 @@ class AuthMutationResolver(
             createdAt = Instant.now()
         )
 
-        val resp = if (authRepository.select(user.id) == null) {
-            authRepository.insert(dto) ?: throw Exception("Database error occured")
-        } else {
-            authRepository.update(dto) ?: throw Exception("Database error occured")
-        }
+        val resp = authRepository.insert(dto) ?: throw Errors.SQLError("Database error occured")
 
-        context.call.sessions.set(Session(resp.refreshToken))
+        context.call.sessions.set(SessionCookie(resp.refreshToken))
         return LoginPayload(jwtConfiguration.makeToken(user.id))
     }
 
     suspend fun refreshToken(context: ApplicationCallContext): LoginPayload {
-        val token = context.call.sessions.get<Session>() ?: throw UnauthorizedException("Missing refresh token")
+        val token = context.call.sessions.get<SessionCookie>() ?: throw UnauthorizedException("Missing refresh token")
 
         val previousToken = authRepository.selectByToken(token.token) ?: throw UnauthorizedException("Invalid token")
         val nextToken = SecureRandom().generateByteArray(24).encodeAsBase64()
@@ -55,9 +52,9 @@ class AuthMutationResolver(
             createdAt = Instant.now()
         )
 
-        val resp = authRepository.update(refreshToken) ?: throw Exception("Database error occured")
+        val resp = authRepository.update(refreshToken) ?: throw Errors.SQLError("Database error occured")
 
-        context.call.sessions.set(Session(resp.refreshToken))
+        context.call.sessions.set(SessionCookie(resp.refreshToken))
         return LoginPayload(jwtConfiguration.makeToken(refreshToken.userId))
     }
 }
