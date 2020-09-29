@@ -3,6 +3,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val argonVersion: String by project
+val arrowVersion: String by project
 val detektVersion: String by project
 val flywayVersion: String by project
 val graphqlKotlinVersion: String by project
@@ -22,6 +23,7 @@ plugins {
     jacoco
     application
     kotlin("jvm")
+    kotlin("kapt")
     id("org.flywaydb.flyway")
     id("org.jlleitschuh.gradle.ktlint")
     id("org.sonarqube")
@@ -50,6 +52,7 @@ repositories {
     mavenCentral()
     jcenter()
     maven { url = uri("https://kotlin.bintray.com/ktor") }
+    maven { url = uri("https://dl.bintray.com/arrow-kt/arrow-kt/") }
 }
 
 dependencies {
@@ -62,6 +65,10 @@ dependencies {
     implementation("io.ktor", "ktor-auth-jwt", ktorVersion)
 
     implementation("de.mkammerer", "argon2-jvm", argonVersion)
+
+    implementation("io.arrow-kt", "arrow-core", arrowVersion)
+    implementation("io.arrow-kt", "arrow-syntax", arrowVersion)
+    kapt("io.arrow-kt", "arrow-meta", arrowVersion)
 
     implementation(platform("org.jdbi:jdbi3-bom:$jdbiVersion"))
     implementation("org.jdbi", "jdbi3-core")

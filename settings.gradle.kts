@@ -9,6 +9,7 @@ pluginManagement {
     val sonarqubeVersion: String by settings
 
     plugins {
+        id("org.jetbrains.kotlin.kapt").version(kotlinVersion)
         id("org.jetbrains.kotlin.jvm").version(kotlinVersion)
         id("org.flywaydb.flyway").version(flywayVersion)
         id("org.jlleitschuh.gradle.ktlint").version(gradleKtlintVersion)
