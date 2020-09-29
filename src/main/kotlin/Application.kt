@@ -37,7 +37,7 @@ fun Application.module() {
 
     val jdbi = DatabaseConfigurator.create(DatabaseConfigurator.buildDataSource(applicationConfiguration))
 
-    val authRepository = AuthRepository()
+    val authRepository = AuthRepository(jdbi)
     val categoryRepository = CategoryRepository(jdbi)
     val userRepository = UserRepository(argon2Configuration, jdbi)
 

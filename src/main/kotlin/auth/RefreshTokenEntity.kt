@@ -1,8 +1,11 @@
 package no.echokarriere.auth
 
 import no.echokarriere.user.Users
+import org.jdbi.v3.core.mapper.RowMapper
+import org.jdbi.v3.core.statement.StatementContext
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.`java-time`.timestamp
+import java.sql.ResultSet
 import java.time.Instant
 import java.util.UUID
 
@@ -12,7 +15,7 @@ class RefreshTokenEntity private constructor(
     val expiresAt: Instant,
     val createdAt: Instant
 ) {
-    companion object {
+    companion object : RowMapper<RefreshTokenEntity> {
         fun create(
             refreshToken: String,
             userId: UUID,
@@ -24,6 +27,15 @@ class RefreshTokenEntity private constructor(
             expiresAt = expiresAt,
             createdAt = createdAt
         )
+
+        override fun map(rs: ResultSet?, ctx: StatementContext?): RefreshTokenEntity? = rs?.let {
+            create(
+                refreshToken = it.getString("refresh_token"),
+                userId = UUID.fromString(it.getString("user_id")),
+                expiresAt = it.getTimestamp("expires_at").toInstant(),
+                createdAt = it.getTimestamp("created_at").toInstant()
+            )
+        }
     }
 }
 
