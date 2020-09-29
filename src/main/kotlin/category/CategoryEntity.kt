@@ -2,8 +2,6 @@ package no.echokarriere.category
 
 import org.jdbi.v3.core.mapper.RowMapper
 import org.jdbi.v3.core.statement.StatementContext
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.`java-time`.timestamp
 import java.sql.ResultSet
 import java.time.Instant
 import java.util.UUID
@@ -99,14 +97,4 @@ data class UpdateCategoryInput(
         val description: String,
         val slug: String
     )
-}
-
-object Categories : Table("category") {
-    val id = uuid("id")
-    val title = text("title")
-    val description = text("description")
-    val slug = text("slug")
-    val createdAt = timestamp("created_at")
-    val modifiedAt = timestamp("modified_at").nullable()
-    override val primaryKey = PrimaryKey(id)
 }

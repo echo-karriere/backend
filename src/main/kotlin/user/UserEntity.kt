@@ -1,11 +1,7 @@
 package no.echokarriere.user
 
-import no.echokarriere.category.Categories
-import no.echokarriere.configuration.PGEnum
 import org.jdbi.v3.core.mapper.RowMapper
 import org.jdbi.v3.core.statement.StatementContext
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.`java-time`.timestamp
 import java.sql.ResultSet
 import java.time.Instant
 import java.util.UUID
@@ -83,21 +79,4 @@ data class CreateUserInput(
         type = type,
         active = true
     )
-}
-
-object Users : Table("user") {
-    val id = uuid("id")
-    val name = text("name")
-    val email = text("email")
-    val password = text("password")
-    val active = bool("active")
-    val type = customEnumeration(
-        "type",
-        "UserType",
-        { value -> UserType.valueOf(value as String) },
-        { PGEnum("UserType", it) }
-    )
-    val createdAt = timestamp("created_at")
-    val modifiedAt = timestamp("modified_at").nullable()
-    override val primaryKey = PrimaryKey(Categories.id)
 }

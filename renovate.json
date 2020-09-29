@@ -10,8 +10,8 @@
       "groupName": "Flyway packages"
     },
     {
-      "packagePatterns": ["^org.jetbrains.exposed"],
-      "groupName": "Exposed packages"
+      "packagePatterns": ["^org.jdbi"],
+      "groupName": "JDBI packages"
     },
     {
       "packagePatterns": ["^org.jetbrains.kotlin"],
@@ -21,10 +21,6 @@
       "packagePatterns": ["^com.graphql-java"],
       "groupName": "Graphql-Java packages",
       "versioning": "semver"
-    },
-    {
-      "packagePatterns": ["^io.kotest"],
-      "groupName": "Kotest packages"
     }
   ]
 }
