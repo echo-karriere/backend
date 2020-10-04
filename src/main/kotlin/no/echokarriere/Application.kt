@@ -25,9 +25,7 @@ import no.echokarriere.graphql.installGraphQL
 import no.echokarriere.user.UserRepository
 import org.jdbi.v3.core.Jdbi
 
-fun main(args: Array<String>) {
-    io.ktor.server.netty.EngineMain.main(args)
-}
+fun main(args: Array<String>) = io.ktor.server.netty.EngineMain.main(args)
 
 fun Application.module(jdbi: Jdbi = DatabaseConfigurator.create(DatabaseConfigurator.buildDataSource())) {
     val applicationConfiguration = HoconApplicationConfig(ConfigFactory.load())

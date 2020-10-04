@@ -1,5 +1,6 @@
 package no.echokarriere.user
 
+import no.echokarriere.getEnumType
 import no.echokarriere.getUUID
 import org.jdbi.v3.core.mapper.RowMapper
 import org.jdbi.v3.core.statement.StatementContext
@@ -59,7 +60,7 @@ class UserEntity private constructor(
                 email = it.getString("email"),
                 password = it.getString("password"),
                 active = it.getBoolean("active"),
-                type = UserType.valueOf(it.getString("type")),
+                type = it.getEnumType("type"),
                 createdAt = it.getTimestamp("created_at").toInstant(),
                 modifiedAt = it.getTimestamp("modified_at")?.toInstant()
             )
