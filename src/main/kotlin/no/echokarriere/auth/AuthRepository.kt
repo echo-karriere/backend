@@ -50,7 +50,7 @@ class AuthRepository(private val jdbi: Jdbi) : CrudRepository<RefreshTokenEntity
         }
     }
 
-    override suspend fun insert(value: RefreshTokenEntity): RefreshTokenEntity? = jdbiQuery {
+    override suspend fun insert(entity: RefreshTokenEntity): RefreshTokenEntity? = jdbiQuery {
         jdbi.withHandle<RefreshTokenEntity?, Exception> {
             it.createQuery(
                 """
@@ -64,10 +64,10 @@ class AuthRepository(private val jdbi: Jdbi) : CrudRepository<RefreshTokenEntity
                 RETURNING *
                 """.trimIndent()
             )
-                .bind("user_id", value.userId)
-                .bind("refresh_token", value.refreshToken)
-                .bind("expires_at", value.expiresAt)
-                .bind("created_at", value.createdAt)
+                .bind("user_id", entity.userId)
+                .bind("refresh_token", entity.refreshToken)
+                .bind("expires_at", entity.expiresAt)
+                .bind("created_at", entity.createdAt)
                 .map(RefreshTokenEntity.Companion::map)
                 .firstOrNull()
         }
@@ -85,7 +85,7 @@ class AuthRepository(private val jdbi: Jdbi) : CrudRepository<RefreshTokenEntity
         }
     }
 
-    override suspend fun update(value: RefreshTokenEntity): RefreshTokenEntity? = jdbiQuery {
+    override suspend fun update(entity: RefreshTokenEntity): RefreshTokenEntity? = jdbiQuery {
         jdbi.withHandle<RefreshTokenEntity?, Exception> {
             it.createQuery(
                 """
@@ -98,10 +98,10 @@ class AuthRepository(private val jdbi: Jdbi) : CrudRepository<RefreshTokenEntity
                 RETURNING *
                 """.trimIndent()
             )
-                .bind("user_id", value.userId)
-                .bind("refresh_token", value.refreshToken)
-                .bind("expires_at", value.expiresAt)
-                .bind("created_at", value.createdAt)
+                .bind("user_id", entity.userId)
+                .bind("refresh_token", entity.refreshToken)
+                .bind("expires_at", entity.expiresAt)
+                .bind("created_at", entity.createdAt)
                 .map(RefreshTokenEntity.Companion::map)
                 .firstOrNull()
         }

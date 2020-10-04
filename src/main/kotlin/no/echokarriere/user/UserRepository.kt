@@ -52,7 +52,7 @@ class UserRepository(private val argon: Argon2Configuration, private val jdbi: J
         }
     }
 
-    override suspend fun insert(value: UserEntity): UserEntity? = jdbiQuery {
+    override suspend fun insert(entity: UserEntity): UserEntity? = jdbiQuery {
         jdbi.withHandle<UserEntity, Exception> { handle ->
             handle.createQuery(
                 """
@@ -61,19 +61,19 @@ class UserRepository(private val argon: Argon2Configuration, private val jdbi: J
                 RETURNING *
                 """.trimIndent()
             )
-                .bind("id", value.id)
-                .bind("name", value.name)
-                .bind("email", value.email)
-                .bind("password", argon.hash(value.password.toCharArray()))
-                .bind("active", value.active)
-                .bind("type", value.type)
-                .bind("created_at", value.createdAt)
+                .bind("id", entity.id)
+                .bind("name", entity.name)
+                .bind("email", entity.email)
+                .bind("password", argon.hash(entity.password.toCharArray()))
+                .bind("active", entity.active)
+                .bind("type", entity.type)
+                .bind("created_at", entity.createdAt)
                 .map(UserEntity.Companion::map)
                 .firstOrNull()
         }
     }
 
-    override suspend fun update(value: UserEntity): UserEntity? {
+    override suspend fun update(entity: UserEntity): UserEntity? {
         TODO("Not yet implemented")
     }
 

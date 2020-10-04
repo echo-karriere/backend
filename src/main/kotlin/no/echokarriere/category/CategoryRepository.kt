@@ -35,7 +35,7 @@ class CategoryRepository(private val jdbi: Jdbi) : CrudRepository<CategoryEntity
         }
     }
 
-    override suspend fun insert(value: CategoryEntity): CategoryEntity? = jdbiQuery {
+    override suspend fun insert(entity: CategoryEntity): CategoryEntity? = jdbiQuery {
         jdbi.withHandle<CategoryEntity?, Exception> { handle ->
             handle.createQuery(
                 """
@@ -44,16 +44,16 @@ class CategoryRepository(private val jdbi: Jdbi) : CrudRepository<CategoryEntity
                 RETURNING *
                 """.trimIndent()
             )
-                .bind("id", value.id)
-                .bind("title", value.title)
-                .bind("description", value.description)
-                .bind("slug", value.slug)
+                .bind("id", entity.id)
+                .bind("title", entity.title)
+                .bind("description", entity.description)
+                .bind("slug", entity.slug)
                 .map(CategoryEntity.Companion::map)
                 .firstOrNull()
         }
     }
 
-    override suspend fun update(value: CategoryEntity): CategoryEntity? = jdbiQuery {
+    override suspend fun update(entity: CategoryEntity): CategoryEntity? = jdbiQuery {
         jdbi.withHandle<CategoryEntity?, Exception> { handle ->
             handle.createQuery(
                 """
@@ -63,10 +63,10 @@ class CategoryRepository(private val jdbi: Jdbi) : CrudRepository<CategoryEntity
                 RETURNING *
                 """.trimIndent()
             )
-                .bind("id", value.id)
-                .bind("title", value.title)
-                .bind("description", value.description)
-                .bind("slug", value.slug)
+                .bind("id", entity.id)
+                .bind("title", entity.title)
+                .bind("description", entity.description)
+                .bind("slug", entity.slug)
                 .map(CategoryEntity.Companion::map)
                 .firstOrNull()
         }
