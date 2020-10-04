@@ -1,5 +1,6 @@
 package no.echokarriere.auth
 
+import no.echokarriere.getUUID
 import org.jdbi.v3.core.mapper.RowMapper
 import org.jdbi.v3.core.statement.StatementContext
 import java.sql.ResultSet
@@ -28,7 +29,7 @@ class RefreshTokenEntity private constructor(
         override fun map(rs: ResultSet?, ctx: StatementContext?): RefreshTokenEntity? = rs?.let {
             create(
                 refreshToken = it.getString("refresh_token"),
-                userId = UUID.fromString(it.getString("user_id")),
+                userId = it.getUUID("user_id"),
                 expiresAt = it.getTimestamp("expires_at").toInstant(),
                 createdAt = it.getTimestamp("created_at").toInstant()
             )

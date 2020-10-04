@@ -1,5 +1,6 @@
 package no.echokarriere.user
 
+import no.echokarriere.getUUID
 import org.jdbi.v3.core.mapper.RowMapper
 import org.jdbi.v3.core.statement.StatementContext
 import java.sql.ResultSet
@@ -53,7 +54,7 @@ class UserEntity private constructor(
 
         override fun map(rs: ResultSet?, ctx: StatementContext?): UserEntity? = rs?.let {
             create(
-                id = UUID.fromString(it.getString("id")),
+                id = it.getUUID("id"),
                 name = it.getString("name"),
                 email = it.getString("email"),
                 password = it.getString("password"),

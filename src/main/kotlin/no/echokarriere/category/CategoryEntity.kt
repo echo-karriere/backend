@@ -1,8 +1,10 @@
 package no.echokarriere.category
 
+import no.echokarriere.getUUID
 import org.jdbi.v3.core.mapper.RowMapper
 import org.jdbi.v3.core.statement.StatementContext
 import java.sql.ResultSet
+import java.sql.Wrapper
 import java.time.Instant
 import java.util.UUID
 
@@ -65,7 +67,7 @@ class CategoryEntity private constructor(
 
         override fun map(rs: ResultSet?, ctx: StatementContext?): CategoryEntity? = rs?.let {
             create(
-                id = UUID.fromString(it.getString("id")),
+                id = it.getUUID("id"),
                 title = it.getString("title"),
                 description = it.getString("description"),
                 slug = it.getString("slug"),
