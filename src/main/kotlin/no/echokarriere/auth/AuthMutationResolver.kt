@@ -3,13 +3,13 @@ package no.echokarriere.auth
 import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 import io.ktor.sessions.set
+import no.echokarriere.Errors
 import no.echokarriere.auth.jwt.JWTConfiguration
 import no.echokarriere.configuration.Argon2Configuration
 import no.echokarriere.graphql.ApplicationCallContext
-import no.echokarriere.Errors
 import no.echokarriere.user.UserRepository
 import java.security.SecureRandom
-import java.time.Instant
+import java.time.OffsetDateTime
 
 @Suppress("unused") // Used by GraphQL via reflection
 class AuthMutationResolver(
@@ -30,8 +30,8 @@ class AuthMutationResolver(
         val dto = RefreshTokenEntity.create(
             refreshToken = refreshToken,
             userId = user.id,
-            expiresAt = Instant.now().plusSeconds(REFRESH_TOKEN_DURATION),
-            createdAt = Instant.now()
+            expiresAt = OffsetDateTime.now().plusSeconds(REFRESH_TOKEN_DURATION),
+            createdAt = OffsetDateTime.now()
         )
 
         val resp = authRepository.insert(dto) ?: throw Errors.SQLError("Database error occured")
@@ -48,8 +48,8 @@ class AuthMutationResolver(
         val refreshToken = RefreshTokenEntity.create(
             refreshToken = nextToken,
             userId = previousToken.userId,
-            expiresAt = Instant.now().plusSeconds(REFRESH_TOKEN_DURATION),
-            createdAt = Instant.now()
+            expiresAt = OffsetDateTime.now().plusSeconds(REFRESH_TOKEN_DURATION),
+            createdAt = OffsetDateTime.now()
         )
 
         val resp = authRepository.update(refreshToken) ?: throw Errors.SQLError("Database error occured")

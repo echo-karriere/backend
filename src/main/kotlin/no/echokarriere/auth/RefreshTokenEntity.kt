@@ -1,20 +1,20 @@
 package no.echokarriere.auth
 
-import java.time.Instant
+import java.time.OffsetDateTime
 import java.util.UUID
 
 class RefreshTokenEntity private constructor(
     val userId: UUID,
     val refreshToken: String,
-    val expiresAt: Instant,
-    val createdAt: Instant
+    val expiresAt: OffsetDateTime,
+    val createdAt: OffsetDateTime
 ) {
     companion object {
         fun create(
             refreshToken: String,
             userId: UUID,
-            expiresAt: Instant,
-            createdAt: Instant
+            expiresAt: OffsetDateTime,
+            createdAt: OffsetDateTime
         ): RefreshTokenEntity = RefreshTokenEntity(
             refreshToken = refreshToken,
             userId = userId,

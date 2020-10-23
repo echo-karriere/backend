@@ -5,8 +5,6 @@ import no.echokarriere.configuration.Argon2Configuration
 import no.echokarriere.configuration.CrudRepository
 import no.echokarriere.dbQuery
 import org.jooq.DSLContext
-import java.time.OffsetDateTime
-import java.time.ZoneId
 import java.util.UUID
 
 class UserRepository(private val argon: Argon2Configuration, private val jooq: DSLContext) :
@@ -44,7 +42,7 @@ class UserRepository(private val argon: Argon2Configuration, private val jooq: D
                 argon.hash(entity.password.toCharArray()),
                 entity.active,
                 entity.type,
-                OffsetDateTime.ofInstant(entity.createdAt, ZoneId.systemDefault())
+                entity.createdAt
             )
             .returning()
             .fetchOne()

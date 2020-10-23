@@ -1,6 +1,6 @@
 package no.echokarriere.category
 
-import java.time.Instant
+import java.time.OffsetDateTime
 import java.util.UUID
 
 data class Category(private val entity: CategoryEntity) {
@@ -15,22 +15,22 @@ class CategoryEntity private constructor(
     val title: String,
     val description: String,
     val slug: String,
-    val createdAt: Instant,
-    val modifiedAt: Instant?
+    val createdAt: OffsetDateTime,
+    val modifiedAt: OffsetDateTime?
 ) {
     private fun update(
         id: UUID = this.id,
         title: String = this.title,
         description: String = this.description,
         slug: String = this.slug,
-        createdAt: Instant = this.createdAt
+        createdAt: OffsetDateTime = this.createdAt
     ): CategoryEntity = CategoryEntity(
         id = id,
         title = title,
         description = description,
         slug = slug,
         createdAt = createdAt,
-        modifiedAt = Instant.now()
+        modifiedAt = OffsetDateTime.now()
     )
 
     fun updateDetails(
@@ -49,8 +49,8 @@ class CategoryEntity private constructor(
             title: String,
             description: String,
             slug: String,
-            createdAt: Instant = Instant.now(),
-            modifiedAt: Instant? = null
+            createdAt: OffsetDateTime = OffsetDateTime.now(),
+            modifiedAt: OffsetDateTime? = null
         ): CategoryEntity = CategoryEntity(
             id = id,
             title = title,

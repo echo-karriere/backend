@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestMethodOrder
 import org.junit.jupiter.api.extension.ExtendWith
 import java.security.SecureRandom
-import java.time.Instant
+import java.time.OffsetDateTime
 import java.util.UUID
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
@@ -50,8 +50,8 @@ class AuthRepositoryTests : TestDatabase() {
         val refreshTokenEntity = RefreshTokenEntity.create(
             userId = userId,
             refreshToken = token,
-            expiresAt = Instant.now().plusSeconds(REFRESH_TOKEN_DURATION),
-            createdAt = Instant.now()
+            expiresAt = OffsetDateTime.now().plusSeconds(REFRESH_TOKEN_DURATION),
+            createdAt = OffsetDateTime.now()
         )
 
         val created = authRepository.insert(refreshTokenEntity)
@@ -99,8 +99,8 @@ class AuthRepositoryTests : TestDatabase() {
         val nextRefreshToken = RefreshTokenEntity.create(
             refreshToken = nextToken,
             userId = userId,
-            expiresAt = Instant.now().plusSeconds(REFRESH_TOKEN_DURATION),
-            createdAt = Instant.now()
+            expiresAt = OffsetDateTime.now().plusSeconds(REFRESH_TOKEN_DURATION),
+            createdAt = OffsetDateTime.now()
         )
 
         val updated = authRepository.update(nextRefreshToken)

@@ -1,21 +1,21 @@
 package no.echokarriere.form
 
-import java.time.Instant
+import java.time.OffsetDateTime
 import java.util.UUID
 
 class FormEntity private constructor(
     val id: UUID,
     val title: String,
     val description: String,
-    val createdAt: Instant,
-    val modifiedAt: Instant?
+    val createdAt: OffsetDateTime,
+    val modifiedAt: OffsetDateTime?
 ) {
     private fun update(
         id: UUID = this.id,
         title: String = this.title,
         description: String = this.description,
-        createdAt: Instant = this.createdAt,
-        modifiedAt: Instant? = this.modifiedAt
+        createdAt: OffsetDateTime = this.createdAt,
+        modifiedAt: OffsetDateTime? = this.modifiedAt
     ): FormEntity = FormEntity(
         id = id,
         title = title,
@@ -30,7 +30,7 @@ class FormEntity private constructor(
     ) = update(
         title = title,
         description = description,
-        modifiedAt = Instant.now()
+        modifiedAt = OffsetDateTime.now()
     )
 
     companion object {
@@ -38,8 +38,8 @@ class FormEntity private constructor(
             id: UUID = UUID.randomUUID(),
             title: String,
             description: String,
-            createdAt: Instant = Instant.now(),
-            modifiedAt: Instant? = null
+            createdAt: OffsetDateTime = OffsetDateTime.now(),
+            modifiedAt: OffsetDateTime? = null
         ): FormEntity = FormEntity(
             id = id,
             title = title,

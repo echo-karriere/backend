@@ -26,7 +26,6 @@ import no.echokarriere.category.CategoryMutationResolver
 import no.echokarriere.category.CategoryQueryResolver
 import no.echokarriere.user.UserMutationResolver
 import no.echokarriere.user.UserQueryResolver
-import java.time.Instant
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.util.UUID
@@ -77,7 +76,6 @@ fun Application.installGraphQL(serviceRegistry: ServiceRegistry) {
     }
 
     routing {
-        // authenticate {
         post("/graphql") {
             call.executeQuery()
         }
@@ -89,30 +87,22 @@ fun Application.installGraphQL(serviceRegistry: ServiceRegistry) {
         static("graphiql") {
             defaultResource("static/graphiql.html")
         }
-        // }
     }
 }
 
 class CustomSchemaGeneratorHooks : SchemaGeneratorHooks {
     override fun willGenerateGraphQLType(type: KType): GraphQLType? = when (type.classifier as? KClass<*>) {
-        UUID::class -> graphQLUuidType
+        UUID::class -> graphQlUUIDType
         OffsetDateTime::class -> graphqlDateTimeType
         LocalDateTime::class -> graphqlDateTimeType
-        Instant::class -> instantType
         else -> null
     }
 }
 
-internal val graphQLUuidType: GraphQLScalarType = GraphQLScalarType.newScalar()
+internal val graphQlUUIDType: GraphQLScalarType = GraphQLScalarType.newScalar()
     .name("UUID")
     .description("A type representing a formatted java.util.UUID")
     .coercing(UUIDCoercing)
-    .build()
-
-internal val instantType: GraphQLScalarType = GraphQLScalarType.newScalar()
-    .name("Instant")
-    .description("A type reresentating a formatted java.time.Instant")
-    .coercing(InstantCoercing)
     .build()
 
 internal val graphqlDateTimeType: GraphQLScalarType = ExtendedScalars.DateTime
@@ -123,17 +113,6 @@ private object UUIDCoercing : Coercing<UUID, String> {
     override fun parseLiteral(input: Any?): UUID? {
         val uuidString = (input as? StringValue)?.value
         return UUID.fromString(uuidString)
-    }
-
-    override fun serialize(dataFetcherResult: Any?): String = dataFetcherResult.toString()
-}
-
-private object InstantCoercing : Coercing<Instant, String> {
-    override fun parseValue(input: Any?): Instant = Instant.parse(serialize(input))
-
-    override fun parseLiteral(input: Any?): Instant {
-        val instantString = (input as? StringValue)?.value
-        return Instant.parse(instantString)
     }
 
     override fun serialize(dataFetcherResult: Any?): String = dataFetcherResult.toString()

@@ -2,7 +2,7 @@ package no.echokarriere.user
 
 import no.echokarriere.enums.Usertype
 import org.jooq.impl.EnumConverter
-import java.time.Instant
+import java.time.OffsetDateTime
 import java.util.UUID
 
 enum class UserType {
@@ -29,8 +29,8 @@ class UserEntity private constructor(
     val password: String,
     val active: Boolean,
     val type: UserType,
-    val createdAt: Instant,
-    val modifiedAt: Instant? = null
+    val createdAt: OffsetDateTime,
+    val modifiedAt: OffsetDateTime? = null
 ) {
     companion object {
         fun create(
@@ -40,8 +40,8 @@ class UserEntity private constructor(
             password: String,
             active: Boolean,
             type: UserType,
-            createdAt: Instant = Instant.now(),
-            modifiedAt: Instant? = null
+            createdAt: OffsetDateTime = OffsetDateTime.now(),
+            modifiedAt: OffsetDateTime? = null
         ): UserEntity = UserEntity(
             id = id,
             name = name,
