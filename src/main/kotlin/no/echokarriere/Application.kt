@@ -37,7 +37,7 @@ fun Application.module(
     val jwtConfiguration = JWTConfiguration(applicationConfiguration)
 
     val authRepository = AuthRepository(jdbi)
-    val categoryRepository = CategoryRepository(jdbi)
+    val categoryRepository = CategoryRepository(jooq)
     val userRepository = UserRepository(argon2Configuration, jooq)
 
     val serviceRegistry = ServiceRegistry(

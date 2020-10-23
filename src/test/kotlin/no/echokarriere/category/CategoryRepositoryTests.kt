@@ -17,7 +17,7 @@ import kotlin.test.assertTrue
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 @ExtendWith(DatabaseExtension::class)
 class CategoryRepositoryTests : TestDatabase() {
-    private val categoryRepository = CategoryRepository(jdbi())
+    private val categoryRepository = CategoryRepository(jooq())
     private val categoryId = UUID.randomUUID()
 
     @Test

@@ -1,9 +1,9 @@
 package no.echokarriere.user
 
+import no.echokarriere.Tables.USER
 import no.echokarriere.configuration.Argon2Configuration
 import no.echokarriere.configuration.CrudRepository
 import no.echokarriere.jdbiQuery
-import no.echokarriere.tables.User.USER
 import org.jooq.DSLContext
 import java.time.OffsetDateTime
 import java.time.ZoneId
@@ -35,7 +35,8 @@ class UserRepository(private val argon: Argon2Configuration, private val jooq: D
     }
 
     override suspend fun insert(entity: UserEntity): UserEntity? = jdbiQuery {
-        jooq.insertInto(USER, USER.ID, USER.NAME, USER.EMAIL, USER.PASSWORD, USER.ACTIVE, USER.TYPE, USER.CREATED_AT)
+        jooq.insertInto(USER)
+            .columns(USER.ID, USER.NAME, USER.EMAIL, USER.PASSWORD, USER.ACTIVE, USER.TYPE, USER.CREATED_AT)
             .values(
                 entity.id,
                 entity.name,
