@@ -1,10 +1,7 @@
 package no.echokarriere.user
 
-import no.echokarriere.getEnumType
-import no.echokarriere.getUUID
-import org.jdbi.v3.core.mapper.RowMapper
-import org.jdbi.v3.core.statement.StatementContext
-import java.sql.ResultSet
+import no.echokarriere.enums.Usertype
+import org.jooq.impl.EnumConverter
 import java.time.Instant
 import java.util.UUID
 
@@ -13,6 +10,9 @@ enum class UserType {
     STAFF,
     USER
 }
+
+@Suppress("unused") // used by Jooq
+class UserTypeConverter : EnumConverter<UserType, Usertype>(UserType::class.java, Usertype::class.java)
 
 data class User(private val entity: UserEntity) {
     val id = entity.id
@@ -32,7 +32,7 @@ class UserEntity private constructor(
     val createdAt: Instant,
     val modifiedAt: Instant? = null
 ) {
-    companion object : RowMapper<UserEntity> {
+    companion object {
         fun create(
             id: UUID = UUID.randomUUID(),
             name: String,
@@ -52,19 +52,6 @@ class UserEntity private constructor(
             createdAt = createdAt,
             modifiedAt = modifiedAt
         )
-
-        override fun map(rs: ResultSet?, ctx: StatementContext?): UserEntity? = rs?.let {
-            create(
-                id = it.getUUID("id"),
-                name = it.getString("name"),
-                email = it.getString("email"),
-                password = it.getString("password"),
-                active = it.getBoolean("active"),
-                type = it.getEnumType("type"),
-                createdAt = it.getTimestamp("created_at").toInstant(),
-                modifiedAt = it.getTimestamp("modified_at")?.toInstant()
-            )
-        }
     }
 }
 

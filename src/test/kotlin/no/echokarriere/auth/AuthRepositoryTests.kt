@@ -26,7 +26,7 @@ import kotlin.test.assertNull
 @ExtendWith(DatabaseExtension::class)
 class AuthRepositoryTests : TestDatabase() {
     private val applicationConfiguration = HoconApplicationConfig(ConfigFactory.load())
-    private val userRepository = UserRepository(Argon2Configuration(applicationConfiguration), jdbi())
+    private val userRepository = UserRepository(Argon2Configuration(applicationConfiguration), jooq())
     private val authRepository = AuthRepository(jdbi())
 
     private val userId = UUID.randomUUID()

@@ -3,74 +3,51 @@ package no.echokarriere.user
 import no.echokarriere.configuration.Argon2Configuration
 import no.echokarriere.configuration.CrudRepository
 import no.echokarriere.jdbiQuery
-import org.jdbi.v3.core.Jdbi
+import no.echokarriere.tables.User.USER
+import org.jooq.DSLContext
+import java.time.OffsetDateTime
+import java.time.ZoneId
 import java.util.UUID
 
-class UserRepository(private val argon: Argon2Configuration, private val jdbi: Jdbi) :
+class UserRepository(private val argon: Argon2Configuration, private val jooq: DSLContext) :
     CrudRepository<UserEntity, UUID> {
     override suspend fun selectAll(): List<UserEntity> = jdbiQuery {
-        jdbi.withHandle<List<UserEntity>, Exception> { handle ->
-            handle.select(
-                """
-                SELECT id, name, email, password, active, type, created_at, modified_at
-                FROM "user"
-                """.trimIndent()
-            )
-                .map(UserEntity.Companion::map)
-                .filterNotNull()
-                .toList()
-        }
+        jooq.select()
+            .from(USER)
+            .fetch()
+            .into(UserEntity::class.java)
     }
 
     override suspend fun select(id: UUID): UserEntity? = jdbiQuery {
-        jdbi.withHandle<UserEntity, Exception> { handle ->
-            handle.select(
-                """
-                SELECT id, name, email, password, active, type, created_at, modified_at
-                FROM "user"
-                WHERE id = :id
-                """.trimIndent()
-            )
-                .bind("id", id)
-                .map(UserEntity.Companion::map)
-                .firstOrNull()
-        }
+        jooq.select()
+            .from(USER)
+            .where(USER.ID.eq(id))
+            .fetchOne()
+            ?.into(UserEntity::class.java)
     }
 
     suspend fun selectByEmail(email: String): UserEntity? = jdbiQuery {
-        jdbi.withHandle<UserEntity, Exception> { handle ->
-            handle.select(
-                """
-                SELECT id, name, email, password, active, type, created_at, modified_at
-                FROM "user"
-                WHERE email = :email
-                """.trimIndent()
-            )
-                .bind("email", email)
-                .map(UserEntity.Companion::map)
-                .firstOrNull()
-        }
+        jooq.select()
+            .from(USER)
+            .where(USER.EMAIL.eq(email))
+            .fetchOne()
+            ?.into(UserEntity::class.java)
     }
 
     override suspend fun insert(entity: UserEntity): UserEntity? = jdbiQuery {
-        jdbi.withHandle<UserEntity, Exception> { handle ->
-            handle.createQuery(
-                """
-                INSERT INTO "user"
-                VALUES (:id, :name, :email, :password, :active, :type, :created_at)
-                RETURNING *
-                """.trimIndent()
+        jooq.insertInto(USER, USER.ID, USER.NAME, USER.EMAIL, USER.PASSWORD, USER.ACTIVE, USER.TYPE, USER.CREATED_AT)
+            .values(
+                entity.id,
+                entity.name,
+                entity.email,
+                argon.hash(entity.password.toCharArray()),
+                entity.active,
+                entity.type,
+                OffsetDateTime.ofInstant(entity.createdAt, ZoneId.systemDefault())
             )
-                .bind("id", entity.id)
-                .bind("name", entity.name)
-                .bind("email", entity.email)
-                .bind("password", argon.hash(entity.password.toCharArray()))
-                .bind("active", entity.active)
-                .bind("type", entity.type)
-                .bind("created_at", entity.createdAt)
-                .map(UserEntity.Companion::map)
-                .firstOrNull()
-        }
+            .returning()
+            .fetchOne()
+            ?.into(UserEntity::class.java)
     }
 
     override suspend fun update(entity: UserEntity): UserEntity? {

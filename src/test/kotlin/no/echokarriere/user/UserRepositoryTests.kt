@@ -19,7 +19,7 @@ import kotlin.test.assertNotNull
 @ExtendWith(DatabaseExtension::class)
 class UserRepositoryTests : TestDatabase() {
     private val applicationConfiguration = HoconApplicationConfig(ConfigFactory.load())
-    private val userRepository = UserRepository(Argon2Configuration(applicationConfiguration), jdbi())
+    private val userRepository = UserRepository(Argon2Configuration(applicationConfiguration), jooq())
     private val userId = UUID.randomUUID()
 
     @Test
