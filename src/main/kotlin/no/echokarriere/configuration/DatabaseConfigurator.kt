@@ -10,10 +10,15 @@ import org.jdbi.v3.core.Jdbi
 import org.jdbi.v3.core.kotlin.KotlinPlugin
 import org.jdbi.v3.postgres.PostgresPlugin
 import org.jdbi.v3.sqlobject.kotlin.KotlinSqlObjectPlugin
+import org.jooq.DSLContext
+import org.jooq.SQLDialect
+import org.jooq.impl.DSL
 import org.postgresql.ds.PGSimpleDataSource
 import javax.sql.DataSource
 
 object DatabaseConfigurator : KLogging() {
+    fun initialize(dataSource: DataSource): DSLContext = DSL.using(dataSource, SQLDialect.POSTGRES)
+
     fun create(dataSource: DataSource): Jdbi {
         val jdbi = Jdbi.create(dataSource)
             .installPlugin(KotlinPlugin())

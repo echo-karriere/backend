@@ -15,26 +15,30 @@ import io.ktor.features.minimumSize
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.jackson.jackson
+import no.echokarriere.auth.AuthRepository
+import no.echokarriere.auth.installAuth
 import no.echokarriere.auth.jwt.JWTConfiguration
 import no.echokarriere.category.CategoryRepository
 import no.echokarriere.configuration.Argon2Configuration
-import no.echokarriere.auth.AuthRepository
-import no.echokarriere.auth.installAuth
 import no.echokarriere.configuration.DatabaseConfigurator
 import no.echokarriere.graphql.installGraphQL
 import no.echokarriere.user.UserRepository
 import org.jdbi.v3.core.Jdbi
+import org.jooq.DSLContext
 
 fun main(args: Array<String>) = io.ktor.server.netty.EngineMain.main(args)
 
-fun Application.module(jdbi: Jdbi = DatabaseConfigurator.create(DatabaseConfigurator.buildDataSource())) {
+fun Application.module(
+    jdbi: Jdbi = DatabaseConfigurator.create(DatabaseConfigurator.buildDataSource()),
+    jooq: DSLContext = DatabaseConfigurator.initialize(DatabaseConfigurator.buildDataSource())
+) {
     val applicationConfiguration = HoconApplicationConfig(ConfigFactory.load())
     val argon2Configuration = Argon2Configuration(applicationConfiguration)
     val jwtConfiguration = JWTConfiguration(applicationConfiguration)
 
     val authRepository = AuthRepository(jdbi)
     val categoryRepository = CategoryRepository(jdbi)
-    val userRepository = UserRepository(argon2Configuration, jdbi)
+    val userRepository = UserRepository(argon2Configuration, jooq)
 
     val serviceRegistry = ServiceRegistry(
         authRepository = authRepository,
