@@ -5,7 +5,7 @@ on: [ push, pull_request ]
 jobs:
   tests:
     runs-on: ubuntu-latest
-    container: gradle:jre11-openj9
+    container: gradle:jdk11-openj9
 
     services:
       postgres:
