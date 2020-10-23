@@ -73,6 +73,7 @@ dependencies {
     implementation("io.arrow-kt", "arrow-syntax", arrowVersion)
     kapt("io.arrow-kt", "arrow-meta", arrowVersion)
 
+    implementation("org.jooq", "jooq", jooqVersion)
     implementation("org.flywaydb", "flyway-core", flywayVersion)
     implementation("com.zaxxer", "HikariCP", hikariVersion)
     implementation("org.postgresql", "postgresql", postgresVersion)
