@@ -44,6 +44,7 @@ jobs:
           DB_URL: jdbc:postgresql://postgres:5432/echokarriere
           DB_USER: user
           DB_PASSWORD: password
+          DB_HOST: postgres
 
       - name: SonarQube analysis
         env:
