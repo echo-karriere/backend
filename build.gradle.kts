@@ -11,6 +11,8 @@ val graphqlScalarsVersion: String by project
 val graphqlVersion: String by project
 val hikariVersion: String by project
 val jdbiVersion: String by project
+val jooqVersion: String by project
+val jooqPluginVersion: String by project
 val jsonPathVersion: String by project
 val junitVersion: String by project
 val kotlinLoggingVersion: String by project
@@ -26,6 +28,7 @@ plugins {
     kotlin("kapt")
     id("org.flywaydb.flyway")
     id("org.jlleitschuh.gradle.ktlint")
+    id("nu.studer.jooq")
     id("org.sonarqube")
     id("com.avast.gradle.docker-compose")
     id("io.gitlab.arturbosch.detekt")
@@ -45,7 +48,7 @@ tasks.withType<KotlinCompile>().all {
 }
 
 application {
-    mainClassName = "no.echokarriere.ApplicationKt"
+    mainClass.set("no.echokarriere.ApplicationKt")
 }
 
 repositories {
@@ -79,6 +82,7 @@ dependencies {
     implementation("org.flywaydb", "flyway-core", flywayVersion)
     implementation("com.zaxxer", "HikariCP", hikariVersion)
     implementation("org.postgresql", "postgresql", postgresVersion)
+    jooqGenerator("org.postgresql", "postgresql", postgresVersion)
 
     implementation("com.graphql-java", "graphql-java", graphqlVersion)
     implementation("com.expediagroup", "graphql-kotlin-schema-generator", graphqlKotlinVersion)
@@ -125,6 +129,47 @@ tasks.withType<Test> {
         showCauses = true
     }
     finalizedBy(tasks.jacocoTestReport)
+}
+
+jooq {
+    version.set(jooqVersion)
+    edition.set(nu.studer.gradle.jooq.JooqEdition.OSS)
+    configurations {
+        create("main") {
+            jooqConfiguration.apply {
+                logging = org.jooq.meta.jaxb.Logging.WARN
+                jdbc.apply {
+                    driver = "org.postgresql.Driver"
+                    url = (System.getenv("DB_URL") ?: "jdbc:postgresql://localhost:5432/echokarriere")
+                    user = (System.getenv("DB_USER") ?: "karriere")
+                    password = (System.getenv("DB_PASSWORD") ?: "password")
+                }
+                generator.apply {
+                    name = "org.jooq.codegen.DefaultGenerator"
+                    database.apply {
+                        name = "org.jooq.meta.postgres.PostgresDatabase"
+                        inputSchema = "public"
+                    }
+                    generate.apply {
+                        isDeprecated = false
+                    }
+                    target.apply {
+                        packageName = "no.echokarriere"
+                    }
+                    strategy.name = "org.jooq.codegen.DefaultGeneratorStrategy"
+                }
+            }
+        }
+    }
+}
+
+tasks.named<nu.studer.gradle.jooq.JooqGenerate>("generateJooq") {
+    dependsOn(tasks.flywayMigrate)
+    inputs.files(fileTree("src/main/resources/db/migrations"))
+        .withPropertyName("migrations")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+    allInputsDeclared.set(true)
+    outputs.cacheIf { true }
 }
 
 tasks.jacocoTestReport {
