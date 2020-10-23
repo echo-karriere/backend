@@ -1,6 +1,7 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jooq.meta.jaxb.ForcedType
 
 val argonVersion: String by project
 val arrowVersion: String by project
@@ -149,9 +150,21 @@ jooq {
                     database.apply {
                         name = "org.jooq.meta.postgres.PostgresDatabase"
                         inputSchema = "public"
+                        forcedTypes.addAll(
+                            arrayOf(
+                                ForcedType()
+                                    .withIncludeTypes("userType")
+                                    .withUserType("no.echokarriere.user.UserType")
+                                    .withConverter("no.echokarriere.user.UserTypeConverter")
+                                    .withEnumConverter(true)
+                            ).toList()
+                        )
                     }
                     generate.apply {
                         isDeprecated = false
+                        isRecords = true
+                        isImmutablePojos = true
+                        isFluentSetters = true
                     }
                     target.apply {
                         packageName = "no.echokarriere"
