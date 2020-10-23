@@ -15,9 +15,8 @@ object TestDatabaseConfiguration {
         val pgSimpleDataSource = PGSimpleDataSource().apply {
             user = System.getenv("DB_USER") ?: "karriere"
             password = System.getenv("DB_PASSWORD") ?: "password"
-            setURL(
-                System.getenv("DB_URL") ?: "jdbc:postgresql://localhost:32782/echokarriere?loggerLevel=OFF"
-            )
+            databaseName = "echokarriere"
+            serverNames = arrayOf(System.getenv("DB_HOST") ?: "localhost")
         }
         val hikariConfig = HikariConfig().apply {
             dataSourceClassName = "org.postgresql.ds.PGSimpleDataSource"
