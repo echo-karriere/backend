@@ -11,7 +11,6 @@ val graphqlKotlinVersion: String by project
 val graphqlScalarsVersion: String by project
 val graphqlVersion: String by project
 val hikariVersion: String by project
-val jdbiVersion: String by project
 val jooqVersion: String by project
 val jooqPluginVersion: String by project
 val jsonPathVersion: String by project
@@ -73,12 +72,6 @@ dependencies {
     implementation("io.arrow-kt", "arrow-core", arrowVersion)
     implementation("io.arrow-kt", "arrow-syntax", arrowVersion)
     kapt("io.arrow-kt", "arrow-meta", arrowVersion)
-
-    implementation(platform("org.jdbi:jdbi3-bom:$jdbiVersion"))
-    implementation("org.jdbi", "jdbi3-core")
-    implementation("org.jdbi", "jdbi3-kotlin")
-    implementation("org.jdbi", "jdbi3-kotlin-sqlobject")
-    implementation("org.jdbi", "jdbi3-postgres")
 
     implementation("org.flywaydb", "flyway-core", flywayVersion)
     implementation("com.zaxxer", "HikariCP", hikariVersion)

@@ -6,10 +6,6 @@ import com.zaxxer.hikari.HikariDataSource
 import io.ktor.config.HoconApplicationConfig
 import mu.KLogging
 import org.flywaydb.core.Flyway
-import org.jdbi.v3.core.Jdbi
-import org.jdbi.v3.core.kotlin.KotlinPlugin
-import org.jdbi.v3.postgres.PostgresPlugin
-import org.jdbi.v3.sqlobject.kotlin.KotlinSqlObjectPlugin
 import org.jooq.DSLContext
 import org.jooq.SQLDialect
 import org.jooq.impl.DSL
@@ -17,17 +13,9 @@ import org.postgresql.ds.PGSimpleDataSource
 import javax.sql.DataSource
 
 object DatabaseConfigurator : KLogging() {
-    fun initialize(dataSource: DataSource): DSLContext = DSL.using(dataSource, SQLDialect.POSTGRES)
-
-    fun create(dataSource: DataSource): Jdbi {
-        val jdbi = Jdbi.create(dataSource)
-            .installPlugin(KotlinPlugin())
-            .installPlugin(KotlinSqlObjectPlugin())
-            .installPlugin(PostgresPlugin())
-
+    fun create(dataSource: DataSource): DSLContext {
         migrate(dataSource)
-
-        return jdbi
+        return DSL.using(dataSource, SQLDialect.POSTGRES)
     }
 
     private fun migrate(dataSource: DataSource) {

@@ -28,7 +28,7 @@ class AuthResolverTests : TestDatabase() {
     @Test
     @Order(1)
     fun `can login`() = runBlocking {
-        withTestApplication({ module(jdbi(), jooq()) }) {
+        withTestApplication({ module(jooq()) }) {
             val resp = createAdminUserAndLogin()
             val json = JsonPath(resp.content).setRootPath("data.login")
 
@@ -43,7 +43,7 @@ class AuthResolverTests : TestDatabase() {
     @Test
     @Order(2)
     fun `can refresh tokens when authenticated`() = runBlocking {
-        withTestApplication({ module(jdbi(), jooq()) }) {
+        withTestApplication({ module(jooq()) }) {
             // Required because JWT generates "duplicate" tokens if they are both created
             // with the same payload and within the same second, this was a bitch to figure out
             Thread.sleep(1000)
@@ -62,7 +62,7 @@ class AuthResolverTests : TestDatabase() {
     @Test
     @Order(3)
     fun `can not refresh tokens when not authenticated`() = runBlocking {
-        withTestApplication({ module(jdbi(), jooq()) }) {
+        withTestApplication({ module(jooq()) }) {
             val call = graphqlQuery(
                 request = "{\"query\":\"mutation RefreshToken {\\n  refreshToken {\\n    token\\n  }\\n}\\n\",\"variables\":null,\"operationName\":\"RefreshToken\"}",
             )

@@ -23,14 +23,12 @@ import no.echokarriere.configuration.Argon2Configuration
 import no.echokarriere.configuration.DatabaseConfigurator
 import no.echokarriere.graphql.installGraphQL
 import no.echokarriere.user.UserRepository
-import org.jdbi.v3.core.Jdbi
 import org.jooq.DSLContext
 
 fun main(args: Array<String>) = io.ktor.server.netty.EngineMain.main(args)
 
 fun Application.module(
-    jdbi: Jdbi = DatabaseConfigurator.create(DatabaseConfigurator.buildDataSource()),
-    jooq: DSLContext = DatabaseConfigurator.initialize(DatabaseConfigurator.buildDataSource())
+    jooq: DSLContext = DatabaseConfigurator.create(DatabaseConfigurator.buildDataSource())
 ) {
     val applicationConfiguration = HoconApplicationConfig(ConfigFactory.load())
     val argon2Configuration = Argon2Configuration(applicationConfiguration)

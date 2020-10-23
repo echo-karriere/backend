@@ -25,7 +25,7 @@ class CategoryResolverTests : TestDatabase() {
     @Test
     @Order(1)
     fun `can create a new category`() = runBlocking {
-        withTestApplication({ module(jdbi(), jooq()) }) {
+        withTestApplication({ module(jooq()) }) {
             val title = "Test Category"
             val description = "A test category"
             val slug = "test-category"
@@ -48,7 +48,7 @@ class CategoryResolverTests : TestDatabase() {
     @Test
     @Order(2)
     fun `can update an existing category`() = runBlocking {
-        withTestApplication({ module(jdbi(), jooq()) }) {
+        withTestApplication({ module(jooq()) }) {
             val title = "Updated category"
             val description = "New description"
             val slug = "updated-category"
@@ -66,7 +66,7 @@ class CategoryResolverTests : TestDatabase() {
     @Test
     @Order(3)
     fun `can delete a category`() = runBlocking {
-        withTestApplication({ module(jdbi(), jooq()) }) {
+        withTestApplication({ module(jooq()) }) {
             val delete =
                 graphqlQuery("{\"query\":\"mutation DeleteCategory {\\n  deleteCategory(id:\\\"$id\\\")\\n}\\n\",\"variables\":null,\"operationName\":\"DeleteCategory\"}")
 
@@ -78,7 +78,7 @@ class CategoryResolverTests : TestDatabase() {
     @Test
     @Order(4)
     fun `cannot delete a previously deleted category`() = runBlocking {
-        withTestApplication({ module(jdbi(), jooq()) }) {
+        withTestApplication({ module(jooq()) }) {
             val delete =
                 graphqlQuery("{\"query\":\"mutation DeleteCategory {\\n  deleteCategory(id:\\\"$id\\\")\\n}\\n\",\"variables\":null,\"operationName\":\"DeleteCategory\"}")
 

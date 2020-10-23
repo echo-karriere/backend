@@ -25,7 +25,7 @@ class UserResolverTests : TestDatabase() {
     @Test
     @Order(1)
     fun `can create a user`() = runBlocking {
-        withTestApplication({ module(jdbi(), jooq()) }) {
+        withTestApplication({ module(jooq()) }) {
             val call =
                 graphqlQuery("{\"query\":\"mutation CreateUser {\\n  createUser(input: {email: \\\"test@example.org\\\", name: \\\"Test User\\\", password: \\\"password123\\\", type: USER}) {\\n\\t\\tactive\\n    email\\n    id\\n    name\\n    type\\n  }\\n}\\n\",\"variables\":null,\"operationName\":\"CreateUser\"}")
             assertEquals(HttpStatusCode.OK, call.response.status()!!)
@@ -47,7 +47,7 @@ class UserResolverTests : TestDatabase() {
     @Test
     @Order(2)
     fun `can list users`() = runBlocking {
-        withTestApplication({ module(jdbi(), jooq()) }) {
+        withTestApplication({ module(jooq()) }) {
             val call =
                 graphqlQuery("{\"query\":\"query Users {\\n  users {\\n    active\\n    email\\n    id\\n    name\\n    type\\n  }\\n}\\n\",\"variables\":null,\"operationName\":\"Users\"}")
             assertEquals(HttpStatusCode.OK, call.response.status()!!)
@@ -65,7 +65,7 @@ class UserResolverTests : TestDatabase() {
     @Test
     @Order(3)
     fun `can get a single user`() = runBlocking {
-        withTestApplication({ module(jdbi(), jooq()) }) {
+        withTestApplication({ module(jooq()) }) {
             val call =
                 graphqlQuery("{\"query\":\"\\nquery User {\\n  user(id: \\\"$id\\\") {\\n    id\\n    name\\n    email\\n    type\\n  }\\n}\",\"variables\":null,\"operationName\":\"User\"}")
             assertEquals(HttpStatusCode.OK, call.response.status()!!)

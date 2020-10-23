@@ -10,10 +10,6 @@
       "groupName": "Flyway packages"
     },
     {
-      "packagePatterns": ["^org.jdbi"],
-      "groupName": "JDBI packages"
-    },
-    {
       "packagePatterns": ["^org.jetbrains.kotlin"],
       "groupName": "Kotlin packages"
     },
