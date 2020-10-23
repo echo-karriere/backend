@@ -6,6 +6,12 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     container: gradle:jdk11-openj9
+    env:
+      DB_URL: jdbc:postgresql://postgres:5432/echokarriere
+      DB_USER: user
+      DB_PASSWORD: password
+      DB_HOST: postgres
+
 
     services:
       postgres:
@@ -40,11 +46,6 @@ jobs:
 
       - name: Check
         run: gradle check --info
-        env:
-          DB_URL: jdbc:postgresql://postgres:5432/echokarriere
-          DB_USER: user
-          DB_PASSWORD: password
-          DB_HOST: postgres
 
       - name: SonarQube analysis
         env:
