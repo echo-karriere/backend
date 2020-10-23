@@ -2,108 +2,77 @@ package no.echokarriere.auth
 
 import no.echokarriere.configuration.CrudRepository
 import no.echokarriere.jdbiQuery
-import org.jdbi.v3.core.Jdbi
+import org.jooq.DSLContext
+import org.jooq.impl.DSL.row
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
 import java.util.UUID
+import no.echokarriere.Tables.REFRESH_TOKEN as AUTH
 
-class AuthRepository(private val jdbi: Jdbi) : CrudRepository<RefreshTokenEntity, UUID> {
+class AuthRepository(private val jooq: DSLContext) : CrudRepository<RefreshTokenEntity, UUID> {
     override suspend fun selectAll(): List<RefreshTokenEntity> = jdbiQuery {
-        jdbi.withHandle<List<RefreshTokenEntity>, Exception> {
-            it.select(
-                """
-                SELECT user_id, refresh_token, expires_at, created_at
-                FROM refresh_token
-                """.trimIndent()
-            )
-                .map(RefreshTokenEntity.Companion::map)
-                .filterNotNull()
-                .toList()
-        }
+        jooq.select()
+            .from(AUTH)
+            .fetch()
+            .into(RefreshTokenEntity::class.java)
     }
 
     override suspend fun select(id: UUID): RefreshTokenEntity? = jdbiQuery {
-        jdbi.withHandle<RefreshTokenEntity?, Exception> {
-            it.select(
-                """
-                SELECT user_id, refresh_token, expires_at, created_at
-                FROM refresh_token
-                WHERE user_id = :id
-                """.trimIndent()
-            )
-                .bind("id", id)
-                .map(RefreshTokenEntity.Companion::map)
-                .firstOrNull()
-        }
+        jooq.select()
+            .from(AUTH)
+            .where(AUTH.USER_ID.eq(id))
+            .fetchOne()
+            ?.into(RefreshTokenEntity::class.java)
     }
 
     suspend fun selectByToken(token: String): RefreshTokenEntity? = jdbiQuery {
-        jdbi.withHandle<RefreshTokenEntity?, Exception> {
-            it.select(
-                """
-                SELECT user_id, refresh_token, expires_at, created_at
-                FROM refresh_token
-                WHERE refresh_token = :token
-                """.trimIndent()
-            )
-                .bind("token", token)
-                .map(RefreshTokenEntity.Companion::map)
-                .firstOrNull()
-        }
+        jooq.select()
+            .from(AUTH)
+            .where(AUTH.REFRESH_TOKEN_.eq(token))
+            .fetchOne()
+            ?.into(RefreshTokenEntity::class.java)
     }
 
     override suspend fun insert(entity: RefreshTokenEntity): RefreshTokenEntity? = jdbiQuery {
-        jdbi.withHandle<RefreshTokenEntity?, Exception> {
-            it.createQuery(
-                """
-                INSERT INTO refresh_token
-                VALUES (:user_id, :refresh_token, :expires_at, :created_at)
-                ON CONFLICT (user_id) DO UPDATE
-                    SET user_id       = :user_id,
-                        refresh_token = :refresh_token,
-                        expires_at    = :expires_at,
-                        created_at    = :created_at
-                RETURNING *
-                """.trimIndent()
+        jooq.insertInto(AUTH)
+            .columns(AUTH.USER_ID, AUTH.REFRESH_TOKEN_, AUTH.EXPIRES_AT, AUTH.CREATED_AT)
+            .values(
+                entity.userId,
+                entity.refreshToken,
+                entity.expiresAt.atOffset(ZoneOffset.UTC),
+                entity.createdAt.atOffset(
+                    ZoneOffset.UTC
+                )
             )
-                .bind("user_id", entity.userId)
-                .bind("refresh_token", entity.refreshToken)
-                .bind("expires_at", entity.expiresAt)
-                .bind("created_at", entity.createdAt)
-                .map(RefreshTokenEntity.Companion::map)
-                .firstOrNull()
-        }
+            .onDuplicateKeyUpdate()
+            .set(AUTH.REFRESH_TOKEN_, entity.refreshToken)
+            .set(AUTH.EXPIRES_AT, entity.expiresAt.atOffset(ZoneOffset.UTC))
+            .set(AUTH.CREATED_AT, entity.createdAt.atOffset(ZoneOffset.UTC))
+            .returning()
+            .fetchOne()
+            ?.into(RefreshTokenEntity::class.java)
     }
 
     override suspend fun delete(id: UUID): Boolean = jdbiQuery {
-        jdbi.withHandle<Boolean, Exception> { handle ->
-            handle.createUpdate(
-                """
-                DELETE FROM refresh_token WHERE user_id = :id
-                """.trimIndent()
-            )
-                .bind("id", id)
-                .execute() == 1
-        }
+        jooq.delete(AUTH)
+            .where(AUTH.USER_ID.eq(id))
+            .execute() == 1
     }
 
     override suspend fun update(entity: RefreshTokenEntity): RefreshTokenEntity? = jdbiQuery {
-        jdbi.withHandle<RefreshTokenEntity?, Exception> {
-            it.createQuery(
-                """
-                UPDATE refresh_token
-                SET user_id       = :user_id,
-                    refresh_token = :refresh_token,
-                    expires_at    = :expires_at,
-                    created_at    = :created_at
-                WHERE user_id = :user_id
-                RETURNING *
-                """.trimIndent()
+        jooq.update(AUTH)
+            .set(
+                row(AUTH.USER_ID, AUTH.REFRESH_TOKEN_, AUTH.EXPIRES_AT, AUTH.CREATED_AT),
+                row(
+                    entity.userId,
+                    entity.refreshToken,
+                    entity.expiresAt.atOffset(ZoneOffset.UTC),
+                    OffsetDateTime.now()
+                ),
             )
-                .bind("user_id", entity.userId)
-                .bind("refresh_token", entity.refreshToken)
-                .bind("expires_at", entity.expiresAt)
-                .bind("created_at", entity.createdAt)
-                .map(RefreshTokenEntity.Companion::map)
-                .firstOrNull()
-        }
+            .where(AUTH.USER_ID.eq(entity.userId))
+            .returning()
+            .fetchOne()
+            ?.into(RefreshTokenEntity::class.java)
     }
 }
