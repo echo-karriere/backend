@@ -30,7 +30,6 @@ plugins {
     id("org.jlleitschuh.gradle.ktlint")
     id("nu.studer.jooq")
     id("org.sonarqube")
-    id("com.avast.gradle.docker-compose")
     id("io.gitlab.arturbosch.detekt")
 }
 
@@ -201,12 +200,6 @@ sonarqube {
         property("sonar.coverage.jacoco.xmlReportPaths", "$buildDir/reports/jacoco/test/jacoco.xml")
         property("sonar.kotlin.detekt.reportPaths", "$buildDir/reports/detekt/detekt.xml")
     }
-}
-
-dockerCompose.isRequiredBy(tasks.test)
-
-dockerCompose {
-    useComposeFiles = listOf("docker-compose.test.yml")
 }
 
 detekt {

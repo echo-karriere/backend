@@ -13,9 +13,11 @@ object TestDatabaseConfiguration {
 
     private fun buildDataSource(): DataSource {
         val pgSimpleDataSource = PGSimpleDataSource().apply {
-            user = "karriere"
-            password = "password" // such safe, much wow
-            setURL("jdbc:postgresql://localhost:32782/echokarriere?loggerLevel=OFF")
+            user = System.getenv("DB_USER") ?: "karriere"
+            password = System.getenv("DB_PASSWORD") ?: "password"
+            setURL(
+                System.getenv("DB_URL") ?: "jdbc:postgresql://localhost:32782/echokarriere?loggerLevel=OFF"
+            )
         }
         val hikariConfig = HikariConfig().apply {
             dataSourceClassName = "org.postgresql.ds.PGSimpleDataSource"
