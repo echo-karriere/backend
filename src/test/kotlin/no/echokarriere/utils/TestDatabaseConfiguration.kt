@@ -11,7 +11,7 @@ import javax.sql.DataSource
 object TestDatabaseConfiguration {
     fun create(): DSLContext = DSL.using(buildDataSource(), SQLDialect.POSTGRES)
 
-    private fun buildDataSource(): DataSource {
+    fun buildDataSource(): DataSource {
         val pgSimpleDataSource = PGSimpleDataSource().apply {
             user = System.getenv("DB_USER") ?: "karriere"
             password = System.getenv("DB_PASSWORD") ?: "password"

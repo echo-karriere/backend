@@ -8,7 +8,7 @@ import org.junit.jupiter.api.extension.ExtensionContext
 class DatabaseExtension : BeforeAllCallback, AfterAllCallback {
     private val flyway = Flyway.configure()
         .locations("filesystem:src/main/resources/db/migrations")
-        .dataSource("jdbc:postgresql://localhost:32782/echokarriere?loggerLevel=OFF", "karriere", "password")
+        .dataSource(TestDatabaseConfiguration.buildDataSource())
         .load()
 
     override fun beforeAll(context: ExtensionContext?) {
