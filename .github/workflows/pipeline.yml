@@ -1,10 +1,26 @@
 name: Pipeline
 
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
   tests:
     runs-on: ubuntu-latest
+    container: gradle:jre11-openj9
+
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_DB: echokarriere
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
 
     steps:
       - uses: actions/checkout@v2
@@ -28,9 +44,10 @@ jobs:
 
       - name: Check
         run: gradle check --info
-
-      - name: Build
-        run: gradle build --info
+        env:
+          DB_URL: jdbc:postgresql://postgres:5432/echokarriere
+          DB_USER: user
+          DB_PASSWORD: password
 
       - name: SonarQube analysis
         env:
