@@ -68,7 +68,7 @@ class AuthRepository(private val jooq: DSLContext) : CrudRepository<RefreshToken
                     entity.refreshToken,
                     entity.expiresAt.atOffset(ZoneOffset.UTC),
                     OffsetDateTime.now()
-                ),
+                )
             )
             .where(AUTH.USER_ID.eq(entity.userId))
             .returning()

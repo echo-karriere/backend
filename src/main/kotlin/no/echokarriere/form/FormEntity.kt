@@ -26,7 +26,7 @@ class FormEntity private constructor(
 
     fun updateDetails(
         title: String,
-        description: String,
+        description: String
     ) = update(
         title = title,
         description = description,

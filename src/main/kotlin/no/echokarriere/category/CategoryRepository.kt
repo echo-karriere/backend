@@ -37,7 +37,7 @@ class CategoryRepository(private val jooq: DSLContext) : CrudRepository<Category
         jooq.update(CATEGORY)
             .set(
                 row(CATEGORY.TITLE, CATEGORY.DESCRIPTION, CATEGORY.SLUG, CATEGORY.MODIFIED_AT),
-                row(entity.title, entity.description, entity.slug, OffsetDateTime.now()),
+                row(entity.title, entity.description, entity.slug, OffsetDateTime.now())
             )
             .where(CATEGORY.ID.eq(entity.id))
             .returning()

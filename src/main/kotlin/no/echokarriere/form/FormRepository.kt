@@ -38,7 +38,7 @@ class FormRepository(private val jooq: DSLContext) : CrudRepository<FormEntity, 
         jooq.update(FORM)
             .set(
                 DSL.row(FORM.TITLE, FORM.DESCRIPTION, FORM.MODIFIED_AT),
-                DSL.row(entity.title, entity.description, OffsetDateTime.now()),
+                DSL.row(entity.title, entity.description, OffsetDateTime.now())
             )
             .where(FORM.ID.eq(entity.id))
             .returning()
