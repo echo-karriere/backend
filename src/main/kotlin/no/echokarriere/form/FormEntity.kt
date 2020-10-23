@@ -1,9 +1,5 @@
 package no.echokarriere.form
 
-import no.echokarriere.getUUID
-import org.jdbi.v3.core.mapper.RowMapper
-import org.jdbi.v3.core.statement.StatementContext
-import java.sql.ResultSet
 import java.time.Instant
 import java.util.UUID
 
@@ -37,7 +33,7 @@ class FormEntity private constructor(
         modifiedAt = Instant.now()
     )
 
-    companion object : RowMapper<FormEntity> {
+    companion object {
         fun create(
             id: UUID = UUID.randomUUID(),
             title: String,
@@ -51,15 +47,5 @@ class FormEntity private constructor(
             createdAt = createdAt,
             modifiedAt = modifiedAt
         )
-
-        override fun map(rs: ResultSet?, ctx: StatementContext?): FormEntity? = rs?.let {
-            create(
-                id = it.getUUID("id"),
-                title = it.getString("title"),
-                description = it.getString("description"),
-                createdAt = it.getTimestamp("created_at").toInstant(),
-                modifiedAt = it.getTimestamp("modified_at")?.toInstant()
-            )
-        }
     }
 }

@@ -18,7 +18,7 @@ import kotlin.test.assertTrue
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 @ExtendWith(DatabaseExtension::class)
 class FormRepositoryTests : TestDatabase() {
-    private val formRepository = FormRepository(jdbi())
+    private val formRepository = FormRepository(jooq())
     private val formId = UUID.randomUUID()
 
     @Test
