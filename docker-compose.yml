@@ -3,7 +3,7 @@ version: "3.7"
 services:
   db:
     container_name: "echo_backend_db"
-    image: postgres:13.0
+    image: postgres:13.1
     restart: unless-stopped
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -13,7 +13,7 @@ services:
 
   test_db:
     container_name: "echo_backend_test_db"
-    image: postgres:13.0
+    image: postgres:13.1
     restart: unless-stopped
     ports:
       - 32782:5432
