@@ -5,17 +5,13 @@ on: [ push, pull_request ]
 jobs:
   tests:
     runs-on: ubuntu-latest
-    container: gradle:jdk11-openj9
     env:
-      DB_URL: jdbc:postgresql://postgres:5432/echokarriere
       DB_USER: user
       DB_PASSWORD: password
-      DB_HOST: postgres
-
 
     services:
       postgres:
-        image: postgres:13
+        image: postgres:13-alpine
         env:
           POSTGRES_DB: echokarriere
           POSTGRES_USER: user
@@ -47,11 +43,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
       - name: Check
-        run: gradle check --info
+        run: ./gradlew check --info
 
       - name: SonarQube analysis
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: gradle build sonarqube --info
+        run: ./gradlew build sonarqube --info
