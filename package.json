@@ -1,0 +1,15 @@
+{
+  "name": "backend",
+  "private": true,
+  "author": "Sondre Nilsen <nilsen.sondre@gmail.com>",
+  "devDependencies": {
+    "@echo-karriere/clubhouse-lint": "0.2.1",
+    "husky": "4.3.7"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "./gradlew ktlintCheck",
+      "commit-msg": "clubhouse-lint"
+    }
+  }
+}

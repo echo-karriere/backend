@@ -16,12 +16,14 @@
 <br />
 
 <!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
+
 **Table of Contents**
 
 - [Developing](#developing)
-    - [Configuration](#configuration)
-    - [Starting the database](#starting-the-database)
-    - [Running](#running)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
+  - [Starting the database](#starting-the-database)
+  - [Running](#running)
 - [LICENSE](#license)
 
 <!-- markdown-toc end -->
@@ -36,6 +38,13 @@ written in Kotlin using Ktor, PostgreSQL and GraphQL.
 
 # Developing
 
+## Installation
+
+Install some helpers with `yarn`, then run `./gradlew build` to install and
+build the backend itself. It is also highly recommended to run
+`./gradlew ktlintApplyToIdea` to configure IntelliJ to use a style that matches
+Ktlint.
+
 ## Configuration
 
 You should look over the
@@ -43,7 +52,7 @@ You should look over the
 already for installing Docker and configuring IntelliJ. First, copy the
 `.env.example` file to `.env` and update its content to the following:
 
-``` ini
+```ini
 POSTGRES_DB=echokarriere
 POSTGRES_USER=karriere
 POSTGRES_PASSWORD=password
@@ -57,8 +66,7 @@ repositiory!
 ## Starting the database
 
 Once you've configured the `.env` file you can simply run `docker-compose up -d`
-to start the database in the background. To see what is happening run `docker
-logs echo_backend_db`, it might offer up a hint if it is not working.
+to start the database in the background. To see what is happening run `docker logs echo_backend_db`, it might offer up a hint if it is not working.
 
 ## Running
 
