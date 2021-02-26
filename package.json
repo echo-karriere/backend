@@ -4,7 +4,7 @@
   "author": "Sondre Nilsen <nilsen.sondre@gmail.com>",
   "devDependencies": {
     "@echo-karriere/clubhouse-lint": "0.3.0",
-    "husky": "5.0.9"
+    "husky": "5.1.1"
   },
   "scripts": {
     "postinstall": "husky install"
