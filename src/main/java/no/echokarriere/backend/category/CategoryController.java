@@ -2,19 +2,18 @@ package no.echokarriere.backend.category;
 
 import no.echokarriere.backend.category.dto.CreateCategoryDTO;
 import no.echokarriere.backend.category.dto.UpdateCategoryDTO;
-import no.echokarriere.backend.category.errors.CategoryCreationException;
-import no.echokarriere.backend.category.errors.CategoryNotFoundException;
-import no.echokarriere.backend.category.errors.CategoryUpdateException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "/api/category", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/categories", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CategoryController {
     private final CategoryRepository categoryRepository;
 
@@ -33,7 +32,7 @@ public class CategoryController {
         return categoryRepository
                 .select(id)
                 .map(Category::new)
-                .orElseThrow(() -> new CategoryNotFoundException(id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
     }
 
     @PostMapping
@@ -42,7 +41,7 @@ public class CategoryController {
         return categoryRepository
                 .create(entity)
                 .map(Category::new)
-                .orElseThrow(CategoryCreationException::new);
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Could not create category"));
     }
 
     @PutMapping("{id}")
@@ -51,7 +50,7 @@ public class CategoryController {
         return categoryRepository
                 .update(entity)
                 .map(Category::new)
-                .orElseThrow(() -> new CategoryUpdateException(id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Could not update category"));
     }
 
     @DeleteMapping("{id}")
