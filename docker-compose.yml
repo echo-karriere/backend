@@ -11,13 +11,5 @@ services:
       - 5432:5432
     env_file: .env
 
-  test_db:
-    container_name: "echo_backend_test_db"
-    image: postgres:13.2
-    restart: unless-stopped
-    ports:
-      - 32782:5432
-    env_file: .env
-
 volumes:
   postgres_data:
