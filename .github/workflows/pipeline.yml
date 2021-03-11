@@ -27,10 +27,10 @@ jobs:
           java-version: 11
 
       - name: Check
-        run: mvn --batch-mode verify
+        run: mvn --batch-mode verify -Pcoverage
 
       - name: SonarQube analysis
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Pcoverage
+        run: mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Pcoverage

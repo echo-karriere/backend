@@ -21,7 +21,7 @@
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.organization>echo-karriere</sonar.organization>
         <sonar.projectKey>echo-karriere_backend</sonar.projectKey>
-        <sonar.exclusions>no.echokarriere.db/**</sonar.exclusions>
+        <sonar.exclusions>**/no/echokarriere/db/**/*</sonar.exclusions>
     </properties>
     <dependencies>
         <dependency>
