@@ -23,12 +23,12 @@ public class CategoryController {
     }
 
     @GetMapping
-    List<Category> all() {
+    public List<Category> all() {
         return categoryRepository.selectAll().stream().map(Category::new).collect(Collectors.toList());
     }
 
     @GetMapping("{id}")
-    Category one(@PathVariable UUID id) {
+    public Category one(@PathVariable UUID id) {
         return categoryRepository
                 .select(id)
                 .map(Category::new)
@@ -36,7 +36,7 @@ public class CategoryController {
     }
 
     @PostMapping
-    Category create(@RequestBody CreateCategoryDTO categoryDTO) {
+    public Category create(@RequestBody CreateCategoryDTO categoryDTO) {
         var entity = new CategoryEntity(categoryDTO.getTitle(), categoryDTO.getDescription(), categoryDTO.getSlug());
         return categoryRepository
                 .create(entity)
@@ -45,7 +45,7 @@ public class CategoryController {
     }
 
     @PutMapping("{id}")
-    Category update(@RequestBody UpdateCategoryDTO categoryDTO, @PathVariable UUID id) {
+    public Category update(@RequestBody UpdateCategoryDTO categoryDTO, @PathVariable UUID id) {
         var entity = new CategoryEntity(id, categoryDTO.getTitle(), categoryDTO.getDescription(), categoryDTO.getSlug());
         return categoryRepository
                 .update(entity)
@@ -54,7 +54,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("{id}")
-    boolean delete(@PathVariable UUID id) {
+    public boolean delete(@PathVariable UUID id) {
         return categoryRepository.delete(id);
     }
 }

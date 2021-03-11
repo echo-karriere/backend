@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CategoryRepositoryTest {
+class CategoryRepositoryTest {
     private final UUID categoryId = UUID.randomUUID();
     @Autowired
     private CategoryRepository categoryRepository;
@@ -29,7 +29,7 @@ public class CategoryRepositoryTest {
     @Test
     @Order(1)
     @DisplayName("Can create a new category")
-    public void createNewCategory() {
+    void createNewCategory() {
         var actual = categoryRepository.create(
                 new CategoryEntity(categoryId, "Test Category", "With a description", "test-category")
         );
@@ -43,7 +43,7 @@ public class CategoryRepositoryTest {
     @Test
     @Order(2)
     @DisplayName("Can get our created category")
-    public void getSingleCategory() {
+    void getSingleCategory() {
         var actual = categoryRepository.select(categoryId);
 
         assertThat(actual).isNotEmpty();
@@ -54,7 +54,7 @@ public class CategoryRepositoryTest {
     @Test
     @Order(2)
     @DisplayName("Returns Optional.empty() when no ID matches")
-    public void getWrongId() {
+    void getWrongId() {
         var actual = categoryRepository.select(UUID.randomUUID());
 
         assertThat(actual).isEmpty();
@@ -63,17 +63,18 @@ public class CategoryRepositoryTest {
     @Test
     @Order(2)
     @DisplayName("Category is in all categories query")
-    public void getAllCategories() {
+    void getAllCategories() {
         var actual = categoryRepository.selectAll();
 
-        assertThat(actual).anyMatch(item -> item.getId().equals(categoryId));
-        assertThat(actual).anyMatch(item -> item.getTitle().equals("Test Category"));
+        assertThat(actual)
+                .anyMatch(item -> item.getId().equals(categoryId))
+                .anyMatch(item -> item.getTitle().equals("Test Category"));
     }
 
     @Test
     @Order(3)
     @DisplayName("Can update category")
-    public void updateCategory() {
+    void updateCategory() {
         var updated = new CategoryEntity(categoryId, "Test Category", "Updated description", "test");
         var actual = categoryRepository.update(updated);
 
@@ -87,7 +88,7 @@ public class CategoryRepositoryTest {
     @Test
     @Order(4)
     @DisplayName("Deleting with the correct ID removes it")
-    public void delete() {
+    void delete() {
         var actual = categoryRepository.delete(categoryId);
 
         assertThat(actual).isTrue();
@@ -96,7 +97,7 @@ public class CategoryRepositoryTest {
     @Test
     @Order(4)
     @DisplayName("Deleting with an incorrect ID does nothing")
-    public void deleteRandom() {
+    void deleteRandom() {
         var actual = categoryRepository.delete(UUID.randomUUID());
 
         assertThat(actual).isFalse();
@@ -105,7 +106,7 @@ public class CategoryRepositoryTest {
     @Test
     @Order(5)
     @DisplayName("Deleting twice does nothing")
-    public void deleteAfter() {
+    void deleteAfter() {
         var actual = categoryRepository.delete(categoryId);
 
         assertThat(actual).isFalse();
