@@ -88,7 +88,7 @@
                         <configuration>
                             <jdbc>
                                 <driver>org.postgresql.Driver</driver>
-                                <url>jdbc:postgresql://${env.DATABASE_URL}/${env.DATABASE_NAME}</url>
+                                <url>${env.DATABASE_URL}</url>
                                 <user>${env.DATABASE_USER}</user>
                                 <password>${env.DATABASE_PASSWORD}</password>
                             </jdbc>
@@ -101,11 +101,8 @@
                                 </database>
                                 <generate>
                                     <deprecated>false</deprecated>
-                                    <instanceFields>true</instanceFields>
-                                    <pojos>true</pojos>
-                                    <pojosEqualsAndHashCode>true</pojosEqualsAndHashCode>
+                                    <pojos>false</pojos>
                                     <javaTimeTypes>true</javaTimeTypes>
-                                    <fluentSetters>true</fluentSetters>
                                 </generate>
                                 <target>
                                     <packageName>no.echokarriere.db</packageName>

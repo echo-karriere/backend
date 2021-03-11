@@ -5,6 +5,10 @@ on: [ push, pull_request ]
 jobs:
   tests:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_USER: karriere
+      DATABASE_PASSWORD: password
+      DATABASE_URL: jdbc:postgresql://localhost:5432/echokarriere
     services:
       postgres:
         image: postgres:13-alpine
