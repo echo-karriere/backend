@@ -28,7 +28,7 @@ public class CategoryRepository implements CrudRepository<CategoryEntity, UUID> 
     public Optional<CategoryEntity> create(CategoryEntity entity) {
         var res = dsl
                 .insertInto(CATEGORY).columns(CATEGORY.ID, CATEGORY.TITLE, CATEGORY.DESCRIPTION, CATEGORY.SLUG)
-                .values(entity.id(), entity.title(), entity.description(), entity.slug())
+                .values(entity.getId(), entity.getTitle(), entity.getDescription(), entity.getSlug())
                 .returning()
                 .fetchOne();
 
@@ -44,9 +44,9 @@ public class CategoryRepository implements CrudRepository<CategoryEntity, UUID> 
                 .update(CATEGORY)
                 .set(
                         row(CATEGORY.TITLE, CATEGORY.DESCRIPTION, CATEGORY.SLUG, CATEGORY.MODIFIED_AT),
-                        row(entity.title(), entity.description(), entity.slug(), OffsetDateTime.now())
+                        row(entity.getTitle(), entity.getDescription(), entity.getSlug(), OffsetDateTime.now())
                 )
-                .where(CATEGORY.ID.eq(entity.id()))
+                .where(CATEGORY.ID.eq(entity.getId()))
                 .returning()
                 .fetchOne();
 

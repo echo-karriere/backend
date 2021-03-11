@@ -33,9 +33,9 @@ public class CategoryRepositoryTest {
         );
 
         assertThat(actual).isNotEmpty();
-        assertThat(actual.get().title()).isEqualTo("Test Category");
-        assertThat(actual.get().description()).isEqualTo("With a description");
-        assertThat(actual.get().slug()).isEqualTo("test-category");
+        assertThat(actual.get().getTitle()).isEqualTo("Test Category");
+        assertThat(actual.get().getDescription()).isEqualTo("With a description");
+        assertThat(actual.get().getSlug()).isEqualTo("test-category");
     }
 
     @Test
@@ -45,8 +45,8 @@ public class CategoryRepositoryTest {
         var actual = categoryRepository.select(categoryId);
 
         assertThat(actual).isNotEmpty();
-        assertThat(actual.get().id()).isEqualTo(categoryId);
-        assertThat(actual.get().title()).isEqualTo("Test Category");
+        assertThat(actual.get().getId()).isEqualTo(categoryId);
+        assertThat(actual.get().getTitle()).isEqualTo("Test Category");
     }
 
     @Test
@@ -64,8 +64,8 @@ public class CategoryRepositoryTest {
     public void getAllCategories() {
         var actual = categoryRepository.selectAll();
 
-        assertThat(actual).anyMatch(item -> item.id().equals(categoryId));
-        assertThat(actual).anyMatch(item -> item.title().equals("Test Category"));
+        assertThat(actual).anyMatch(item -> item.getId().equals(categoryId));
+        assertThat(actual).anyMatch(item -> item.getTitle().equals("Test Category"));
     }
 
     @Test
@@ -77,9 +77,9 @@ public class CategoryRepositoryTest {
 
 
         assertThat(actual).isNotEmpty();
-        assertThat(actual.get().title()).isEqualTo("Test Category");
-        assertThat(actual.get().description()).isEqualTo("Updated description");
-        assertThat(actual.get().slug()).isEqualTo("test");
+        assertThat(actual.get().getTitle()).isEqualTo("Test Category");
+        assertThat(actual.get().getDescription()).isEqualTo("Updated description");
+        assertThat(actual.get().getSlug()).isEqualTo("test");
     }
 
     @Test

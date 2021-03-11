@@ -1,8 +1,12 @@
 package no.echokarriere.backend.category.dto;
 
-public record UpdateCategoryDTO(
-        String title,
-        String description,
-        String slug
-) {
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
+
+@Value
+@RequiredArgsConstructor
+public class UpdateCategoryDTO {
+    String title;
+    String description;
+    String slug;
 }

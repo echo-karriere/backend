@@ -1,8 +1,12 @@
 package no.echokarriere.backend.category.dto;
 
-public record CreateCategoryDTO(
-        String title,
-        String description,
-        String slug
-) {
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
+
+@Value
+@RequiredArgsConstructor
+public class CreateCategoryDTO {
+    String title;
+    String description;
+    String slug;
 }

@@ -39,7 +39,7 @@ jobs:
 
       - uses: actions/setup-java@v1
         with:
-          java-version: 15
+          java-version: 11
 
       - name: Check
         run: mvn --batch-mode verify

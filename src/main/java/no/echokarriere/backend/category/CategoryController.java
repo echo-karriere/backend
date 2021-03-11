@@ -37,7 +37,7 @@ public class CategoryController {
 
     @PostMapping
     Category create(@RequestBody CreateCategoryDTO categoryDTO) {
-        var entity = new CategoryEntity(categoryDTO.title(), categoryDTO.description(), categoryDTO.slug());
+        var entity = new CategoryEntity(categoryDTO.getTitle(), categoryDTO.getDescription(), categoryDTO.getSlug());
         return categoryRepository
                 .create(entity)
                 .map(Category::new)
@@ -46,7 +46,7 @@ public class CategoryController {
 
     @PutMapping("{id}")
     Category update(@RequestBody UpdateCategoryDTO categoryDTO, @PathVariable UUID id) {
-        var entity = new CategoryEntity(id, categoryDTO.title(), categoryDTO.description(), categoryDTO.slug());
+        var entity = new CategoryEntity(id, categoryDTO.getTitle(), categoryDTO.getDescription(), categoryDTO.getSlug());
         return categoryRepository
                 .update(entity)
                 .map(Category::new)
