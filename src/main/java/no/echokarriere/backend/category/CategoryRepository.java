@@ -3,7 +3,7 @@ package no.echokarriere.backend.category;
 import no.echokarriere.backend.configuration.CrudRepository;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
@@ -14,7 +14,7 @@ import java.util.UUID;
 import static no.echokarriere.db.tables.Category.CATEGORY;
 import static org.jooq.impl.DSL.row;
 
-@Service
+@Repository
 public class CategoryRepository implements CrudRepository<CategoryEntity, UUID> {
     private final DSLContext dsl;
 
