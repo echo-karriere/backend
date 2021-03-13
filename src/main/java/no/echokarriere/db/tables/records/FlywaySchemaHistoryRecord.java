@@ -4,14 +4,15 @@
 package no.echokarriere.db.tables.records;
 
 
+import java.time.LocalDateTime;
+
 import no.echokarriere.db.tables.FlywaySchemaHistory;
+
 import org.jooq.Field;
 import org.jooq.Record1;
 import org.jooq.Record10;
 import org.jooq.Row10;
 import org.jooq.impl.UpdatableRecordImpl;
-
-import java.time.LocalDateTime;
 
 
 /**

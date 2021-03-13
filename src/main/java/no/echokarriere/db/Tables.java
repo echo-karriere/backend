@@ -4,8 +4,12 @@
 package no.echokarriere.db;
 
 
-import no.echokarriere.db.tables.*;
+import no.echokarriere.db.tables.Category;
+import no.echokarriere.db.tables.Company;
+import no.echokarriere.db.tables.FlywaySchemaHistory;
+import no.echokarriere.db.tables.PgpArmorHeaders;
 import no.echokarriere.db.tables.records.PgpArmorHeadersRecord;
+
 import org.jooq.Configuration;
 import org.jooq.Field;
 import org.jooq.Result;
@@ -23,19 +27,14 @@ public class Tables {
     public static final Category CATEGORY = Category.CATEGORY;
 
     /**
+     * The table <code>public.company</code>.
+     */
+    public static final Company COMPANY = Company.COMPANY;
+
+    /**
      * The table <code>public.flyway_schema_history</code>.
      */
     public static final FlywaySchemaHistory FLYWAY_SCHEMA_HISTORY = FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY;
-
-    /**
-     * The table <code>public.form</code>.
-     */
-    public static final Form FORM = Form.FORM;
-
-    /**
-     * The table <code>public.form_submission</code>.
-     */
-    public static final FormSubmission FORM_SUBMISSION = FormSubmission.FORM_SUBMISSION;
 
     /**
      * The table <code>public.pgp_armor_headers</code>.
@@ -75,14 +74,4 @@ public class Tables {
               __1
         );
     }
-
-    /**
-     * The table <code>public.refresh_token</code>.
-     */
-    public static final RefreshToken REFRESH_TOKEN = RefreshToken.REFRESH_TOKEN;
-
-    /**
-     * The table <code>public.user</code>.
-     */
-    public static final User USER = User.USER;
 }

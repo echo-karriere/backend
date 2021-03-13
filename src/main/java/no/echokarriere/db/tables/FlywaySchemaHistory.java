@@ -4,18 +4,29 @@
 package no.echokarriere.db.tables;
 
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+
 import no.echokarriere.db.Indexes;
 import no.echokarriere.db.Keys;
 import no.echokarriere.db.Public;
 import no.echokarriere.db.tables.records.FlywaySchemaHistoryRecord;
-import org.jooq.*;
+
+import org.jooq.Field;
+import org.jooq.ForeignKey;
+import org.jooq.Index;
+import org.jooq.Name;
+import org.jooq.Record;
+import org.jooq.Row10;
+import org.jooq.Schema;
+import org.jooq.Table;
+import org.jooq.TableField;
+import org.jooq.TableOptions;
+import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
-
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
 
 
 /**

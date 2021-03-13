@@ -4,15 +4,16 @@
 package no.echokarriere.db.tables.records;
 
 
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
 import no.echokarriere.db.tables.Category;
+
 import org.jooq.Field;
 import org.jooq.Record1;
 import org.jooq.Record6;
 import org.jooq.Row6;
 import org.jooq.impl.UpdatableRecordImpl;
-
-import java.time.OffsetDateTime;
-import java.util.UUID;
 
 
 /**

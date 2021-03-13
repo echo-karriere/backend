@@ -5,6 +5,7 @@ package no.echokarriere.db;
 
 
 import no.echokarriere.db.tables.FlywaySchemaHistory;
+
 import org.jooq.Index;
 import org.jooq.OrderField;
 import org.jooq.impl.DSL;

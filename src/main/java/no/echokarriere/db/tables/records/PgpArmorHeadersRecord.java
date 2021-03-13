@@ -5,6 +5,7 @@ package no.echokarriere.db.tables.records;
 
 
 import no.echokarriere.db.tables.PgpArmorHeaders;
+
 import org.jooq.Field;
 import org.jooq.Record2;
 import org.jooq.Row2;

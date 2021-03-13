@@ -6,6 +6,7 @@ package no.echokarriere.db;
 
 import no.echokarriere.db.tables.PgpArmorHeaders;
 import no.echokarriere.db.tables.records.PgpArmorHeadersRecord;
+
 import org.jooq.Configuration;
 import org.jooq.Field;
 import org.jooq.Result;

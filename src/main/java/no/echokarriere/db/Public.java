@@ -4,14 +4,21 @@
 package no.echokarriere.db;
 
 
-import no.echokarriere.db.tables.User;
-import no.echokarriere.db.tables.*;
-import no.echokarriere.db.tables.records.PgpArmorHeadersRecord;
-import org.jooq.*;
-import org.jooq.impl.SchemaImpl;
-
 import java.util.Arrays;
 import java.util.List;
+
+import no.echokarriere.db.tables.Category;
+import no.echokarriere.db.tables.Company;
+import no.echokarriere.db.tables.FlywaySchemaHistory;
+import no.echokarriere.db.tables.PgpArmorHeaders;
+import no.echokarriere.db.tables.records.PgpArmorHeadersRecord;
+
+import org.jooq.Catalog;
+import org.jooq.Configuration;
+import org.jooq.Field;
+import org.jooq.Result;
+import org.jooq.Table;
+import org.jooq.impl.SchemaImpl;
 
 
 /**
@@ -33,19 +40,14 @@ public class Public extends SchemaImpl {
     public final Category CATEGORY = Category.CATEGORY;
 
     /**
+     * The table <code>public.company</code>.
+     */
+    public final Company COMPANY = Company.COMPANY;
+
+    /**
      * The table <code>public.flyway_schema_history</code>.
      */
     public final FlywaySchemaHistory FLYWAY_SCHEMA_HISTORY = FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY;
-
-    /**
-     * The table <code>public.form</code>.
-     */
-    public final Form FORM = Form.FORM;
-
-    /**
-     * The table <code>public.form_submission</code>.
-     */
-    public final FormSubmission FORM_SUBMISSION = FormSubmission.FORM_SUBMISSION;
 
     /**
      * The table <code>public.pgp_armor_headers</code>.
@@ -87,16 +89,6 @@ public class Public extends SchemaImpl {
     }
 
     /**
-     * The table <code>public.refresh_token</code>.
-     */
-    public final RefreshToken REFRESH_TOKEN = RefreshToken.REFRESH_TOKEN;
-
-    /**
-     * The table <code>public.user</code>.
-     */
-    public final User USER = User.USER;
-
-    /**
      * No further instances allowed
      */
     private Public() {
@@ -113,11 +105,8 @@ public class Public extends SchemaImpl {
     public final List<Table<?>> getTables() {
         return Arrays.<Table<?>>asList(
             Category.CATEGORY,
+            Company.COMPANY,
             FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY,
-            Form.FORM,
-            FormSubmission.FORM_SUBMISSION,
-            PgpArmorHeaders.PGP_ARMOR_HEADERS,
-            RefreshToken.REFRESH_TOKEN,
-            User.USER);
+            PgpArmorHeaders.PGP_ARMOR_HEADERS);
     }
 }

@@ -4,9 +4,13 @@
 package no.echokarriere.db;
 
 
-import no.echokarriere.db.tables.*;
-import no.echokarriere.db.tables.records.*;
-import org.jooq.ForeignKey;
+import no.echokarriere.db.tables.Category;
+import no.echokarriere.db.tables.Company;
+import no.echokarriere.db.tables.FlywaySchemaHistory;
+import no.echokarriere.db.tables.records.CategoryRecord;
+import no.echokarriere.db.tables.records.CompanyRecord;
+import no.echokarriere.db.tables.records.FlywaySchemaHistoryRecord;
+
 import org.jooq.TableField;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
@@ -14,7 +18,7 @@ import org.jooq.impl.Internal;
 
 
 /**
- * A class modelling foreign key relationships and constraints of tables in
+ * A class modelling foreign key relationships and constraints of tables in 
  * public.
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
@@ -27,18 +31,7 @@ public class Keys {
     public static final UniqueKey<CategoryRecord> CATEGORY_PKEY = Internal.createUniqueKey(Category.CATEGORY, DSL.name("category_pkey"), new TableField[] { Category.CATEGORY.ID }, true);
     public static final UniqueKey<CategoryRecord> CATEGORY_SLUG_KEY = Internal.createUniqueKey(Category.CATEGORY, DSL.name("category_slug_key"), new TableField[] { Category.CATEGORY.SLUG }, true);
     public static final UniqueKey<CategoryRecord> CATEGORY_TITLE_KEY = Internal.createUniqueKey(Category.CATEGORY, DSL.name("category_title_key"), new TableField[] { Category.CATEGORY.TITLE }, true);
+    public static final UniqueKey<CompanyRecord> COMPANY_NAME_KEY = Internal.createUniqueKey(Company.COMPANY, DSL.name("company_name_key"), new TableField[] { Company.COMPANY.NAME }, true);
+    public static final UniqueKey<CompanyRecord> COMPANY_PKEY = Internal.createUniqueKey(Company.COMPANY, DSL.name("company_pkey"), new TableField[] { Company.COMPANY.ID }, true);
     public static final UniqueKey<FlywaySchemaHistoryRecord> FLYWAY_SCHEMA_HISTORY_PK = Internal.createUniqueKey(FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY, DSL.name("flyway_schema_history_pk"), new TableField[] { FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY.INSTALLED_RANK }, true);
-    public static final UniqueKey<FormRecord> FORM_PKEY = Internal.createUniqueKey(Form.FORM, DSL.name("form_pkey"), new TableField[] { Form.FORM.ID }, true);
-    public static final UniqueKey<FormRecord> FORM_TITLE_KEY = Internal.createUniqueKey(Form.FORM, DSL.name("form_title_key"), new TableField[] { Form.FORM.TITLE }, true);
-    public static final UniqueKey<FormSubmissionRecord> FORM_SUBMISSION_PKEY = Internal.createUniqueKey(FormSubmission.FORM_SUBMISSION, DSL.name("form_submission_pkey"), new TableField[] { FormSubmission.FORM_SUBMISSION.ID }, true);
-    public static final UniqueKey<RefreshTokenRecord> REFRESH_TOKEN_PKEY = Internal.createUniqueKey(RefreshToken.REFRESH_TOKEN, DSL.name("refresh_token_pkey"), new TableField[] { RefreshToken.REFRESH_TOKEN.USER_ID }, true);
-    public static final UniqueKey<UserRecord> USER_EMAIL_KEY = Internal.createUniqueKey(User.USER, DSL.name("user_email_key"), new TableField[] { User.USER.EMAIL }, true);
-    public static final UniqueKey<UserRecord> USER_PKEY = Internal.createUniqueKey(User.USER, DSL.name("user_pkey"), new TableField[] { User.USER.ID }, true);
-
-    // -------------------------------------------------------------------------
-    // FOREIGN KEY definitions
-    // -------------------------------------------------------------------------
-
-    public static final ForeignKey<FormSubmissionRecord, FormRecord> FORM_SUBMISSION__FORM_SUBMISSION_FORM_FKEY = Internal.createForeignKey(FormSubmission.FORM_SUBMISSION, DSL.name("form_submission_form_fkey"), new TableField[] { FormSubmission.FORM_SUBMISSION.FORM }, Keys.FORM_PKEY, new TableField[] { Form.FORM.ID }, true);
-    public static final ForeignKey<RefreshTokenRecord, UserRecord> REFRESH_TOKEN__REFRESH_TOKEN_USER_ID_FKEY = Internal.createForeignKey(RefreshToken.REFRESH_TOKEN, DSL.name("refresh_token_user_id_fkey"), new TableField[] { RefreshToken.REFRESH_TOKEN.USER_ID }, Keys.USER_PKEY, new TableField[] { User.USER.ID }, true);
 }
