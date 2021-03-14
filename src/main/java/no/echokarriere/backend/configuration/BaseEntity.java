@@ -6,11 +6,10 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import java.time.OffsetDateTime;
+import javax.persistence.*;
+import java.time.Instant;
 import java.util.UUID;
 
 @Data
@@ -18,13 +17,17 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass
-public class AbstractEntity {
+@EntityListeners(AuditingEntityListener.class)
+public class BaseEntity {
     @Id
     @GeneratedValue
     UUID id;
 
     @CreatedDate
-    OffsetDateTime createdAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    Instant createdAt;
+
     @LastModifiedDate
-    OffsetDateTime modifiedAt;
+    @Column(name = "modified_at")
+    Instant modifiedAt;
 }
