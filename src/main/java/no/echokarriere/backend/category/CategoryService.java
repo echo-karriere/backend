@@ -2,9 +2,8 @@ package no.echokarriere.backend.category;
 
 import no.echokarriere.backend.category.dto.CreateCategoryDTO;
 import no.echokarriere.backend.category.dto.UpdateCategoryDTO;
-import org.springframework.http.HttpStatus;
+import no.echokarriere.backend.exception.NoSuchElementException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,7 +23,7 @@ public class CategoryService {
     public Category one(UUID id) {
         return categoryRepository
                 .findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
+                .orElseThrow(() -> new NoSuchElementException("No such category: " + id.toString()));
     }
 
     public Category create(CreateCategoryDTO categoryDTO) {
