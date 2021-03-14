@@ -9,12 +9,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import no.echokarriere.backend.category.dto.CreateCategoryDTO;
 import no.echokarriere.backend.category.dto.UpdateCategoryDTO;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
 @RestController
+@Validated
 @RequestMapping(value = "/api/categories", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CategoryController {
     private final CategoryService categoryService;
@@ -49,7 +52,7 @@ public class CategoryController {
             @ApiResponse(responseCode = "400", description = "Could not create a new category", content = @Content)
     })
     public Category create(
-            @Parameter(description = "Data used to create a new category") @RequestBody CreateCategoryDTO categoryDTO
+            @Parameter(description = "Data used to create a new category") @Valid @RequestBody CreateCategoryDTO categoryDTO
     ) {
         return categoryService.create(categoryDTO);
     }
@@ -62,7 +65,7 @@ public class CategoryController {
             @ApiResponse(responseCode = "404", description = "Could not find category", content = @Content)
     })
     public Category update(
-            @Parameter(description = "Data used to update category") @RequestBody UpdateCategoryDTO categoryDTO,
+            @Parameter(description = "Data used to update category") @Valid @RequestBody UpdateCategoryDTO categoryDTO,
             @Parameter(description = "ID of category") @PathVariable UUID id
     ) {
         return categoryService.update(categoryDTO, id);
