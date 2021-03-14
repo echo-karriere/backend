@@ -2,7 +2,6 @@ package no.echokarriere.backend.company;
 
 import no.echokarriere.backend.configuration.CrudRepository;
 import org.jooq.DSLContext;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +17,6 @@ import static org.jooq.impl.DSL.row;
 public class CompanyRepository implements CrudRepository<CompanyEntity, UUID> {
     private final DSLContext dsl;
 
-    @Autowired
     public CompanyRepository(DSLContext dsl) {
         this.dsl = dsl;
     }

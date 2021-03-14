@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import no.echokarriere.backend.company.dto.CreateCompanyDTO;
 import no.echokarriere.backend.company.dto.UpdateCompanyDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +19,6 @@ import java.util.UUID;
 public class CompanyController {
     private final CompanyService companyService;
 
-    @Autowired
     public CompanyController(CompanyService companyService) {
         this.companyService = companyService;
     }
