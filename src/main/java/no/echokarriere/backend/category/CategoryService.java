@@ -8,7 +8,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
@@ -19,33 +18,27 @@ public class CategoryService {
     }
 
     public List<Category> all() {
-        return categoryRepository.selectAll().stream().map(Category::new).collect(Collectors.toList());
+        return categoryRepository.findAll();
     }
 
     public Category one(UUID id) {
         return categoryRepository
-                .select(id)
-                .map(Category::new)
+                .findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
     }
 
     public Category create(CreateCategoryDTO categoryDTO) {
-        var entity = new CategoryEntity(categoryDTO.getTitle(), categoryDTO.getDescription(), categoryDTO.getSlug());
-        return categoryRepository
-                .create(entity)
-                .map(Category::new)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Could not create category"));
+        var entity = new Category(categoryDTO.getTitle(), categoryDTO.getDescription(), categoryDTO.getSlug());
+        return categoryRepository.save(entity);
     }
 
     public Category update(UpdateCategoryDTO categoryDTO, UUID id) {
-        var entity = new CategoryEntity(id, categoryDTO.getTitle(), categoryDTO.getDescription(), categoryDTO.getSlug());
-        return categoryRepository
-                .update(entity)
-                .map(Category::new)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Could not update category"));
+        var entity = new Category(categoryDTO.getTitle(), categoryDTO.getDescription(), categoryDTO.getSlug());
+        entity.setId(id);
+        return categoryRepository.save(entity);
     }
 
-    public boolean delete(UUID id) {
-        return categoryRepository.delete(id);
+    public void delete(UUID id) {
+        categoryRepository.deleteById(id);
     }
 }

@@ -1,22 +1,26 @@
 package no.echokarriere.backend.category;
 
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import no.echokarriere.backend.configuration.AbstractEntity;
 
-import java.time.OffsetDateTime;
-import java.util.UUID;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
-@Value
-@RequiredArgsConstructor
-public class Category {
-    UUID id;
+@EqualsAndHashCode(callSuper = true)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "category")
+public class Category extends AbstractEntity {
+    @NotEmpty(message = "Category must have a title")
     String title;
+    @NotEmpty(message = "Category must have a description")
     String description;
+    @NotEmpty(message = "Category must have a slug")
     String slug;
-    OffsetDateTime createdAt;
-    OffsetDateTime modifiedAt;
-
-    Category(CategoryEntity entity) {
-        this(entity.getId(), entity.getTitle(), entity.getDescription(), entity.getSlug(), entity.getCreatedAt(), entity.getModifiedAt());
-    }
 }

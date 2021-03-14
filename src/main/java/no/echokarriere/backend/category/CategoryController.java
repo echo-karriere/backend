@@ -71,13 +71,13 @@ public class CategoryController {
     @DeleteMapping("{id}")
     @Operation(summary = "Delete a category from the service", tags = {"categories"})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Boolean.class))),
+            @ApiResponse(responseCode = "200", description = "successful operation", content = @Content),
             @ApiResponse(responseCode = "400", description = "Invalid ID supplied", content = @Content),
             @ApiResponse(responseCode = "404", description = "Category not found", content = @Content)
     })
-    public boolean delete(
+    public void delete(
             @Parameter(description = "ID of category") @PathVariable UUID id
     ) {
-        return categoryService.delete(id);
+        categoryService.delete(id);
     }
 }
