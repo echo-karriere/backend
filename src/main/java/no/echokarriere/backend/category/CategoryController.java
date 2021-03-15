@@ -6,8 +6,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import no.echokarriere.backend.category.dto.CreateCategoryDTO;
-import no.echokarriere.backend.category.dto.UpdateCategoryDTO;
+import no.echokarriere.backend.category.dto.CategoryDTO;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +27,7 @@ public class CategoryController {
 
     @GetMapping
     @Operation(summary = "Get all categories", tags = {"categories"})
-    public List<Category> all() {
+    public List<CategoryDTO> all() {
         return categoryService.all();
     }
 
@@ -39,7 +38,7 @@ public class CategoryController {
             @ApiResponse(responseCode = "400", description = "Invalid ID supplied", content = @Content),
             @ApiResponse(responseCode = "404", description = "Category not found", content = @Content)
     })
-    public Category one(
+    public CategoryDTO one(
             @Parameter(description = "ID of category") @PathVariable UUID id
     ) {
         return categoryService.one(id);
@@ -51,8 +50,8 @@ public class CategoryController {
             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Category.class))),
             @ApiResponse(responseCode = "400", description = "Could not create a new category", content = @Content)
     })
-    public Category create(
-            @Parameter(description = "Data used to create a new category") @Valid @RequestBody CreateCategoryDTO categoryDTO
+    public CategoryDTO create(
+            @Parameter(description = "Data used to create a new category") @Valid @RequestBody CategoryDTO categoryDTO
     ) {
         return categoryService.create(categoryDTO);
     }
@@ -64,8 +63,8 @@ public class CategoryController {
             @ApiResponse(responseCode = "400", description = "Could not update category, bad request", content = @Content),
             @ApiResponse(responseCode = "404", description = "Could not find category", content = @Content)
     })
-    public Category update(
-            @Parameter(description = "Data used to update category") @Valid @RequestBody UpdateCategoryDTO categoryDTO,
+    public CategoryDTO update(
+            @Parameter(description = "Data used to update category") @Valid @RequestBody CategoryDTO categoryDTO,
             @Parameter(description = "ID of category") @PathVariable UUID id
     ) {
         return categoryService.update(categoryDTO, id);

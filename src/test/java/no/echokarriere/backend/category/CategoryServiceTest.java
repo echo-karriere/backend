@@ -1,39 +1,35 @@
 package no.echokarriere.backend.category;
 
-import no.echokarriere.backend.FlywayMigrationConfig;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@ActiveProfiles("integration-test")
-@Import(FlywayMigrationConfig.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class CategoryRepositoryTest {
-    private final UUID categoryId = UUID.randomUUID();
+class CategoryServiceTest {
+    private Category category;
     @Autowired
-    private CategoryRepository categoryRepository;
-    @Autowired
-    private FlywayMigrationStrategy strategy;
+    private CategoryService categoryService;
+
+    @BeforeAll
+    void setup() {
+        category = new Category("Test Category", "With a description", "test-category");
+    }
 
     @Test
     @Order(1)
     @DisplayName("Can create a new category")
     void createNewCategory() {
-        var category = new Category("Test Category", "With a description", "test-category");
-        category.setId(categoryId);
-        var actual = categoryRepository.save(category);
+        var actual = categoryService.create(category);
 
+        assertThat(actual.getId()).isEqualTo(categoryId);
         assertThat(actual.getTitle()).isEqualTo("Test Category");
         assertThat(actual.getDescription()).isEqualTo("With a description");
         assertThat(actual.getSlug()).isEqualTo("test-category");
@@ -43,7 +39,7 @@ class CategoryRepositoryTest {
     @Order(2)
     @DisplayName("Can get our created category")
     void getSingleCategory() {
-        var actual = categoryRepository.findById(categoryId);
+        var actual = categoryService.findById(categoryId);
 
         assertThat(actual).isNotEmpty();
         assertThat(actual.get().getId()).isEqualTo(categoryId);
@@ -54,7 +50,7 @@ class CategoryRepositoryTest {
     @Order(2)
     @DisplayName("Returns Optional.empty() when no ID matches")
     void getWrongId() {
-        var actual = categoryRepository.findById(UUID.randomUUID());
+        var actual = categoryService.findById(UUID.randomUUID());
 
         assertThat(actual).isEmpty();
     }
@@ -63,7 +59,7 @@ class CategoryRepositoryTest {
     @Order(2)
     @DisplayName("Category is in all categories query")
     void getAllCategories() {
-        var actual = categoryRepository.findAll();
+        var actual = categoryService.findAll();
 
         assertThat(actual)
                 .anyMatch(item -> item.getId().equals(categoryId))
@@ -76,7 +72,7 @@ class CategoryRepositoryTest {
     void updateCategory() {
         var updated = new Category("Test Category", "Updated description", "test");
         updated.setId(categoryId);
-        var actual = categoryRepository.save(updated);
+        var actual = categoryService.save(updated);
 
         assertThat(actual.getTitle()).isEqualTo("Test Category");
         assertThat(actual.getDescription()).isEqualTo("Updated description");
@@ -87,8 +83,8 @@ class CategoryRepositoryTest {
     @Order(4)
     @DisplayName("Deleting with the correct ID removes it")
     void delete() {
-        categoryRepository.deleteById(categoryId);
-        var actual = categoryRepository.findById(categoryId);
+        categoryService.deleteById(categoryId);
+        var actual = categoryService.findById(categoryId);
 
         assertThat(actual).isEmpty();
     }
@@ -98,8 +94,8 @@ class CategoryRepositoryTest {
     @DisplayName("Deleting with an incorrect ID does nothing")
     void deleteRandom() {
         var id = UUID.randomUUID();
-        categoryRepository.deleteById(id);
-        var actual = categoryRepository.findById(id);
+        categoryService.deleteById(id);
+        var actual = categoryService.findById(id);
 
         assertThat(actual).isEmpty();
     }
