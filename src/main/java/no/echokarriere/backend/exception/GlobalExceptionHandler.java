@@ -17,4 +17,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         var response = APIResponse.failure(exception.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
+
+    @ExceptionHandler(BadRequestException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Object> handleBadRequestException(BadRequestException exception) {
+        var response = APIResponse.failure(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
 }

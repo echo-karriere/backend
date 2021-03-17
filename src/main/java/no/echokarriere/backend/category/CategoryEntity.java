@@ -16,11 +16,11 @@ public class CategoryEntity {
     OffsetDateTime createdAt;
     OffsetDateTime modifiedAt;
 
-    CategoryEntity(String title, String description, String slug) {
-        this(UUID.randomUUID(), title, description, slug, null, null);
+    CategoryEntity(CategoryDTO dto) {
+        this(UUID.randomUUID(), dto.getTitle(), dto.getDescription(), dto.getSlug(), null, null);
     }
 
-    CategoryEntity(UUID id, String title, String description, String slug) {
-        this(id, title, description, slug, null, null);
+    CategoryEntity(UUID id, CategoryDTO dto) {
+        this(id, dto.getTitle(), dto.getDescription(), dto.getSlug(), null, null);
     }
 }

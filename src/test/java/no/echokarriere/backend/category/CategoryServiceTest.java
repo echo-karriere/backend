@@ -1,6 +1,7 @@
 package no.echokarriere.backend.category;
 
 import no.echokarriere.backend.FlywayMigrationConfig;
+import no.echokarriere.backend.exception.NoSuchElementException;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
@@ -12,6 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @ActiveProfiles("integration-test")
@@ -19,10 +21,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class CategoryRepositoryTest {
-    private final UUID categoryId = UUID.randomUUID();
+class CategoryServiceTest {
+    private UUID categoryId;
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryService categoryService;
     @Autowired
     private FlywayMigrationStrategy strategy;
 
@@ -30,66 +32,61 @@ class CategoryRepositoryTest {
     @Order(1)
     @DisplayName("Can create a new category")
     void createNewCategory() {
-        var actual = categoryRepository.create(
-                new CategoryEntity(categoryId, "Test Category", "With a description", "test-category", null, null)
-        );
+        var actual = categoryService.create(new CategoryDTO("Test Service", "And description", "service"));
+        categoryId = actual.getId();
 
-        assertThat(actual).isNotEmpty();
-        assertThat(actual.get().getTitle()).isEqualTo("Test Category");
-        assertThat(actual.get().getDescription()).isEqualTo("With a description");
-        assertThat(actual.get().getSlug()).isEqualTo("test-category");
+        assertThat(actual.getTitle()).isEqualTo("Test Service");
+        assertThat(actual.getDescription()).isEqualTo("And description");
+        assertThat(actual.getSlug()).isEqualTo("service");
     }
 
     @Test
     @Order(2)
     @DisplayName("Can get our created category")
     void getSingleCategory() {
-        var actual = categoryRepository.select(categoryId);
+        var actual = categoryService.single(categoryId);
 
-        assertThat(actual).isNotEmpty();
-        assertThat(actual.get().getId()).isEqualTo(categoryId);
-        assertThat(actual.get().getTitle()).isEqualTo("Test Category");
+        assertThat(actual.getId()).isEqualTo(categoryId);
+        assertThat(actual.getTitle()).isEqualTo("Test Service");
     }
 
     @Test
     @Order(2)
-    @DisplayName("Returns Optional.empty() when no ID matches")
+    @DisplayName("Throws exception when no ID matches")
     void getWrongId() {
-        var actual = categoryRepository.select(UUID.randomUUID());
-
-        assertThat(actual).isEmpty();
+        var id = UUID.randomUUID();
+        assertThatThrownBy(() -> categoryService.single(id)).isInstanceOf(NoSuchElementException.class);
     }
 
     @Test
     @Order(2)
-    @DisplayName("Category is in all categories query")
+    @DisplayName("Category is in all categories")
     void getAllCategories() {
-        var actual = categoryRepository.selectAll();
+        var actual = categoryService.all();
 
         assertThat(actual)
                 .anyMatch(item -> item.getId().equals(categoryId))
-                .anyMatch(item -> item.getTitle().equals("Test Category"));
+                .anyMatch(item -> item.getTitle().equals("Test Service"));
     }
 
     @Test
     @Order(3)
     @DisplayName("Can update category")
     void updateCategory() {
-        var updated = new CategoryEntity(categoryId, "Test Category", "Updated description", "test", null, null);
-        var actual = categoryRepository.update(updated);
+        var updated = new CategoryDTO("Test Service", "And a new description", "service");
+        var actual = categoryService.update(updated, categoryId);
 
 
-        assertThat(actual).isNotEmpty();
-        assertThat(actual.get().getTitle()).isEqualTo("Test Category");
-        assertThat(actual.get().getDescription()).isEqualTo("Updated description");
-        assertThat(actual.get().getSlug()).isEqualTo("test");
+        assertThat(actual.getTitle()).isEqualTo("Test Service");
+        assertThat(actual.getDescription()).isEqualTo("And a new description");
+        assertThat(actual.getSlug()).isEqualTo("service");
     }
 
     @Test
     @Order(4)
     @DisplayName("Deleting with the correct ID removes it")
     void delete() {
-        var actual = categoryRepository.delete(categoryId);
+        var actual = categoryService.delete(categoryId);
 
         assertThat(actual).isTrue();
     }
@@ -98,7 +95,7 @@ class CategoryRepositoryTest {
     @Order(4)
     @DisplayName("Deleting with an incorrect ID does nothing")
     void deleteRandom() {
-        var actual = categoryRepository.delete(UUID.randomUUID());
+        var actual = categoryService.delete(UUID.randomUUID());
 
         assertThat(actual).isFalse();
     }
@@ -107,7 +104,7 @@ class CategoryRepositoryTest {
     @Order(5)
     @DisplayName("Deleting twice does nothing")
     void deleteAfter() {
-        var actual = categoryRepository.delete(categoryId);
+        var actual = categoryService.delete(categoryId);
 
         assertThat(actual).isFalse();
     }

@@ -6,8 +6,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import no.echokarriere.backend.category.dto.CreateCategoryDTO;
-import no.echokarriere.backend.category.dto.UpdateCategoryDTO;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +40,7 @@ public class CategoryController {
     public Category one(
             @Parameter(description = "ID of category") @PathVariable UUID id
     ) {
-        return categoryService.one(id);
+        return categoryService.single(id);
     }
 
     @PostMapping
@@ -52,7 +50,7 @@ public class CategoryController {
             @ApiResponse(responseCode = "400", description = "Could not create a new category", content = @Content)
     })
     public Category create(
-            @Parameter(description = "Data used to create a new category") @Valid @RequestBody CreateCategoryDTO categoryDTO
+            @Parameter(description = "Data used to create a new category") @Valid @RequestBody CategoryDTO categoryDTO
     ) {
         return categoryService.create(categoryDTO);
     }
@@ -65,7 +63,7 @@ public class CategoryController {
             @ApiResponse(responseCode = "404", description = "Could not find category", content = @Content)
     })
     public Category update(
-            @Parameter(description = "Data used to update category") @Valid @RequestBody UpdateCategoryDTO categoryDTO,
+            @Parameter(description = "Data used to update category") @Valid @RequestBody CategoryDTO categoryDTO,
             @Parameter(description = "ID of category") @PathVariable UUID id
     ) {
         return categoryService.update(categoryDTO, id);
@@ -78,9 +76,9 @@ public class CategoryController {
             @ApiResponse(responseCode = "400", description = "Invalid ID supplied", content = @Content),
             @ApiResponse(responseCode = "404", description = "Category not found", content = @Content)
     })
-    public void delete(
+    public boolean delete(
             @Parameter(description = "ID of category") @PathVariable UUID id
     ) {
-        categoryService.delete(id);
+        return categoryService.delete(id);
     }
 }
