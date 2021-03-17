@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
@@ -17,27 +18,31 @@ public class CategoryService {
     }
 
     public List<Category> all() {
-        return categoryRepository.findAll();
+        return categoryRepository.selectAll().stream().map(Category::new).collect(Collectors.toList());
     }
 
     public Category one(UUID id) {
         return categoryRepository
-                .findById(id)
+                .select(id)
+                .map(Category::new)
                 .orElseThrow(() -> new NoSuchElementException("No such category: " + id.toString()));
     }
 
     public Category create(CreateCategoryDTO categoryDTO) {
-        var entity = new Category(categoryDTO.getTitle(), categoryDTO.getDescription(), categoryDTO.getSlug());
-        return categoryRepository.save(entity);
+        var entity = new CategoryEntity(categoryDTO.getTitle(), categoryDTO.getDescription(), categoryDTO.getSlug());
+        return categoryRepository.create(entity)
+                .map(Category::new)
+                .orElseThrow(() -> new RuntimeException("Could not create category"));
     }
 
     public Category update(UpdateCategoryDTO categoryDTO, UUID id) {
-        var entity = new Category(categoryDTO.getTitle(), categoryDTO.getDescription(), categoryDTO.getSlug());
-        entity.setId(id);
-        return categoryRepository.save(entity);
+        var entity = new CategoryEntity(id, categoryDTO.getTitle(), categoryDTO.getDescription(), categoryDTO.getSlug());
+        return categoryRepository.update(entity)
+                .map(Category::new)
+                .orElseThrow(() -> new RuntimeException("Could not update category"));
     }
 
     public void delete(UUID id) {
-        categoryRepository.deleteById(id);
+        categoryRepository.delete(id);
     }
 }
