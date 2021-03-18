@@ -5,6 +5,22 @@ on: [ push, pull_request ]
 jobs:
   tests:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:11.6-alpine
+        env:
+          POSTGRES_DB: test_db
+          POSTGRES_USER: karriere
+          POSTGRES_PASSWORD: password
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 32789:5432
+
     steps:
       - uses: actions/checkout@v2
 
