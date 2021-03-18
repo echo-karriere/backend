@@ -1,23 +1,16 @@
 package no.echokarriere.backend.company;
 
-import no.echokarriere.backend.FlywayMigrationConfig;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@ActiveProfiles("integration-test")
-@Import(FlywayMigrationConfig.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CompanyRepositoryTest {
     private final UUID companyId = UUID.randomUUID();

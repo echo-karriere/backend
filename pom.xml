@@ -74,18 +74,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-bootstrap</artifactId>
-            <version>3.0.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.playtika.testcontainers</groupId>
-            <artifactId>embedded-postgresql</artifactId>
-            <version>2.0.3</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
@@ -130,6 +118,49 @@
                 </configuration>
             </plugin>
 
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.34.1</version>
+                <configuration>
+                    <images>
+                        <image>
+                            <alias>test-db</alias>
+                            <name>postgres:11.6</name>
+                            <run>
+                                <ports>
+                                    <port>32789:5432</port>
+                                </ports>
+                                <env>
+                                    <POSTGRES_PASSWORD>password</POSTGRES_PASSWORD>
+                                    <POSTGRES_USER>karriere</POSTGRES_USER>
+                                    <POSTGRES_DB>test_db</POSTGRES_DB>
+                                </env>
+                                <wait>
+                                    <log>database system is ready to accept connections</log>
+                                </wait>
+                            </run>
+                        </image>
+                    </images>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <id>start-test-db</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>stop-test-db</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
