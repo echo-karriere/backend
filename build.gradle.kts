@@ -10,7 +10,6 @@ plugins {
     id("org.springframework.boot")
     id("io.spring.dependency-management")
     id("com.netflix.dgs.codegen")
-    id("org.flywaydb.flyway")
     id("nu.studer.jooq")
     id("org.sonarqube")
 }
@@ -65,14 +64,6 @@ sourceSets {
     }
 }
 
-flyway {
-    url = (System.getenv("DATABASE_URL") ?: "jdbc:postgresql://localhost:5432/echokarriere")
-    user = (System.getenv("DATABASE_USER") ?: "karriere")
-    password = (System.getenv("DATABASE_PASSWORD") ?: "password")
-    locations = arrayOf("filesystem:src/main/resources/db/migration")
-}
-
-tasks.flywayMigrate { dependsOn("flywayClasses") }
 tasks.withType<Test> {
     useJUnitPlatform()
     failFast = true
@@ -125,7 +116,6 @@ jooq {
 }
 
 tasks.named<nu.studer.gradle.jooq.JooqGenerate>("generateJooq") {
-    dependsOn(tasks.flywayMigrate)
     inputs.files(fileTree("src/main/resources/db/migration"))
         .withPropertyName("migrations")
         .withPathSensitivity(PathSensitivity.RELATIVE)
