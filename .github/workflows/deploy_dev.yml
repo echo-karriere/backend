@@ -28,13 +28,18 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Cache local Maven repository
+      - name: Gradle wrapper validation
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Cache Gradle packages
         uses: actions/cache@v2
         with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
-            ${{ runner.os }}-maven-
+            ${{ runner.os }}-gradle-
 
       - name: Set up Java version
         uses: actions/setup-java@v1
@@ -42,7 +47,7 @@ jobs:
           java-version: 11
 
       - name: Build with Maven
-        run: mvn clean install
+        run: mvn build
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
@@ -50,4 +55,4 @@ jobs:
           app-name: 'echo-karriere'
           slot-name: 'dev'
           publish-profile: ${{ secrets.AzureAppService_PublishProfile_ce79176bdf7947a48f5e78a23d212ac8 }}
-          package: '${{ github.workspace }}/target/*.jar'
+          package: '${{ github.workspace }}/build/libs/*.jar'
