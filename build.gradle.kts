@@ -1,22 +1,15 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
-val springBootVersion: String by project
-val flywayVersion: String by project
-val jooqVersion: String by project
-val jooqPluginVersion: String by project
 val postgresVersion: String by project
 val lombokVersion: String by project
-val graphqlDGSVersion: String by project
-val junitVersion: String by project
-val sonarqubeVersion: String by project
-val springdocVersion: String by project
 
 plugins {
     jacoco
     java
     id("org.springframework.boot")
     id("io.spring.dependency-management")
+    id("com.netflix.dgs.codegen")
     id("org.flywaydb.flyway")
     id("nu.studer.jooq")
     id("org.sonarqube")
@@ -37,13 +30,14 @@ dependencies {
     annotationProcessor("org.projectlombok", "lombok", lombokVersion)
     compileOnly("org.projectlombok", "lombok", lombokVersion)
 
-    implementation("org.flywaydb", "flyway-core", flywayVersion)
-    implementation("org.jooq", "jooq", jooqVersion)
+    implementation("org.flywaydb", "flyway-core", "7.7.0")
+    implementation("org.jooq", "jooq", "3.14.8")
     runtimeOnly("org.postgresql", "postgresql", postgresVersion)
     jooqGenerator("org.postgresql", "postgresql", postgresVersion)
 
-//    implementation("com.netflix.graphql.dgs", "graphql-dgs-spring-boot-starter", graphqlDGSVersion)
-    implementation("org.springdoc", "springdoc-openapi-ui", springdocVersion)
+    implementation("com.netflix.graphql.dgs", "graphql-dgs-spring-boot-starter", "3.9.3")
+    implementation("com.graphql-java", "graphql-java-extended-scalars", "15.0.0")
+    implementation("org.springdoc", "springdoc-openapi-ui", "1.5.5")
 
     testImplementation("org.springframework.boot", "spring-boot-starter-test")
 }
@@ -96,10 +90,12 @@ tasks.withType<Test> {
     finalizedBy(tasks.jacocoTestReport)
 }
 
+tasks.withType<com.netflix.graphql.dgs.codegen.gradle.GenerateJavaTask> {
+    packageName = "no.echokarriere.graphql"
+    generateClient = true
+}
 
 jooq {
-    version.set(jooqVersion)
-    edition.set(nu.studer.gradle.jooq.JooqEdition.OSS)
     configurations {
         create("main") {
             jooqConfiguration.apply {

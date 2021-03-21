@@ -2,6 +2,7 @@ kt/
 .env
 .envrc
 .graphqlconfig
+schema.graphql
 
 ### Created by https://www.gitignore.io
 ### Intellij+all ###
