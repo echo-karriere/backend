@@ -35,7 +35,9 @@ dependencies {
     implementation("com.netflix.graphql.dgs", "graphql-dgs-spring-boot-starter", "3.9.3")
     implementation("com.graphql-java", "graphql-java-extended-scalars", "15.0.0")
 
-    testImplementation("org.springframework.boot", "spring-boot-starter-test")
+    testImplementation("org.springframework.boot", "spring-boot-starter-test") {
+        exclude("org.junit.vintage", "junit-vintage-engine")
+    }
 }
 
 group = "no.echokarriere"
@@ -51,16 +53,6 @@ configurations {
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(11))
-    }
-}
-
-sourceSets {
-    val flyway by creating {
-        compileClasspath += sourceSets.main.get().compileClasspath
-        runtimeClasspath += sourceSets.main.get().runtimeClasspath
-    }
-    main {
-        output.dir(flyway.output)
     }
 }
 
@@ -84,6 +76,8 @@ tasks.withType<com.netflix.graphql.dgs.codegen.gradle.GenerateJavaTask> {
 }
 
 jooq {
+    version.set(dependencyManagement.importedProperties["jooq.version"])
+    edition.set(nu.studer.gradle.jooq.JooqEdition.OSS)
     configurations {
         create("main") {
             jooqConfiguration.apply {
@@ -116,9 +110,6 @@ jooq {
 }
 
 tasks.named<nu.studer.gradle.jooq.JooqGenerate>("generateJooq") {
-    inputs.files(fileTree("src/main/resources/db/migration"))
-        .withPropertyName("migrations")
-        .withPathSensitivity(PathSensitivity.RELATIVE)
     allInputsDeclared.set(true)
     outputs.cacheIf { true }
 }
