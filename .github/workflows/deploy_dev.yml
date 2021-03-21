@@ -1,22 +1,27 @@
 name: Deploy dev
 
 on:
-  push:
+  workflow_run:
+    workflows:
+      - Pipeline
     branches:
       - bootify
+    types:
+      - completed
   workflow_dispatch:
 
 jobs:
   build-and-deploy-dev:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: jdbc:postgresql://localhost:32789/test_db
+      DATABASE_URL: jdbc:postgresql://localhost:32789/echokarriere
 
     services:
       postgres:
         image: postgres:11.6-alpine
         env:
-          POSTGRES_DB: test_db
+          POSTGRES_DB: echokarriere
           POSTGRES_USER: karriere
           POSTGRES_PASSWORD: password
         options: >-
@@ -48,7 +53,7 @@ jobs:
         with:
           java-version: 11
 
-      - name: Build with Maven
+      - name: Build with Gradle
         run: ./gradlew build
 
       - name: Deploy to Azure Web App
