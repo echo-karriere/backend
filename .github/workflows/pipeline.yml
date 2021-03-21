@@ -49,6 +49,9 @@ jobs:
         with:
           java-version: 11
 
+      - name: Run codegen
+        run: ./gradlew generateJooq generateJava
+
       - name: Check
         run: ./gradlew check --info
 
