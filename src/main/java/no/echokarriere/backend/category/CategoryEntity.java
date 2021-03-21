@@ -2,6 +2,8 @@ package no.echokarriere.backend.category;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import no.echokarriere.graphql.types.CreateCategoryInput;
+import no.echokarriere.graphql.types.UpdateCategoryInput;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -16,11 +18,11 @@ public class CategoryEntity {
     OffsetDateTime createdAt;
     OffsetDateTime modifiedAt;
 
-    CategoryEntity(CategoryDTO dto) {
-        this(UUID.randomUUID(), dto.getTitle(), dto.getDescription(), dto.getSlug(), null, null);
+    CategoryEntity(CreateCategoryInput input) {
+        this(UUID.randomUUID(), input.getTitle(), input.getDescription(), input.getSlug(), null, null);
     }
 
-    CategoryEntity(UUID id, CategoryDTO dto) {
-        this(id, dto.getTitle(), dto.getDescription(), dto.getSlug(), null, null);
+    CategoryEntity(UUID id, UpdateCategoryInput input) {
+        this(id, input.getTitle(), input.getDescription(), input.getSlug(), null, null);
     }
 }

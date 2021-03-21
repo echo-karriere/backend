@@ -1,8 +1,11 @@
 package no.echokarriere.backend.category;
 
-import no.echokarriere.backend.configuration.CrudService;
 import no.echokarriere.backend.exception.BadRequestException;
 import no.echokarriere.backend.exception.NoSuchElementException;
+import no.echokarriere.graphql.types.Category;
+import no.echokarriere.graphql.types.CreateCategoryInput;
+import no.echokarriere.graphql.types.UpdateCategoryInput;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,35 +13,40 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class CategoryService implements CrudService<Category, CategoryDTO, UUID> {
+public class CategoryService {
     private final CategoryRepository categoryRepository;
+    private final ConversionService conversionService;
 
-    public CategoryService(CategoryRepository categoryRepository) {
+    public CategoryService(CategoryRepository categoryRepository, ConversionService conversionService) {
         this.categoryRepository = categoryRepository;
+        this.conversionService = conversionService;
     }
 
     public List<Category> all() {
-        return categoryRepository.selectAll().stream().map(Category::new).collect(Collectors.toList());
+        return categoryRepository.selectAll()
+                .stream()
+                .map(it -> conversionService.convert(it, Category.class))
+                .collect(Collectors.toList());
     }
 
     public Category single(UUID id) {
         return categoryRepository
                 .select(id)
-                .map(Category::new)
+                .map(it -> conversionService.convert(it, Category.class))
                 .orElseThrow(() -> new NoSuchElementException("No such category: " + id.toString()));
     }
 
-    public Category create(CategoryDTO categoryDTO) {
-        var entity = new CategoryEntity(categoryDTO);
+    public Category create(CreateCategoryInput input) {
+        var entity = new CategoryEntity(input);
         return categoryRepository.create(entity)
-                .map(Category::new)
+                .map(it -> conversionService.convert(it, Category.class))
                 .orElseThrow(() -> new BadRequestException("Could not create category"));
     }
 
-    public Category update(CategoryDTO categoryDTO, UUID id) {
-        var entity = new CategoryEntity(id, categoryDTO);
+    public Category update(UUID id, UpdateCategoryInput input) {
+        var entity = new CategoryEntity(id, input);
         return categoryRepository.update(entity)
-                .map(Category::new)
+                .map(it -> conversionService.convert(it, Category.class))
                 .orElseThrow(() -> new BadRequestException("Could not update category"));
     }
 

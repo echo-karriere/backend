@@ -1,12 +1,9 @@
-type Query {
-    allCompanies: [Company]
-    companyById(id: ID!): Company
-}
-
-type Mutation {
-    createCompany(input: CreateCompanyInput!): Company
-    updateCompany(id: ID!, input: UpdateCompanyInput!): Company
-    deleteCompany(id: ID!): Boolean
+type Company {
+    id: ID!
+    name: String!
+    homepage: String!
+    createdAt: DateTime!
+    modifiedAt: DateTime
 }
 
 input CreateCompanyInput {
@@ -19,10 +16,13 @@ input UpdateCompanyInput {
     homepage: String!
 }
 
-type Company {
-    id: ID!
-    name: String!
-    homepage: String!
-    createdAt: DateTime!
-    modifiedAt: DateTime
+extend type Query {
+    allCompanies: [Company]
+    companyById(id: ID!): Company
+}
+
+extend type Mutation {
+    createCompany(input: CreateCompanyInput!): Company
+    updateCompany(id: ID!, input: UpdateCompanyInput!): Company
+    deleteCompany(id: ID!): Boolean
 }
