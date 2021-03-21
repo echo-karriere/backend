@@ -151,8 +151,7 @@ sonarqube {
         property("sonar.projectKey", "echo-karriere_backend")
         property("sonar.organization", "echo-karriere")
         property("sonar.host.url", "https://sonarcloud.io")
-        property("sonar.sources", "$rootDir/src/main/kotlin")
+        property("sonar.sources", "$rootDir/src/main/java")
         property("sonar.coverage.jacoco.xmlReportPaths", "$buildDir/reports/jacoco/test/jacoco.xml")
-        property("sonar.kotlin.detekt.reportPaths", "$buildDir/reports/detekt/detekt.xml")
     }
 }
