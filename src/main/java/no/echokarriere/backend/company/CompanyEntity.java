@@ -2,8 +2,8 @@ package no.echokarriere.backend.company;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-import no.echokarriere.backend.company.dto.CreateCompanyDTO;
-import no.echokarriere.backend.company.dto.UpdateCompanyDTO;
+import no.echokarriere.graphql.types.CreateCompanyInput;
+import no.echokarriere.graphql.types.UpdateCompanyInput;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -17,18 +17,18 @@ public class CompanyEntity {
     OffsetDateTime createdAt;
     OffsetDateTime modifiedAt;
 
-    public CompanyEntity(CreateCompanyDTO dto) {
+    public CompanyEntity(CreateCompanyInput input) {
         this.id = UUID.randomUUID();
-        this.name = dto.getName();
-        this.homepage = dto.getHomepage();
+        this.name = input.getName();
+        this.homepage = input.getHomepage();
         this.createdAt = OffsetDateTime.now();
         this.modifiedAt = null;
     }
 
-    public CompanyEntity(UUID id, UpdateCompanyDTO dto) {
+    public CompanyEntity(UUID id, UpdateCompanyInput input) {
         this.id = id;
-        this.name = dto.getName();
-        this.homepage = dto.getHomepage();
+        this.name = input.getName();
+        this.homepage = input.getHomepage();
         this.createdAt = OffsetDateTime.now();
         this.modifiedAt = null;
     }

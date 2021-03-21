@@ -1,9 +1,28 @@
-#type Company {
-#    title: ID!
-#    name: String!
-#    homepage: String!
-#    createdAt: Date!
-#    modifiedAt: Date
-#}
-#
-#scalar Date
+type Query {
+    allCompanies: [Company]
+    companyById(id: ID!): Company
+}
+
+type Mutation {
+    createCompany(input: CreateCompanyInput!): Company
+    updateCompany(id: ID!, input: UpdateCompanyInput!): Company
+    deleteCompany(id: ID!): Boolean
+}
+
+input CreateCompanyInput {
+    name: String!
+    homepage: String!
+}
+
+input UpdateCompanyInput {
+    name: String!
+    homepage: String!
+}
+
+type Company {
+    id: ID!
+    name: String!
+    homepage: String!
+    createdAt: DateTime!
+    modifiedAt: DateTime
+}
