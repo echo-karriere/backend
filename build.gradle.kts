@@ -111,8 +111,6 @@ jooq {
                     database.apply {
                         name = "org.jooq.meta.postgres.PostgresDatabase"
                         inputSchema = "public"
-                        isIncludePackages = false
-                        isIncludeRoutines = false
                     }
                     generate.apply {
                         isDeprecated = false

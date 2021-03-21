@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static no.echokarriere.db.tables.Category.CATEGORY;
+import static no.echokarriere.Tables.CATEGORY;
 import static org.jooq.impl.DSL.row;
 
 @Repository
