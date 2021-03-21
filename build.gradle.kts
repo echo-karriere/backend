@@ -23,7 +23,6 @@ dependencies {
     implementation("org.springframework.boot", "spring-boot-starter-jooq")
     implementation("org.springframework.boot", "spring-boot-starter-web")
     implementation("org.springframework.boot", "spring-boot-starter-actuator")
-    implementation("org.springframework.boot", "spring-boot-starter-validation")
     developmentOnly("org.springframework.boot", "spring-boot-devtools")
 
     annotationProcessor("org.projectlombok", "lombok", lombokVersion)
@@ -36,7 +35,6 @@ dependencies {
 
     implementation("com.netflix.graphql.dgs", "graphql-dgs-spring-boot-starter", "3.9.3")
     implementation("com.graphql-java", "graphql-java-extended-scalars", "15.0.0")
-    implementation("org.springdoc", "springdoc-openapi-ui", "1.5.5")
 
     testImplementation("org.springframework.boot", "spring-boot-starter-test")
 }
