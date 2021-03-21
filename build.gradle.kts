@@ -66,9 +66,9 @@ sourceSets {
 }
 
 flyway {
-    url = (System.getenv("DB_URL") ?: "jdbc:postgresql://localhost:5432/echokarriere")
-    user = (System.getenv("DB_USER") ?: "karriere")
-    password = (System.getenv("DB_PASSWORD") ?: "password")
+    url = (System.getenv("DATABASE_URL") ?: "jdbc:postgresql://localhost:5432/echokarriere")
+    user = (System.getenv("DATABASE_USER") ?: "karriere")
+    password = (System.getenv("DATABASE_PASSWORD") ?: "password")
     locations = arrayOf("filesystem:src/main/resources/db/migration")
 }
 
@@ -99,9 +99,9 @@ jooq {
                 logging = org.jooq.meta.jaxb.Logging.WARN
                 jdbc.apply {
                     driver = "org.postgresql.Driver"
-                    url = (System.getenv("DB_URL") ?: "jdbc:postgresql://localhost:5432/echokarriere")
-                    user = (System.getenv("DB_USER") ?: "karriere")
-                    password = (System.getenv("DB_PASSWORD") ?: "password")
+                    url = (System.getenv("DATABASE_URL") ?: "jdbc:postgresql://localhost:5432/echokarriere")
+                    user = (System.getenv("DATABASE_USER") ?: "karriere")
+                    password = (System.getenv("DATABASE_PASSWORD") ?: "password")
                 }
                 generator.apply {
                     name = "org.jooq.codegen.DefaultGenerator"
