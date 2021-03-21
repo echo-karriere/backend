@@ -4,9 +4,15 @@
   "author": "Sondre Nilsen <nilsen.sondre@gmail.com>",
   "devDependencies": {
     "@echo-karriere/clubhouse-lint": "0.3.0",
-    "husky": "5.1.3"
+    "husky": "5.1.3",
+    "lint-staged": "10.5.4",
+    "prettier": "2.2.1"
   },
   "scripts": {
-    "postinstall": "husky install"
+    "postinstall": "husky install",
+    "fmt": "prettier --write"
+  },
+  "lint-staged": {
+    "*.{graphqls,gqs,graphql,md}": "prettier --write"
   }
 }

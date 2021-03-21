@@ -1,28 +1,28 @@
 type Company {
-    id: ID!
-    name: String!
-    homepage: String!
-    createdAt: DateTime!
-    modifiedAt: DateTime
+  id: ID!
+  name: String!
+  homepage: String!
+  createdAt: DateTime!
+  modifiedAt: DateTime
 }
 
 input CreateCompanyInput {
-    name: String!
-    homepage: String!
+  name: String!
+  homepage: String!
 }
 
 input UpdateCompanyInput {
-    name: String!
-    homepage: String!
+  name: String!
+  homepage: String!
 }
 
 extend type Query {
-    allCompanies: [Company]
-    companyById(id: ID!): Company
+  allCompanies: [Company]
+  companyById(id: ID!): Company
 }
 
 extend type Mutation {
-    createCompany(input: CreateCompanyInput!): Company
-    updateCompany(id: ID!, input: UpdateCompanyInput!): Company
-    deleteCompany(id: ID!): Boolean
+  createCompany(input: CreateCompanyInput!): Company
+  updateCompany(id: ID!, input: UpdateCompanyInput!): Company
+  deleteCompany(id: ID!): Boolean
 }

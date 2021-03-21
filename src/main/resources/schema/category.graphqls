@@ -1,31 +1,31 @@
 type Category {
-    id: ID!
-    title: String!
-    description: String
-    slug: String!
-    createdAt: DateTime!
-    modifiedAt: DateTime
+  id: ID!
+  title: String!
+  description: String
+  slug: String!
+  createdAt: DateTime!
+  modifiedAt: DateTime
 }
 
 input CreateCategoryInput {
-    title: String!
-    description: String
-    slug: String!
+  title: String!
+  description: String
+  slug: String!
 }
 
 input UpdateCategoryInput {
-    title: String!
-    description: String
-    slug: String!
+  title: String!
+  description: String
+  slug: String!
 }
 
 extend type Query {
-    allCategories: [Category]
-    categoryById(id: ID!): Category
+  allCategories: [Category]
+  categoryById(id: ID!): Category
 }
 
 extend type Mutation {
-    createCategory(input: CreateCategoryInput!): Category
-    updateCategory(id: ID!, input: UpdateCategoryInput!): Category
-    deleteCategory(id: ID!): Boolean
+  createCategory(input: CreateCategoryInput!): Category
+  updateCategory(id: ID!, input: UpdateCategoryInput!): Category
+  deleteCategory(id: ID!): Boolean
 }
