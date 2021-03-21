@@ -1,0 +1,9 @@
+#type Company {
+#    title: ID!
+#    name: String!
+#    homepage: String!
+#    createdAt: Date!
+#    modifiedAt: Date
+#}
+#
+#scalar Date

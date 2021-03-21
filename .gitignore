@@ -1,34 +1,11 @@
-### Created by https://www.gitignore.io
-### Kotlin ###
-# Compiled class file
-*.class
-
-# Log file
-*.log
-
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-
-### dotenv ###
+kt/
 .env
+.envrc
+.graphqlconfig
 
+### Created by https://www.gitignore.io
 ### Intellij+all ###
-# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # User-specific stuff
@@ -58,11 +35,14 @@ hs_err_pid*
 # When using Gradle or Maven with auto-import, you should exclude module files,
 # since they will be recreated, and may cause churn.  Uncomment if using
 # auto-import.
-# .idea/modules.xml
-# .idea/*.iml
-# .idea/modules
-# *.iml
-# *.ipr
+.idea/artifacts
+.idea/compiler.xml
+.idea/jarRepositories.xml
+.idea/modules.xml
+.idea/*.iml
+.idea/modules
+*.iml
+*.ipr
 
 # CMake
 cmake-build-*/
@@ -113,9 +93,6 @@ modules.xml
 # Sonarlint plugin
 .idea/sonarlint
 
-
-
-### Created by https://www.gitignore.io
 ### Gradle ###
 .gradle
 build/
@@ -135,7 +112,31 @@ gradle-app.setting
 ### Gradle Patch ###
 **/build/
 
-.envrc
+### Java ###
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
 
 
 ### Created by https://www.gitignore.io
@@ -195,6 +196,9 @@ typings/
 # Optional eslint cache
 .eslintcache
 
+# Optional stylelint cache
+.stylelintcache
+
 # Microbundle cache
 .rpt2_cache/
 .rts2_cache_cjs/
@@ -226,6 +230,14 @@ typings/
 .nuxt
 dist
 
+# Storybook build outputs
+.out
+.storybook-out
+storybook-static
+
+# rollup.js default build output
+dist/
+
 # Gatsby files
 .cache/
 # Comment in the public line in if your project uses Gatsby and not Next.js
@@ -250,17 +262,7 @@ dist
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
 
-HELP.md
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!src/main/**/target/
-!src/test/**/target/
+# Temporary folders
+tmp/
+temp/
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
