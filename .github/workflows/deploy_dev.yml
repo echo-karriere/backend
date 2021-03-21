@@ -9,6 +9,8 @@ on:
 jobs:
   build-and-deploy-dev:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: jdbc:postgresql://localhost:32789/test_db
 
     services:
       postgres:
