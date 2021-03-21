@@ -1,6 +1,8 @@
 package no.echokarriere.backend.category;
 
 import no.echokarriere.backend.exception.NoSuchElementException;
+import no.echokarriere.graphql.types.CreateCategoryInput;
+import no.echokarriere.graphql.types.UpdateCategoryInput;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,8 +24,8 @@ class CategoryServiceTest {
     @Order(1)
     @DisplayName("Can create a new category")
     void createNewCategory() {
-        var actual = categoryService.create(new CategoryDTO("Test Service", "And description", "service"));
-        categoryId = actual.getId();
+        var actual = categoryService.create(new CreateCategoryInput("Test Service", "And description", "service"));
+        categoryId = UUID.fromString(actual.getId());
 
         assertThat(actual.getTitle()).isEqualTo("Test Service");
         assertThat(actual.getDescription()).isEqualTo("And description");
@@ -36,7 +38,7 @@ class CategoryServiceTest {
     void getSingleCategory() {
         var actual = categoryService.single(categoryId);
 
-        assertThat(actual.getId()).isEqualTo(categoryId);
+        assertThat(actual.getId()).isEqualTo(categoryId.toString());
         assertThat(actual.getTitle()).isEqualTo("Test Service");
     }
 
@@ -55,7 +57,7 @@ class CategoryServiceTest {
         var actual = categoryService.all();
 
         assertThat(actual)
-                .anyMatch(item -> item.getId().equals(categoryId))
+                .anyMatch(item -> item.getId().equals(categoryId.toString()))
                 .anyMatch(item -> item.getTitle().equals("Test Service"));
     }
 
@@ -63,8 +65,8 @@ class CategoryServiceTest {
     @Order(3)
     @DisplayName("Can update category")
     void updateCategory() {
-        var updated = new CategoryDTO("Test Service", "And a new description", "service");
-        var actual = categoryService.update(updated, categoryId);
+        var updated = new UpdateCategoryInput("Test Service", "And a new description", "service");
+        var actual = categoryService.update(categoryId, updated);
 
 
         assertThat(actual.getTitle()).isEqualTo("Test Service");
