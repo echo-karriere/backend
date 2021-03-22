@@ -1,13 +1,13 @@
 package no.echokarriere.backend.company;
 
+import no.echokarriere.backend.exception.BadRequestException;
+import no.echokarriere.backend.exception.NoSuchElementException;
 import no.echokarriere.graphql.types.Company;
 import no.echokarriere.graphql.types.CreateCompanyInput;
 import no.echokarriere.graphql.types.UpdateCompanyInput;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
@@ -30,11 +30,11 @@ public class CompanyService {
                 .collect(Collectors.toList());
     }
 
-    public Company one(UUID id) {
+    public Company single(UUID id) {
         return companyRepository
                 .select(id)
                 .map(it -> conversionService.convert(it, Company.class))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found"));
+                .orElseThrow(() -> new NoSuchElementException("Company not found"));
     }
 
     @Transactional
@@ -43,7 +43,7 @@ public class CompanyService {
         return companyRepository
                 .create(entity)
                 .map(it -> conversionService.convert(it, Company.class))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Could not create category"));
+                .orElseThrow(() -> new BadRequestException("Could not create category"));
     }
 
     @Transactional
@@ -52,7 +52,7 @@ public class CompanyService {
         return companyRepository
                 .update(entity)
                 .map(it -> conversionService.convert(it, Company.class))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Could not update category"));
+                .orElseThrow(() -> new BadRequestException("Could not update category"));
     }
 
     @Transactional

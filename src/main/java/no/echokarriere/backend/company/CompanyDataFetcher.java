@@ -27,7 +27,7 @@ public class CompanyDataFetcher {
 
     @DgsData(parentType = DgsConstants.QUERY_TYPE, field = DgsConstants.QUERY.CompanyById)
     public Company fromId(@InputArgument("id") UUID id) {
-        return companyService.one(id);
+        return companyService.single(id);
     }
 
     @DgsData(parentType = DgsConstants.MUTATION.TYPE_NAME, field = DgsConstants.MUTATION.CreateCompany)
