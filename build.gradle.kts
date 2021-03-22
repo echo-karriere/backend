@@ -19,13 +19,20 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot", "spring-boot-starter-jooq")
     implementation("org.springframework.boot", "spring-boot-starter-web")
     implementation("org.springframework.boot", "spring-boot-starter-actuator")
+    implementation("org.springframework.boot", "spring-boot-starter-jooq")
+    implementation("org.springframework.boot", "spring-boot-starter-jdbc")
     developmentOnly("org.springframework.boot", "spring-boot-devtools")
 
     annotationProcessor("org.projectlombok", "lombok", lombokVersion)
     compileOnly("org.projectlombok", "lombok", lombokVersion)
+
+    implementation(platform("org.jdbi:jdbi3-bom:3.18.0"))
+    implementation("org.jdbi", "jdbi3-core")
+    implementation("org.jdbi", "jdbi3-spring4")
+    implementation("org.jdbi", "jdbi3-sqlobject")
+    implementation("org.jdbi", "jdbi3-postgres")
 
     implementation("org.flywaydb", "flyway-core", "7.7.0")
     implementation("org.jooq", "jooq", "3.14.8")
