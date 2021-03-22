@@ -6,6 +6,7 @@ import no.echokarriere.graphql.types.UpdateCompanyInput;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -36,6 +37,7 @@ public class CompanyService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found"));
     }
 
+    @Transactional
     public Company create(CreateCompanyInput input) {
         var entity = new CompanyEntity(input);
         return companyRepository
@@ -44,6 +46,7 @@ public class CompanyService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Could not create category"));
     }
 
+    @Transactional
     public Company update(UUID id, UpdateCompanyInput input) {
         var entity = new CompanyEntity(id, input);
         return companyRepository
@@ -52,6 +55,7 @@ public class CompanyService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Could not update category"));
     }
 
+    @Transactional
     public boolean delete(UUID id) {
         return companyRepository.delete(id);
     }

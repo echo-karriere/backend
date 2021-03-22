@@ -66,7 +66,7 @@ class CategoryRepositoryTest {
     @Order(3)
     @DisplayName("Can update category")
     void updateCategory() {
-        var updated = new CategoryEntity(categoryId, "Test Category", "Updated description", "test", null, null);
+        var updated = new CategoryEntity(categoryId, "Test Category", "Updated description", "test", null, OffsetDateTime.now());
         var actual = categoryRepository.update(updated);
 
 

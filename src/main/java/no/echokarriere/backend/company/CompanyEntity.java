@@ -1,5 +1,6 @@
 package no.echokarriere.backend.company;
 
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import no.echokarriere.graphql.types.CreateCompanyInput;
@@ -10,6 +11,7 @@ import java.util.UUID;
 
 @Value
 @RequiredArgsConstructor
+@Builder
 public class CompanyEntity {
     UUID id;
     String name;
