@@ -1,88 +1,72 @@
 package no.echokarriere.backend.category;
 
 import no.echokarriere.backend.configuration.CrudRepository;
-import org.jooq.DSLContext;
+import org.jdbi.v3.core.Jdbi;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static no.echokarriere.Tables.CATEGORY;
-import static org.jooq.impl.DSL.row;
-
 @Repository
 public class CategoryRepository implements CrudRepository<CategoryEntity, UUID> {
-    private final DSLContext dsl;
+    private final Jdbi jdbi;
 
-    public CategoryRepository(DSLContext dsl) {
-        this.dsl = dsl;
+    public CategoryRepository(Jdbi jdbi) {
+        this.jdbi = jdbi;
     }
 
     @Override
-    @Transactional
     public Optional<CategoryEntity> create(CategoryEntity entity) {
-        var res = dsl
-                .insertInto(CATEGORY).columns(CATEGORY.ID, CATEGORY.TITLE, CATEGORY.DESCRIPTION, CATEGORY.SLUG)
-                .values(entity.getId(), entity.getTitle(), entity.getDescription(), entity.getSlug())
-                .returning()
-                .fetchOne();
-
-        if (res == null) return Optional.empty();
-
-        return Optional.of(res.into(CategoryEntity.class));
+        return jdbi.withHandle(handle -> handle
+                .createUpdate("""
+                        insert into category (id, title, description, slug, created_at)
+                        values (:id, :title, :description, :slug, :createdAt)
+                        returning *
+                        """)
+                .bindBean(entity)
+                .executeAndReturnGeneratedKeys()
+                .mapTo(CategoryEntity.class)
+                .findOne());
     }
 
     @Override
-    @Transactional
     public Optional<CategoryEntity> update(CategoryEntity entity) {
-        var res = dsl
-                .update(CATEGORY)
-                .set(
-                        row(CATEGORY.TITLE, CATEGORY.DESCRIPTION, CATEGORY.SLUG, CATEGORY.MODIFIED_AT),
-                        row(entity.getTitle(), entity.getDescription(), entity.getSlug(), OffsetDateTime.now())
-                )
-                .where(CATEGORY.ID.eq(entity.getId()))
-                .returning()
-                .fetchOne();
-
-        if (res == null) return Optional.empty();
-
-        return Optional.of(res.into(CategoryEntity.class));
+        return jdbi.withHandle(handle -> handle
+                .createUpdate("""
+                        update category
+                        set title = :title, description = :description, slug = :slug, modified_at = :modifiedAt
+                        where id = :id
+                        returning *
+                        """)
+                .bindBean(entity)
+                .executeAndReturnGeneratedKeys()
+                .mapTo(CategoryEntity.class)
+                .findOne());
     }
 
     @Override
-    @Transactional
     public boolean delete(UUID id) {
-        return dsl.
-                delete(CATEGORY)
-                .where(CATEGORY.ID.eq(id))
-                .execute() == 1;
+        return jdbi.withHandle(handle -> handle
+                .createUpdate("delete from category where id = :id")
+                .bind("id", id)
+                .execute() == 1);
     }
 
     @Override
-    @Transactional
     public Optional<CategoryEntity> select(UUID id) {
-        var res = dsl
-                .select()
-                .from(CATEGORY)
-                .where(CATEGORY.ID.eq(id))
-                .fetchOne();
-
-        if (res == null) return Optional.empty();
-
-        return Optional.of(res.into(CategoryEntity.class));
+        return jdbi.withHandle(handle -> handle
+                .createQuery("select * from category where id = :id")
+                .bind("id", id)
+                .mapTo(CategoryEntity.class)
+                .findOne());
     }
 
     @Override
-    @Transactional
     public List<CategoryEntity> selectAll() {
-        return dsl
-                .select()
-                .from(CATEGORY)
-                .fetch()
-                .into(CategoryEntity.class);
+        return jdbi.withHandle(handle -> handle
+                .createQuery("select * from category")
+                .mapTo(CategoryEntity.class)
+                .list());
     }
 }

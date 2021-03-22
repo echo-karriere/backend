@@ -7,6 +7,7 @@ import no.echokarriere.graphql.types.CreateCategoryInput;
 import no.echokarriere.graphql.types.UpdateCategoryInput;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -36,6 +37,7 @@ public class CategoryService {
                 .orElseThrow(() -> new NoSuchElementException("No such category: " + id.toString()));
     }
 
+    @Transactional
     public Category create(CreateCategoryInput input) {
         var entity = new CategoryEntity(input);
         return categoryRepository.create(entity)
@@ -43,6 +45,7 @@ public class CategoryService {
                 .orElseThrow(() -> new BadRequestException("Could not create category"));
     }
 
+    @Transactional
     public Category update(UUID id, UpdateCategoryInput input) {
         var entity = new CategoryEntity(id, input);
         return categoryRepository.update(entity)
@@ -50,6 +53,7 @@ public class CategoryService {
                 .orElseThrow(() -> new BadRequestException("Could not update category"));
     }
 
+    @Transactional
     public boolean delete(UUID id) {
         return categoryRepository.delete(id);
     }

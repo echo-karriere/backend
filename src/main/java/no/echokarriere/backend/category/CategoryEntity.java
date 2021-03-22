@@ -1,5 +1,6 @@
 package no.echokarriere.backend.category;
 
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import no.echokarriere.graphql.types.CreateCategoryInput;
@@ -10,6 +11,7 @@ import java.util.UUID;
 
 @Value
 @RequiredArgsConstructor
+@Builder
 public class CategoryEntity {
     UUID id;
     String title;
@@ -19,10 +21,10 @@ public class CategoryEntity {
     OffsetDateTime modifiedAt;
 
     CategoryEntity(CreateCategoryInput input) {
-        this(UUID.randomUUID(), input.getTitle(), input.getDescription(), input.getSlug(), null, null);
+        this(UUID.randomUUID(), input.getTitle(), input.getDescription(), input.getSlug(), OffsetDateTime.now(), null);
     }
 
     CategoryEntity(UUID id, UpdateCategoryInput input) {
-        this(id, input.getTitle(), input.getDescription(), input.getSlug(), null, null);
+        this(id, input.getTitle(), input.getDescription(), input.getSlug(), null, OffsetDateTime.now());
     }
 }
