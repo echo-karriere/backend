@@ -89,9 +89,8 @@ jobs:
           login-server: https://echokarriere.azurecr.io/
           username: ${{ secrets.AzureAppService_ContainerUsername_2476a2a1b4f34eb692445ad9d2af5cf6 }}
           password: ${{ secrets.AzureAppService_ContainerPassword_22751274f8954b79a8a085b6c5aeaa8e }}
-
       - run: |
-          docker build . -t echokarriere.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_2476a2a1b4f34eb692445ad9d2af5cf6 }}/backend:dev
+          DOCKER_BUILDKIT=1 docker build . -t echokarriere.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_2476a2a1b4f34eb692445ad9d2af5cf6 }}/backend:dev
           docker push echokarriere.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_2476a2a1b4f34eb692445ad9d2af5cf6 }}/backend:dev
 
       - name: Deploy to Azure Web App
