@@ -91,8 +91,8 @@ jobs:
           password: ${{ secrets.AzureAppService_ContainerPassword_22751274f8954b79a8a085b6c5aeaa8e }}
 
       - run: |
-          docker build . -t echokarriere.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_2476a2a1b4f34eb692445ad9d2af5cf6 }}/backend:${{ github.sha }}
-          docker push echokarriere.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_2476a2a1b4f34eb692445ad9d2af5cf6 }}/backend:${{ github.sha }}
+          docker build . -t echokarriere.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_2476a2a1b4f34eb692445ad9d2af5cf6 }}/backend:dev
+          docker push echokarriere.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_2476a2a1b4f34eb692445ad9d2af5cf6 }}/backend:dev
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
@@ -100,4 +100,4 @@ jobs:
           app-name: 'echokarriere'
           slot-name: 'dev'
           publish-profile: ${{ secrets.AzureAppService_PublishProfile_0d44f657b2d24d50a2bc89c7d7415749 }}
-          images: 'echokarriere.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_2476a2a1b4f34eb692445ad9d2af5cf6 }}/backend:${{ github.sha }}'
+          images: 'echokarriere.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_2476a2a1b4f34eb692445ad9d2af5cf6 }}/backend:dev'
