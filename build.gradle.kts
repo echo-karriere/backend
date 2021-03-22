@@ -1,16 +1,14 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
-val postgresVersion: String by project
-val lombokVersion: String by project
-
 plugins {
     jacoco
     java
-    id("org.springframework.boot")
-    id("io.spring.dependency-management")
-    id("com.netflix.dgs.codegen")
-    id("org.sonarqube")
+    id("io.freefair.lombok").version("5.3.0")
+    id("org.springframework.boot").version("2.4.4")
+    id("io.spring.dependency-management").version("1.0.11.RELEASE")
+    id("com.netflix.dgs.codegen").version("4.4.1")
+    id("org.sonarqube").version("3.1.1")
 }
 
 repositories {
@@ -23,9 +21,6 @@ dependencies {
     implementation("org.springframework.boot", "spring-boot-starter-jdbc")
     developmentOnly("org.springframework.boot", "spring-boot-devtools")
 
-    annotationProcessor("org.projectlombok", "lombok", lombokVersion)
-    compileOnly("org.projectlombok", "lombok", lombokVersion)
-
     implementation(platform("org.jdbi:jdbi3-bom:3.18.0"))
     implementation("org.jdbi", "jdbi3-core")
     implementation("org.jdbi", "jdbi3-spring4")
@@ -33,7 +28,7 @@ dependencies {
     implementation("org.jdbi", "jdbi3-postgres")
 
     implementation("org.flywaydb", "flyway-core", "7.7.0")
-    runtimeOnly("org.postgresql", "postgresql", postgresVersion)
+    runtimeOnly("org.postgresql", "postgresql", "42.2.19")
 
     implementation("com.netflix.graphql.dgs", "graphql-dgs-spring-boot-starter", "3.9.3")
     implementation("com.graphql-java", "graphql-java-extended-scalars", "15.0.0")
