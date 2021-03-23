@@ -62,7 +62,7 @@ jobs:
         run: ./gradlew build sonarqube --info
   deploy-dev:
     runs-on: ubuntu-latest
-    needs: [ tests ]
+    needs: [tests]
 
     steps:
       - uses: actions/checkout@master
@@ -82,7 +82,7 @@ jobs:
           java-version: 15
 
       - name: Build
-        run: ./gradlew build --info
+        run: ./gradlew build -x test --info
 
       - uses: azure/docker-login@v1
         with:
@@ -96,7 +96,7 @@ jobs:
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'echokarriere'
-          slot-name: 'dev'
+          app-name: "echokarriere"
+          slot-name: "dev"
           publish-profile: ${{ secrets.AzureAppService_PublishProfile_0d44f657b2d24d50a2bc89c7d7415749 }}
-          images: 'echokarriere.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_2476a2a1b4f34eb692445ad9d2af5cf6 }}/backend:dev'
+          images: "echokarriere.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_2476a2a1b4f34eb692445ad9d2af5cf6 }}/backend:dev"
