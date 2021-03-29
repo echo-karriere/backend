@@ -21,7 +21,7 @@ dependencies {
     implementation("org.springframework.boot", "spring-boot-starter-jdbc")
     developmentOnly("org.springframework.boot", "spring-boot-devtools")
 
-    implementation(platform("org.jdbi:jdbi3-bom:3.18.0"))
+    implementation(platform("org.jdbi:jdbi3-bom:3.18.1"))
     implementation("org.jdbi", "jdbi3-core")
     implementation("org.jdbi", "jdbi3-spring4")
     implementation("org.jdbi", "jdbi3-sqlobject")
