@@ -69,7 +69,7 @@ tasks.withType<Test> {
 
 tasks.withType<com.netflix.graphql.dgs.codegen.gradle.GenerateJavaTask> {
     packageName = "no.echokarriere.graphql"
-    generateClient = false
+    generateClient = true
 }
 
 flyway {
