@@ -4,14 +4,15 @@ on:
   push:
     branches:
       - main
+      - production
+  pull_request:
   workflow_dispatch:
-
-env:
-  DATABASE_URL: jdbc:postgresql://localhost:32789/test_db
 
 jobs:
   tests:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: jdbc:postgresql://localhost:32789/test_db
 
     services:
       postgres:
@@ -72,6 +73,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./gradlew sonarqube --info
   deploy-dev:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs: [ tests ]
     environment:
