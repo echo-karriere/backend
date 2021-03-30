@@ -9,6 +9,7 @@ plugins {
     id("io.spring.dependency-management").version("1.0.11.RELEASE")
     id("com.netflix.dgs.codegen").version("4.4.1")
     id("org.sonarqube").version("3.1.1")
+    id("org.flywaydb.flyway").version("7.7.0")
     id("nu.studer.jooq").version("5.2.1")
 }
 
@@ -71,13 +72,18 @@ tasks.withType<com.netflix.graphql.dgs.codegen.gradle.GenerateJavaTask> {
     generateClient = true
 }
 
+flyway {
+    url = (System.getenv("DATABASE_URL") ?: "jdbc:postgresql://localhost:5432/echokarriere")
+    user = (System.getenv("DATABASE_USER") ?: "karriere")
+    password = (System.getenv("DATABASE_PASSWORD") ?: "password")
+}
+
 jooq {
     version.set(dependencyManagement.importedProperties["jooq.version"])
     edition.set(nu.studer.gradle.jooq.JooqEdition.OSS)
     configurations {
         create("main") {
             jooqConfiguration.apply {
-                logging = org.jooq.meta.jaxb.Logging.DEBUG
                 jdbc.apply {
                     driver = "org.postgresql.Driver"
                     url = (System.getenv("DATABASE_URL") ?: "jdbc:postgresql://localhost:5432/echokarriere")
@@ -106,6 +112,10 @@ jooq {
 }
 
 tasks.named<nu.studer.gradle.jooq.JooqGenerate>("generateJooq") {
+    dependsOn(tasks.flywayMigrate)
+    inputs.files(fileTree("src/main/resources/db/migration"))
+        .withPropertyName("migrations")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
     allInputsDeclared.set(true)
     outputs.cacheIf { true }
 }
