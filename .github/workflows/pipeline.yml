@@ -8,12 +8,14 @@ on:
 jobs:
   tests:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: jdbc:postgresql://localhost:32789/test_db
 
     services:
       postgres:
         image: postgres:11.6-alpine
         env:
-          POSTGRES_DB: echokarriere
+          POSTGRES_DB: test_db
           POSTGRES_USER: karriere
           POSTGRES_PASSWORD: password
         options: >-
@@ -22,7 +24,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
         ports:
-          - 5432:5432
+          - 32789:5432
 
     steps:
       - uses: actions/checkout@v2
