@@ -4,12 +4,12 @@ on:
   push:
     branches:
       - main
+env:
+  DATABASE_URL: jdbc:postgresql://localhost:32789/test_db
 
 jobs:
   tests:
     runs-on: ubuntu-latest
-    env:
-      DATABASE_URL: jdbc:postgresql://localhost:32789/test_db
 
     services:
       postgres:
