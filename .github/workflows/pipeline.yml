@@ -60,3 +60,34 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./gradlew sonarqube --info
+  deploy-dev:
+    runs-on: ubuntu-latest
+    needs: [ tests ]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Build
+        run: ./gradlew build -x test --info
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: "echokarriere"
+          slot-name: "dev"
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_13C51D58A61C435B80D2784763B2A1C4 }}
+          package: ${{ github.workspace }}/build/libs/*.jar
