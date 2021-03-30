@@ -50,7 +50,7 @@ jobs:
 
       - uses: actions/setup-java@v1
         with:
-          java-version: 15
+          java-version: 11
 
       - name: Check
         run: ./gradlew check --info
@@ -59,44 +59,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew build sonarqube --info
-  deploy-dev:
-    runs-on: ubuntu-latest
-    needs: [tests]
-
-    steps:
-      - uses: actions/checkout@master
-
-      - name: Cache Gradle packages
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-
-      - uses: actions/setup-java@v1
-        with:
-          java-version: 15
-
-      - name: Build
-        run: ./gradlew build -x test --info
-
-      - uses: azure/docker-login@v1
-        with:
-          login-server: https://echokarriere.azurecr.io/
-          username: ${{ secrets.AzureAppService_ContainerUsername_2476a2a1b4f34eb692445ad9d2af5cf6 }}
-          password: ${{ secrets.AzureAppService_ContainerPassword_22751274f8954b79a8a085b6c5aeaa8e }}
-      - run: |
-          DOCKER_BUILDKIT=1 docker build . -t echokarriere.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_2476a2a1b4f34eb692445ad9d2af5cf6 }}/backend:dev
-          docker push echokarriere.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_2476a2a1b4f34eb692445ad9d2af5cf6 }}/backend:dev
-
-      - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: "echokarriere"
-          slot-name: "dev"
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_0d44f657b2d24d50a2bc89c7d7415749 }}
-          images: "echokarriere.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_2476a2a1b4f34eb692445ad9d2af5cf6 }}/backend:dev"
+        run: ./gradlew sonarqube --info
