@@ -22,7 +22,6 @@ dependencies {
     implementation("org.springframework.boot", "spring-boot-starter-jooq")
     developmentOnly("org.springframework.boot", "spring-boot-devtools")
 
-    implementation("org.jooq", "jooq", "3.14.8")
     jooqGenerator("org.postgresql", "postgresql", "42.2.19")
 
     implementation("org.flywaydb", "flyway-core", "7.7.0")
