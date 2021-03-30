@@ -1,7 +1,7 @@
 package no.echokarriere.backend.category;
 
 import no.echokarriere.backend.configuration.CrudRepository;
-import no.echokarriere.tables.records.CategoryRecord;
+import no.echokarriere.db.tables.records.CategoryRecord;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static no.echokarriere.Tables.CATEGORY;
+import static no.echokarriere.db.Tables.CATEGORY;
 import static org.jooq.impl.DSL.row;
 
 @Repository

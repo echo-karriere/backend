@@ -96,7 +96,7 @@ jooq {
                         isJavaTimeTypes = true
                     }
                     target.apply {
-                        packageName = "no.echokarriere"
+                        packageName = "no.echokarriere.db"
                     }
                     strategy.name = "org.jooq.codegen.DefaultGeneratorStrategy"
                 }

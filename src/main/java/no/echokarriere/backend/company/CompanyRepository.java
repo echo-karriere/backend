@@ -1,7 +1,7 @@
 package no.echokarriere.backend.company;
 
 import no.echokarriere.backend.configuration.CrudRepository;
-import no.echokarriere.tables.records.CompanyRecord;
+import no.echokarriere.db.tables.records.CompanyRecord;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static no.echokarriere.Tables.COMPANY;
+import static no.echokarriere.db.Tables.COMPANY;
 import static org.jooq.impl.DSL.row;
 
 @Repository
