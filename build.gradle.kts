@@ -77,7 +77,7 @@ jooq {
     configurations {
         create("main") {
             jooqConfiguration.apply {
-                logging = org.jooq.meta.jaxb.Logging.WARN
+                logging = org.jooq.meta.jaxb.Logging.DEBUG
                 jdbc.apply {
                     driver = "org.postgresql.Driver"
                     url = (System.getenv("DATABASE_URL") ?: "jdbc:postgresql://localhost:5432/echokarriere")
