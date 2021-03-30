@@ -9,6 +9,7 @@ plugins {
     id("io.spring.dependency-management").version("1.0.11.RELEASE")
     id("com.netflix.dgs.codegen").version("4.4.1")
     id("org.sonarqube").version("3.1.1")
+    id("nu.studer.jooq").version("5.2.1")
 }
 
 repositories {
@@ -18,14 +19,11 @@ repositories {
 dependencies {
     implementation("org.springframework.boot", "spring-boot-starter-web")
     implementation("org.springframework.boot", "spring-boot-starter-actuator")
-    implementation("org.springframework.boot", "spring-boot-starter-jdbc")
+    implementation("org.springframework.boot", "spring-boot-starter-jooq")
     developmentOnly("org.springframework.boot", "spring-boot-devtools")
 
-    implementation(platform("org.jdbi:jdbi3-bom:3.18.1"))
-    implementation("org.jdbi", "jdbi3-core")
-    implementation("org.jdbi", "jdbi3-spring4")
-    implementation("org.jdbi", "jdbi3-sqlobject")
-    implementation("org.jdbi", "jdbi3-postgres")
+    implementation("org.jooq", "jooq", "3.14.8")
+    jooqGenerator("org.postgresql", "postgresql", "42.2.19")
 
     implementation("org.flywaydb", "flyway-core", "7.7.0")
     runtimeOnly("org.postgresql", "postgresql", "42.2.19")
@@ -71,6 +69,45 @@ tasks.withType<Test> {
 tasks.withType<com.netflix.graphql.dgs.codegen.gradle.GenerateJavaTask> {
     packageName = "no.echokarriere.graphql"
     generateClient = true
+}
+
+jooq {
+    version.set(dependencyManagement.importedProperties["jooq.version"])
+    edition.set(nu.studer.gradle.jooq.JooqEdition.OSS)
+    configurations {
+        create("main") {
+            jooqConfiguration.apply {
+                logging = org.jooq.meta.jaxb.Logging.WARN
+                jdbc.apply {
+                    driver = "org.postgresql.Driver"
+                    url = (System.getenv("DATABASE_URL") ?: "jdbc:postgresql://localhost:5432/echokarriere")
+                    user = (System.getenv("DATABASE_USER") ?: "karriere")
+                    password = (System.getenv("DATABASE_PASSWORD") ?: "password")
+                }
+                generator.apply {
+                    name = "org.jooq.codegen.DefaultGenerator"
+                    database.apply {
+                        name = "org.jooq.meta.postgres.PostgresDatabase"
+                        inputSchema = "public"
+                    }
+                    generate.apply {
+                        isDeprecated = false
+                        isPojos = false
+                        isJavaTimeTypes = true
+                    }
+                    target.apply {
+                        packageName = "no.echokarriere"
+                    }
+                    strategy.name = "org.jooq.codegen.DefaultGeneratorStrategy"
+                }
+            }
+        }
+    }
+}
+
+tasks.named<nu.studer.gradle.jooq.JooqGenerate>("generateJooq") {
+    allInputsDeclared.set(true)
+    outputs.cacheIf { true }
 }
 
 tasks.jacocoTestReport {
