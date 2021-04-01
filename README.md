@@ -33,46 +33,48 @@
 ## What
 
 This is the backend that powers [echo karriere](https://www.echokarriere.no/)
-for managing our events, content and data. It's a student developed project
-written in Kotlin using Ktor, PostgreSQL and GraphQL.
+for managing our events, content and data. It's a student developed project written in Java 11 using Spring Boot,
+GraphQL, jOOQ and PostgreSQL.
 
 # Developing
 
 ## Installation
 
-Install some helpers with `yarn`, then run `./gradlew build` to install and
-build the backend itself. It is also highly recommended to run
-`./gradlew ktlintApplyToIdea` to configure IntelliJ to use a style that matches
-Ktlint.
+Install some helpers with `yarn`, then run `./gradlew build` to install and build the backend itself.
 
 ## Configuration
 
 You should look over the
-[documentation](https://docs.echokarriere.no/backend/docker/) if you haven't
-already for installing Docker and configuring IntelliJ. First, copy the
-`.env.example` file to `.env` and update its content to the following:
+[documentation](https://docs.echokarriere.no/backend/docker/) if you haven't already for installing Docker and
+configuring IntelliJ. Create a copy of the
+`env.example` file called `.env`. Optionally, if you want to clear out the database each time the application starts you
+can add
 
 ```ini
-POSTGRES_DB=echokarriere
-POSTGRES_USER=karriere
-POSTGRES_PASSWORD=password
-POSTGRES_HOST=localhost
+DEV_MODE=on
 ```
 
-**NB:** The `.env` file is ignored by `git` by default so that we never
-accidentally expose secrets, make sure you never commit this file to the
-repositiory!
+to the file as well, though this should only be required when making major changes to the database schema.
+
+**NB:** The `.env` file is ignored by `git` by default so that we never accidentally expose secrets, make sure you never
+commit this file to the repositiory!
 
 ## Starting the database
 
-Once you've configured the `.env` file you can simply run `docker-compose up -d`
-to start the database in the background. To see what is happening run `docker logs echo_backend_db`, it might offer up a hint if it is not working.
+Once you've created the `.env` file you and are ready to develop, run:
+
+```shell
+docker-compose -f docker-compose.yml -f docker-compose.test.yml up -d
+```
+
+to start the development and test server for. We use two different instances of PostgreSQL to avoid conflicts and errors
+when running tests and a live development server.
 
 ## Running
 
-To run the application you can either start it with `./gradlew run` or run it
-from IntelliJ. Simply press the green play icon in the sidebar in
-`Application.kt`.
+To run the application you can either start it with `./gradlew bootRun` or run it from IntelliJ. Simply press the green
+play icon in the sidebar in
+`BackendApplication.java`.
 
 # LICENSE
 
