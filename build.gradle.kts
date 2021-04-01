@@ -29,7 +29,8 @@ dependencies {
     implementation("org.flywaydb", "flyway-core", "7.7.0")
     runtimeOnly("org.postgresql", "postgresql", "42.2.19")
 
-    implementation("com.netflix.graphql.dgs", "graphql-dgs-spring-boot-starter", "3.9.3")
+    implementation(platform("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:3.10.2"))
+    implementation("com.netflix.graphql.dgs", "graphql-dgs-spring-boot-starter")
     implementation("com.graphql-java", "graphql-java-extended-scalars", "15.0.0")
 
     testImplementation("org.springframework.boot", "spring-boot-starter-test") {
