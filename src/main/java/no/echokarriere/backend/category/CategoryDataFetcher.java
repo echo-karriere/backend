@@ -1,9 +1,9 @@
 package no.echokarriere.backend.category;
 
 import com.netflix.graphql.dgs.DgsComponent;
-import com.netflix.graphql.dgs.DgsData;
+import com.netflix.graphql.dgs.DgsMutation;
+import com.netflix.graphql.dgs.DgsQuery;
 import com.netflix.graphql.dgs.InputArgument;
-import no.echokarriere.graphql.DgsConstants;
 import no.echokarriere.graphql.types.Category;
 import no.echokarriere.graphql.types.CreateCategoryInput;
 import no.echokarriere.graphql.types.UpdateCategoryInput;
@@ -20,27 +20,27 @@ public class CategoryDataFetcher {
         this.categoryService = categoryService;
     }
 
-    @DgsData(parentType = DgsConstants.QUERY_TYPE, field = DgsConstants.QUERY.AllCategories)
-    public List<Category> allCompanies() {
+    @DgsQuery
+    public List<Category> allCategories() {
         return categoryService.all();
     }
 
-    @DgsData(parentType = DgsConstants.QUERY_TYPE, field = DgsConstants.QUERY.CategoryById)
-    public Category fromId(@InputArgument("id") UUID id) {
+    @DgsQuery
+    public Category categoryById(@InputArgument("id") UUID id) {
         return categoryService.single(id);
     }
 
-    @DgsData(parentType = DgsConstants.MUTATION.TYPE_NAME, field = DgsConstants.MUTATION.CreateCategory)
+    @DgsMutation
     public Category createCategory(@InputArgument("input") CreateCategoryInput input) {
         return categoryService.create(input);
     }
 
-    @DgsData(parentType = DgsConstants.MUTATION.TYPE_NAME, field = DgsConstants.MUTATION.UpdateCategory)
+    @DgsMutation
     public Category updateCategory(@InputArgument("id") UUID id, @InputArgument("input") UpdateCategoryInput input) {
         return categoryService.update(id, input);
     }
 
-    @DgsData(parentType = DgsConstants.MUTATION.TYPE_NAME, field = DgsConstants.MUTATION.DeleteCategory)
+    @DgsMutation
     public boolean deleteCategory(@InputArgument("id") UUID id) {
         return categoryService.delete(id);
     }
