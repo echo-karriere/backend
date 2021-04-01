@@ -38,7 +38,7 @@ jobs:
       - name: Cache SonarCloud packages
         uses: actions/cache@v2
         with:
-          path: /root/.sonar/cache
+          path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
 
       - name: Cache Gradle packages
