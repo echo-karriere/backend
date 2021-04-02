@@ -32,21 +32,19 @@ public class DevDataLoader implements ApplicationRunner {
 
     private void initializeDevCategories() {
         if (!categoryRepository.selectAll().isEmpty()) return;
-        var categories = List.of(
+        List.of(
                 new CategoryEntity(UUID.fromString("af53312e-f87b-47e8-a14d-a63537ec7ddd"), "Nyheter", "Sider med nyheter", "news", OffsetDateTime.now(), null),
                 new CategoryEntity(UUID.fromString("daf2fe8a-54c8-4d02-b201-ac1bf121b0ac"), "For studenter", "Sider for studenter", "for-studenter", OffsetDateTime.now(), null),
                 new CategoryEntity(UUID.fromString("bdddaaea-e8e0-42cc-aaf4-87014163a43f"), "For bedrifter", "Sider for bedrifter", "for-bedrifter", OffsetDateTime.now(), null)
-        );
-        categories.forEach(categoryRepository::create);
+        ).forEach(categoryRepository::create);
     }
 
     private void initializeDevCompanies() {
         if (!companyRepository.selectAll().isEmpty()) return;
-        var companies = List.of(
+        List.of(
                 new CompanyEntity(UUID.fromString("a04e620b-b9b9-4012-a202-83c15c96fc77"), "Acme Corporation", "acme.com", OffsetDateTime.now(), null),
                 new CompanyEntity(UUID.fromString("40468aaa-e5ae-4d51-b0d2-931842d2702f"), "Globex Corporation", "globex.org", OffsetDateTime.now(), null),
                 new CompanyEntity(UUID.fromString("337e1370-cb5c-45b6-ad6c-fdd925a27313"), "Umbrella Corporation", "umbrella.com", OffsetDateTime.now(), null)
-        );
-        companies.forEach(companyRepository::create);
+        ).forEach(companyRepository::create);
     }
 }
