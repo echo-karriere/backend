@@ -1,7 +1,7 @@
 package no.echokarriere.backend.category;
 
 import no.echokarriere.backend.exception.BadRequestException;
-import no.echokarriere.backend.exception.NoSuchElementException;
+import no.echokarriere.backend.exception.ResourceNotFoundException;
 import no.echokarriere.graphql.types.Category;
 import no.echokarriere.graphql.types.CreateCategoryInput;
 import no.echokarriere.graphql.types.UpdateCategoryInput;
@@ -34,7 +34,7 @@ public class CategoryService {
         return categoryRepository
                 .select(id)
                 .map(it -> conversionService.convert(it, Category.class))
-                .orElseThrow(() -> new NoSuchElementException("No such category: " + id.toString()));
+                .orElseThrow(() -> new ResourceNotFoundException("No such category: " + id.toString()));
     }
 
     @Transactional

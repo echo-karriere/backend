@@ -1,6 +1,6 @@
 package no.echokarriere.backend.category;
 
-import no.echokarriere.backend.exception.NoSuchElementException;
+import no.echokarriere.backend.exception.ResourceNotFoundException;
 import no.echokarriere.graphql.types.CreateCategoryInput;
 import no.echokarriere.graphql.types.UpdateCategoryInput;
 import org.junit.jupiter.api.*;
@@ -47,7 +47,7 @@ class CategoryServiceTest {
     @DisplayName("Throws exception when no ID matches")
     void getWrongId() {
         var id = UUID.randomUUID();
-        assertThatThrownBy(() -> categoryService.single(id)).isInstanceOf(NoSuchElementException.class);
+        assertThatThrownBy(() -> categoryService.single(id)).isInstanceOf(ResourceNotFoundException.class);
     }
 
     @Test

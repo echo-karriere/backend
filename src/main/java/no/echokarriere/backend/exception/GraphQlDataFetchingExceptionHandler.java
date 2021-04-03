@@ -13,7 +13,7 @@ public class GraphQlDataFetchingExceptionHandler implements DataFetcherException
 
     @Override
     public DataFetcherExceptionHandlerResult onException(DataFetcherExceptionHandlerParameters handlerParameters) {
-        if (handlerParameters.getException() instanceof NoSuchElementException) {
+        if (handlerParameters.getException() instanceof ResourceNotFoundException) {
             var error = TypedGraphQLError.newNotFoundBuilder()
                     .message(handlerParameters.getException().getMessage())
                     .path(handlerParameters.getPath())

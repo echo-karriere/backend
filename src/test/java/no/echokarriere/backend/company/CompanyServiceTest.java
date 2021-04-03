@@ -1,6 +1,6 @@
 package no.echokarriere.backend.company;
 
-import no.echokarriere.backend.exception.NoSuchElementException;
+import no.echokarriere.backend.exception.ResourceNotFoundException;
 import no.echokarriere.graphql.types.CreateCompanyInput;
 import no.echokarriere.graphql.types.UpdateCompanyInput;
 import org.junit.jupiter.api.*;
@@ -46,7 +46,7 @@ class CompanyServiceTest {
     @DisplayName("Throws exception when no ID matches")
     void getWrongId() {
         var id = UUID.randomUUID();
-        assertThatThrownBy(() -> companyService.single(id)).isInstanceOf(NoSuchElementException.class);
+        assertThatThrownBy(() -> companyService.single(id)).isInstanceOf(ResourceNotFoundException.class);
     }
 
     @Test

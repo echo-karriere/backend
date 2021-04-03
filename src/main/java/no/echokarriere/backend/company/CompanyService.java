@@ -1,7 +1,7 @@
 package no.echokarriere.backend.company;
 
 import no.echokarriere.backend.exception.BadRequestException;
-import no.echokarriere.backend.exception.NoSuchElementException;
+import no.echokarriere.backend.exception.ResourceNotFoundException;
 import no.echokarriere.graphql.types.Company;
 import no.echokarriere.graphql.types.CreateCompanyInput;
 import no.echokarriere.graphql.types.UpdateCompanyInput;
@@ -34,7 +34,7 @@ public class CompanyService {
         return companyRepository
                 .select(id)
                 .map(it -> conversionService.convert(it, Company.class))
-                .orElseThrow(() -> new NoSuchElementException("Company not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
     }
 
     @Transactional
