@@ -20,7 +20,7 @@ input UpdateCategoryInput {
 }
 
 extend type Query {
-  allCategories: [Category]
+  allCategories: [Category!]!
   categoryById(id: ID!): Category
 }
 

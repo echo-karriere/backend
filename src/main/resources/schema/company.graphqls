@@ -17,7 +17,7 @@ input UpdateCompanyInput {
 }
 
 extend type Query {
-  allCompanies: [Company]
+  allCompanies: [Company!]!
   companyById(id: ID!): Company
 }
 
