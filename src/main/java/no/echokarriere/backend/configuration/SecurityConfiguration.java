@@ -49,7 +49,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 HttpMethod.POST.name()
         ));
         configuration.setAllowedOrigins(List.of(
-                "http://localhost:3000"
+                "http://localhost:3000",
+                "https://dev.api.echokarriere.no",
+                "https://echokarriere-dev.azurewebsites.net"
         ));
 
         var source = new UrlBasedCorsConfigurationSource();
