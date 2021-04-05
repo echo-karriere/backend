@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DATABASE_URL: jdbc:postgresql://localhost:32789/test_db
+      AUTH0_AUDIENCE: ${{ secrets.AUTH0_AUDIENCE }}
+      AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
 
     services:
       postgres:
