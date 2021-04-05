@@ -46,9 +46,8 @@ Install some helpers with `yarn`, then run `./gradlew build` to install and buil
 
 You should look over the
 [documentation](https://docs.echokarriere.no/backend/docker/) if you haven't already for installing Docker and
-configuring IntelliJ. Create a copy of the
-`env.example` file called `.env`. Optionally, if you want to clear out the database each time the application starts you
-can add
+configuring IntelliJ. Create a copy of the `env.example` file called `.env`, to get the Auth0 variables contact the web
+master for echo karriere. Optionally, if you want to clear out the database each time the application starts you can add
 
 ```ini
 DEV_MODE=on
