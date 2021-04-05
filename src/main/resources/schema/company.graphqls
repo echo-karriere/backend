@@ -1,8 +1,26 @@
+"""
+A company that is or has participated in one of our events.
+"""
 type Company {
+  """
+  Company ID
+  """
   id: ID!
+  """
+  Name of company
+  """
   name: String!
+  """
+  A link to their homepage
+  """
   homepage: String!
+  """
+  When was this resource created?
+  """
   createdAt: DateTime!
+  """
+  When was this resource last updated?
+  """
   modifiedAt: DateTime
 }
 
