@@ -5,6 +5,7 @@ import com.netflix.graphql.types.errors.TypedGraphQLError;
 import graphql.execution.DataFetcherExceptionHandler;
 import graphql.execution.DataFetcherExceptionHandlerParameters;
 import graphql.execution.DataFetcherExceptionHandlerResult;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -22,6 +23,13 @@ public class GraphQlDataFetchingExceptionHandler implements DataFetcherException
             return DataFetcherExceptionHandlerResult.newResult(error).build();
         } else if (handlerParameters.getException() instanceof BadRequestException) {
             var error = TypedGraphQLError.newBadRequestBuilder()
+                    .message(handlerParameters.getException().getMessage())
+                    .path(handlerParameters.getPath())
+                    .build();
+
+            return DataFetcherExceptionHandlerResult.newResult(error).build();
+        } else if (handlerParameters.getException() instanceof AccessDeniedException) {
+            var error = TypedGraphQLError.newPermissionDeniedBuilder()
                     .message(handlerParameters.getException().getMessage())
                     .path(handlerParameters.getPath())
                     .build();
