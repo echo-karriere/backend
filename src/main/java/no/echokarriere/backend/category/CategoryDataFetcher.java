@@ -7,11 +7,13 @@ import com.netflix.graphql.dgs.InputArgument;
 import no.echokarriere.graphql.types.Category;
 import no.echokarriere.graphql.types.CreateCategoryInput;
 import no.echokarriere.graphql.types.UpdateCategoryInput;
+import org.springframework.security.access.annotation.Secured;
 
 import java.util.List;
 import java.util.UUID;
 
 @DgsComponent
+@Secured({"admin", "staff"})
 @SuppressWarnings("unused") // Autowired by GraphQL
 public class CategoryDataFetcher {
     private final CategoryService categoryService;
