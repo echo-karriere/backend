@@ -1,5 +1,6 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.jooq.meta.jaxb.ForcedType
 
 plugins {
     jacoco
@@ -107,6 +108,15 @@ jooq {
                     database.apply {
                         name = "org.jooq.meta.postgres.PostgresDatabase"
                         inputSchema = "public"
+                        forcedTypes.addAll(
+                            arrayOf(
+                                ForcedType()
+                                    .withIncludeTypes("userType")
+                                    .withUserType("no.echokarriere.backend.user.UserType")
+                                    .withConverter("no.echokarriere.backend.user.UserTypeConverter")
+                                    .withEnumConverter(true)
+                            ).toList()
+                        )
                     }
                     generate.apply {
                         isDeprecated = false
