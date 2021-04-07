@@ -1,7 +1,6 @@
 package no.echokarriere.backend.configuration;
 
 
-import com.azure.spring.aad.webapi.AADJwtBearerTokenAuthenticationConverter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,11 +27,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/graphql")
                 .permitAll()
                 .antMatchers("/graphiql")
-                .permitAll()
-                .and()
-                .oauth2ResourceServer()
-                .jwt()
-                .jwtAuthenticationConverter(new AADJwtBearerTokenAuthenticationConverter());
+                .permitAll();
     }
 
     CorsConfigurationSource corsConfigurationSource() {
