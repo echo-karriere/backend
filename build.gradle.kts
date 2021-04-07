@@ -1,6 +1,5 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import org.jooq.meta.jaxb.ForcedType
 
 plugins {
     jacoco
@@ -19,6 +18,12 @@ repositories {
     jcenter()
 }
 
+dependencyManagement {
+    imports {
+        mavenBom("com.azure.spring:azure-spring-boot-bom:3.3.0")
+    }
+}
+
 dependencies {
     implementation("org.springframework.boot", "spring-boot-starter-web")
     implementation("org.springframework.boot", "spring-boot-starter-actuator")
@@ -26,6 +31,8 @@ dependencies {
     implementation("org.springframework.boot", "spring-boot-starter-security")
     implementation("org.springframework.security", "spring-security-oauth2-resource-server")
     implementation("org.springframework.security", "spring-security-oauth2-jose")
+    implementation("com.azure.spring", "azure-spring-boot-starter")
+    implementation("com.azure.spring", "azure-spring-boot-starter-active-directory-b2c")
     developmentOnly("org.springframework.boot", "spring-boot-devtools")
 
     jooqGenerator("org.postgresql", "postgresql", "42.2.19")
@@ -100,15 +107,6 @@ jooq {
                     database.apply {
                         name = "org.jooq.meta.postgres.PostgresDatabase"
                         inputSchema = "public"
-                        forcedTypes.addAll(
-                            arrayOf(
-                                ForcedType()
-                                    .withIncludeTypes("userType")
-                                    .withUserType("no.echokarriere.backend.user.UserType")
-                                    .withConverter("no.echokarriere.backend.user.UserTypeConverter")
-                                    .withEnumConverter(true)
-                            ).toList()
-                        )
                     }
                     generate.apply {
                         isDeprecated = false
