@@ -1,0 +1,38 @@
+enum UserType {
+  ADMIN
+  STAFF
+  USER
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  active: Boolean!
+  userType: UserType!
+  createdAt: DateTime
+  modifiedAt: DateTime
+}
+
+input CreateUserInput {
+  name: String!
+  email: String!
+  userType: UserType!
+}
+
+input UpdateUserInput {
+  name: String!
+  email: String!
+  userType: UserType!
+}
+
+extend type Query {
+  allUsers: [User!]!
+  userById(id: ID!): User
+}
+
+extend type Mutation {
+  createUser(input: CreateUserInput!): User
+  updateUser(id: ID!, input: UpdateUserInput!): User
+  deleteUser(id: ID!): Boolean
+}
