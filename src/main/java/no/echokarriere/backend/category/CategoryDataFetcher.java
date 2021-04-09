@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @DgsComponent
-@RolesAllowed({"ADMIN", "STAFF"})
+@RolesAllowed({"admin", "staff"})
 @SuppressWarnings("unused") // Autowired by GraphQL
 public class CategoryDataFetcher {
     private final CategoryService categoryService;
