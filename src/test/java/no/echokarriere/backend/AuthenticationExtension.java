@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class AuthenticationExtension extends SimpleInstrumentation {
     @Override
     public InstrumentationContext<ExecutionResult> beginExecution(InstrumentationExecutionParameters parameters) {
-        var token = new UsernamePasswordAuthenticationToken("admin", "admin", List.of("ROLE_ADMIN", "ROLE_STAFF", "ROLE_USER").stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
+        var token = new UsernamePasswordAuthenticationToken("admin", "admin", List.of("ROLE_admin", "ROLE_staff", "ROLE_user").stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
         SecurityContextHolder.getContext().setAuthentication(token);
         return super.beginExecution(parameters);
     }
