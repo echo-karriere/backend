@@ -12,7 +12,7 @@ import javax.annotation.security.RolesAllowed;
 import java.util.List;
 import java.util.UUID;
 
-@RolesAllowed({"ADMIN", "STAFF", "USER"})
+@RolesAllowed({"admin", "staff", "user"})
 @DgsComponent
 @SuppressWarnings("unused") // Autowired by GraphQL
 public class CompanyDataFetcher {
@@ -23,7 +23,7 @@ public class CompanyDataFetcher {
     }
 
     @DgsQuery
-    @RolesAllowed({"ADMIN", "STAFF"})
+    @RolesAllowed({"admin", "staff"})
     public List<Company> allCompanies() {
         return companyService.all();
     }
@@ -34,7 +34,7 @@ public class CompanyDataFetcher {
     }
 
     @DgsMutation
-    @RolesAllowed({"ADMIN", "STAFF"})
+    @RolesAllowed({"admin", "staff"})
     public Company createCompany(@InputArgument("input") CreateCompanyInput input) {
         return companyService.create(input);
     }

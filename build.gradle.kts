@@ -20,7 +20,7 @@ repositories {
 
 dependencyManagement {
     imports {
-        mavenBom("com.azure.spring:azure-spring-boot-bom:3.3.0")
+        mavenBom("org.keycloak.bom:keycloak-adapter-bom:12.0.4")
     }
 }
 
@@ -29,10 +29,7 @@ dependencies {
     implementation("org.springframework.boot", "spring-boot-starter-actuator")
     implementation("org.springframework.boot", "spring-boot-starter-jooq")
     implementation("org.springframework.boot", "spring-boot-starter-security")
-    implementation("org.springframework.security", "spring-security-oauth2-resource-server")
-    implementation("org.springframework.security", "spring-security-oauth2-jose")
-    implementation("com.azure.spring", "azure-spring-boot-starter")
-    implementation("com.azure.spring", "azure-spring-boot-starter-active-directory-b2c")
+    implementation("org.keycloak", "keycloak-spring-boot-starter")
     developmentOnly("org.springframework.boot", "spring-boot-devtools")
 
     jooqGenerator("org.postgresql", "postgresql", "42.2.19")
