@@ -4,8 +4,8 @@ CREATE TABLE "Category" (
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
-    "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "modified_at" TIMESTAMPTZ(6),
+    "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "modifiedAt" TIMESTAMPTZ(6),
 
     PRIMARY KEY ("id")
 );
@@ -15,8 +15,8 @@ CREATE TABLE "Company" (
     "id" UUID NOT NULL,
     "name" TEXT NOT NULL,
     "homepage" TEXT,
-    "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "modified_at" TIMESTAMPTZ(6),
+    "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "modifiedAt" TIMESTAMPTZ(6),
 
     PRIMARY KEY ("id")
 );

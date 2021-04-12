@@ -12,14 +12,14 @@ model Category {
   title       String    @unique
   description String
   slug        String    @unique
-  created_at  DateTime  @default(now()) @db.Timestamptz(6)
-  modified_at DateTime? @db.Timestamptz(6)
+  createdAt   DateTime  @default(now()) @db.Timestamptz(6)
+  modifiedAt  DateTime? @db.Timestamptz(6)
 }
 
 model Company {
-  id          String    @id @default(uuid()) @db.Uuid
-  name        String    @unique
-  homepage    String?
-  created_at  DateTime  @default(now()) @db.Timestamptz(6)
-  modified_at DateTime? @db.Timestamptz(6)
+  id         String    @id @default(uuid()) @db.Uuid
+  name       String    @unique
+  homepage   String?
+  createdAt  DateTime  @default(now()) @db.Timestamptz(6)
+  modifiedAt DateTime? @db.Timestamptz(6)
 }
