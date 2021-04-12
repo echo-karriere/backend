@@ -12,7 +12,7 @@ export class Category {
   title!: string;
 
   @Field({ nullable: true, description: "What is this category used for?" })
-  description?: string | null;
+  description?: string;
 
   @Field({
     description:
@@ -24,5 +24,5 @@ export class Category {
   createdAt!: Date;
 
   @Field({ nullable: true, description: "When was this resource last updated?" })
-  modifiedAt?: Date | null;
+  modifiedAt?: Date;
 }

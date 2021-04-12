@@ -17,5 +17,5 @@ export class Company {
   createdAt!: Date;
 
   @Field({ nullable: true, description: "When was this resource last updated?" })
-  modifiedAt?: Date | null;
+  modifiedAt?: Date;
 }
