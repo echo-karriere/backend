@@ -12,7 +12,7 @@ type Category {
   """What is this category used for?"""
   description: String
 
-  """Company ID"""
+  """Category ID"""
   id: ID!
 
   """When was this resource last updated?"""
@@ -27,10 +27,33 @@ type Category {
   title: String!
 }
 
+"""A company that is or has participated in one of our events."""
+type Company {
+  """When was this resource created?"""
+  createdAt: DateTime!
+
+  """A link to their homepage"""
+  homepage: String!
+
+  """Company ID"""
+  id: ID!
+
+  """When was this resource last updated?"""
+  modifiedAt: DateTime
+
+  """Name of company"""
+  name: String!
+}
+
 input CreateCategoryInput {
   description: String
   slug: String!
   title: String!
+}
+
+input CreateCompanyInput {
+  homepage: String!
+  name: String!
 }
 
 """
@@ -40,17 +63,27 @@ scalar DateTime
 
 type Mutation {
   createCategory(input: CreateCategoryInput!): Category
+  createCompany(input: CreateCompanyInput!): Company
   deleteCategory(id: String!): Boolean!
+  deleteCompany(id: String!): Boolean!
   updateCategory(id: String!, input: UpdateCategoryInput!): Category
+  updateCompany(id: String!, input: UpdateCompanyInput!): Company
 }
 
 type Query {
   allCategories: [Category!]!
+  allCompanies: [Company!]!
   categoryById(id: String!): Category
+  companyById(id: String!): Company
 }
 
 input UpdateCategoryInput {
   description: String
   slug: String!
   title: String!
+}
+
+input UpdateCompanyInput {
+  homepage: String!
+  name: String!
 }

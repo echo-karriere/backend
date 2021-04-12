@@ -4,22 +4,22 @@ import { TerminusModule } from "@nestjs/terminus";
 
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import { CategoryModule } from "./category";
+import { CategoryModule } from "./category/category.module";
+import { CompanyModule } from "./company/company.module";
 import { HealthController } from "./health/health.controller";
-import { PrismaService } from "./prisma.service";
 
 @Module({
   imports: [
-    TerminusModule,
-    CategoryModule,
     GraphQLModule.forRoot({
       autoSchemaFile: "schema.gql",
       installSubscriptionHandlers: true,
       sortSchema: true,
-      playground: process.env.NODE_ENV !== "production",
     }),
+    TerminusModule,
+    CategoryModule,
+    CompanyModule,
   ],
   controllers: [AppController, HealthController],
-  providers: [PrismaService, AppService],
+  providers: [AppService],
 })
 export class AppModule {}
