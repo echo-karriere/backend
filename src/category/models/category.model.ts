@@ -5,7 +5,7 @@ import { Field, ID, ObjectType } from "@nestjs/graphql";
     "A category is used to group pages into logical hierachies, for example by grouping all news related pages under the category 'News'.",
 })
 export class Category {
-  @Field(() => ID, { description: "Company ID" })
+  @Field(() => ID, { description: "Category ID" })
   id: string;
 
   @Field({ description: "Name of category" })
