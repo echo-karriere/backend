@@ -1,14 +1,3 @@
 {
-  "extends": [
-    "github>echo-karriere/renovate-config:default",
-    "docker:disable"
-  ],
-  "packageRules": [
-    {
-      "packagePatterns": [
-        "^org.flywaydb"
-      ],
-      "groupName": "Flyway packages"
-    }
-  ]
+  "extends": ["github>echo-karriere/renovate-config:default", "docker:disable"]
 }
