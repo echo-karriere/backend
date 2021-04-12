@@ -9,7 +9,7 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: jdbc:postgresql://localhost:32789/test_db
+      DATABASE_URL: postgresql://karriere:password@localhost:32789/test_db?schema=public
 
     services:
       postgres:
