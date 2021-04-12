@@ -5,17 +5,17 @@ import { Field, ID, ObjectType } from "@nestjs/graphql";
 })
 export class Company {
   @Field(() => ID, { description: "Company ID" })
-  id: string;
+  id!: string;
 
   @Field({ description: "Name of company" })
-  name: string;
+  name!: string;
 
   @Field({ description: "A link to their homepage" })
-  homepage: string;
+  homepage!: string;
 
   @Field({ description: "When was this resource created?" })
-  createdAt: Date;
+  createdAt!: Date;
 
   @Field({ nullable: true, description: "When was this resource last updated?" })
-  modifiedAt: Date;
+  modifiedAt?: Date | null;
 }

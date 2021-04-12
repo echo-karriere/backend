@@ -10,7 +10,7 @@ datasource db {
 model Category {
   id          String    @id @default(uuid()) @db.Uuid
   title       String    @unique
-  description String
+  description String?
   slug        String    @unique
   createdAt   DateTime  @default(now()) @db.Timestamptz(6)
   modifiedAt  DateTime? @db.Timestamptz(6)
@@ -19,7 +19,7 @@ model Category {
 model Company {
   id         String    @id @default(uuid()) @db.Uuid
   name       String    @unique
-  homepage   String?
+  homepage   String
   createdAt  DateTime  @default(now()) @db.Timestamptz(6)
   modifiedAt DateTime? @db.Timestamptz(6)
 }

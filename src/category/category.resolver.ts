@@ -15,7 +15,7 @@ export class CategoryResolver {
   }
 
   @Query(() => Category, { nullable: true })
-  async categoryById(@Args("id") id: string): Promise<Category> {
+  async categoryById(@Args("id") id: string): Promise<Category | null> {
     return this.service.select({ id });
   }
 

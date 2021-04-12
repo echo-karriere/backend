@@ -6,23 +6,23 @@ import { Field, ID, ObjectType } from "@nestjs/graphql";
 })
 export class Category {
   @Field(() => ID, { description: "Category ID" })
-  id: string;
+  id!: string;
 
   @Field({ description: "Name of category" })
-  title: string;
+  title!: string;
 
   @Field({ nullable: true, description: "What is this category used for?" })
-  description: string;
+  description?: string | null;
 
   @Field({
     description:
       "What is the slug for the URL? For news it could be '/news/' while for the category 'For bedrifter' it could be '/for-bedrifter/'.",
   })
-  slug: string;
+  slug!: string;
 
   @Field({ description: "When was this resource created?" })
-  createdAt: Date;
+  createdAt!: Date;
 
   @Field({ nullable: true, description: "When was this resource last updated?" })
-  modifiedAt: Date;
+  modifiedAt?: Date | null;
 }

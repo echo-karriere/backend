@@ -31,7 +31,7 @@ export class CompanyService {
     }
   }
 
-  async select(where: Prisma.CompanyWhereUniqueInput): Promise<Company> {
+  async select(where: Prisma.CompanyWhereUniqueInput): Promise<Company | null> {
     return this.prisma.company.findUnique({
       where,
     });
