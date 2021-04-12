@@ -1,0 +1,40 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Category {
+  createdAt: DateTime!
+  description: String
+  id: ID!
+  modifiedAt: DateTime
+  slug: String!
+  title: String!
+}
+
+input CreateCategoryInput {
+  description: String
+  slug: String!
+  title: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Mutation {
+  createCategory(input: CreateCategoryInput!): Category
+  deleteCategory(id: String!): Boolean!
+  updateCategory(id: String!, input: UpdateCategoryInput!): Category
+}
+
+type Query {
+  allCategories: [Category!]!
+  categoryById(id: String!): Category
+}
+
+input UpdateCategoryInput {
+  description: String
+  slug: String!
+  title: String!
+}
