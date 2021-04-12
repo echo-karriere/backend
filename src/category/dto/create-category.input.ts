@@ -4,12 +4,12 @@ import { IsOptional } from "class-validator";
 @InputType()
 export class CreateCategoryInput {
   @Field()
-  title: string;
+  title!: string;
 
   @Field({ nullable: true })
   @IsOptional()
   description?: string;
 
   @Field()
-  slug: string;
+  slug!: string;
 }

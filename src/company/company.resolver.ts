@@ -15,7 +15,7 @@ export class CompanyResolver {
   }
 
   @Query(() => Company, { nullable: true })
-  async companyById(@Args("id") id: string): Promise<Company> {
+  async companyById(@Args("id") id: string): Promise<Company | null> {
     return this.service.select({ id });
   }
 
