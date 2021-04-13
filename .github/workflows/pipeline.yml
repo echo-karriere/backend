@@ -9,7 +9,7 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: postgresql://karriere:password@localhost:32789/test_db?schema=public
+      DATABASE_URL: postgresql://karriere:password@localhost:32789/test_db?schem
 
     services:
       postgres:
@@ -58,6 +58,10 @@ jobs:
         run: |
           yarn test
           yarn test:e2e
+        env:
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_TENANT_NAME: ${{ secrets.AZURE_TENANT_NAME }}
+          AZURE_POLICY_NAME: ${{ secrets.AZURE_POLICY_NAME }}
 
       - name: Build
         run: yarn build
