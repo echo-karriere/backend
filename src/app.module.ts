@@ -15,6 +15,7 @@ import { HealthController } from "./health/health.controller";
       autoSchemaFile: "schema.gql",
       installSubscriptionHandlers: true,
       sortSchema: true,
+      cors: true,
       context: ({ req }: { req: unknown }) => ({ req }),
     }),
     TerminusModule,
