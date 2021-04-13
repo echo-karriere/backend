@@ -1,11 +1,14 @@
+import { UseGuards } from "@nestjs/common";
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 
+import { GqlAuthGuard } from "../auth/gql.guard";
 import { CategoryService } from "./category.service";
 import { CreateCategoryInput } from "./dto/create-category.input";
 import { UpdateCategoryInput } from "./dto/update-category.input";
 import { Category } from "./models/category.model";
 
 @Resolver(() => Category)
+@UseGuards(GqlAuthGuard)
 export class CategoryResolver {
   constructor(private service: CategoryService) {}
 

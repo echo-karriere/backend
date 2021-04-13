@@ -4,6 +4,7 @@ import { TerminusModule } from "@nestjs/terminus";
 
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
+import { AuthModule } from "./auth/auth.module";
 import { CategoryModule } from "./category/category.module";
 import { CompanyModule } from "./company/company.module";
 import { HealthController } from "./health/health.controller";
@@ -14,10 +15,12 @@ import { HealthController } from "./health/health.controller";
       autoSchemaFile: "schema.gql",
       installSubscriptionHandlers: true,
       sortSchema: true,
+      context: ({ req }: { req: unknown }) => ({ req }),
     }),
     TerminusModule,
     CategoryModule,
     CompanyModule,
+    AuthModule,
   ],
   controllers: [AppController, HealthController],
   providers: [AppService],
