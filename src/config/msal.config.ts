@@ -1,20 +1,27 @@
 import { AuthenticationResult, ClientCredentialRequest, ConfidentialClientApplication } from "@azure/msal-node";
 import axios, { AxiosRequestConfig } from "axios";
 
+const config = {
+  graphEndpoint: process.env.GRAPH_ENDPOINT ?? "example.org/graph",
+  clientSecret: process.env.AZURE_CLIENT_SECRET ?? "verysecret",
+  aadEndpoint: process.env.AAD_ENDPOINT ?? "example.org",
+  tenantId: process.env.AZURE_TENANT_ID ?? "id",
+};
+
 const msalConfig = {
   auth: {
     clientId: process.env.AZURE_CLIENT_ID,
-    authority: process.env.AAD_ENDPOINT + process.env.AZURE_TENANT_ID,
-    clientSecret: process.env.AZURE_CLIENT_SECRET,
+    authority: config.aadEndpoint + config.tenantId,
+    clientSecret: config.clientSecret,
   },
 };
 
 export const tokenRequest = {
-  scopes: [process.env.GRAPH_ENDPOINT + ".default"],
+  scopes: [config.graphEndpoint + ".default"],
 };
 
 export const apiConfig = {
-  users: process.env.GRAPH_ENDPOINT + "v1.0/users",
+  users: config.graphEndpoint + "v1.0/users",
 };
 
 export const cca = new ConfidentialClientApplication(msalConfig);
