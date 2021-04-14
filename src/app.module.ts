@@ -7,6 +7,7 @@ import { AppService } from "./app.service";
 import { AuthModule } from "./auth/auth.module";
 import { CategoryModule } from "./category/category.module";
 import { CompanyModule } from "./company/company.module";
+import { corsConfiguration } from "./config/cors.config";
 import { HealthController } from "./health/health.controller";
 
 @Module({
@@ -15,7 +16,7 @@ import { HealthController } from "./health/health.controller";
       autoSchemaFile: "schema.gql",
       installSubscriptionHandlers: true,
       sortSchema: true,
-      cors: true,
+      cors: corsConfiguration,
       context: ({ req }: { req: unknown }) => ({ req }),
     }),
     TerminusModule,
