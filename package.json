@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "@echo-karriere/clubhouse-lint": "0.3.0",
-    "@microsoft/microsoft-graph-types-beta": "*",
+    "@microsoft/microsoft-graph-types-beta": "0.3.0-preview",
     "@nestjs/cli": "7.6.0",
     "@nestjs/schematics": "7.3.1",
     "@nestjs/testing": "7.6.15",
