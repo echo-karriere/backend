@@ -45,6 +45,7 @@ module.exports = {
     "node/no-extraneous-require": "off",
     // I really hate this rule, please stop
     "unicorn/prevent-abbreviations": "off",
+    "unicorn/no-null": "off",
   },
   overrides: [
     {
