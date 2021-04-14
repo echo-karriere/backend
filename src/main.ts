@@ -5,7 +5,9 @@ import { AppModule } from "./app.module";
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
 
-  await app.listen(8080, "0.0.0.0");
+  const port = process.env.PORT ? Number.parseInt(process.env.PORT, 10) : 8080;
+
+  await app.listen(port, "0.0.0.0");
   console.log(`Application is running on: ${await app.getUrl()}`);
 
   if (module.hot) {
