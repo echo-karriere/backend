@@ -23,7 +23,7 @@ module.exports = {
     jest: true,
     es6: true,
   },
-  ignorePatterns: [".eslintrc.js", "*.config.js"],
+  ignorePatterns: [".eslintrc.js", "*.config.js", "prisma/seed.js"],
   rules: {
     // Not needed, see https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/typedef.md#when-not-to-use-it
     "@typescript-eslint/typedef": "off",
