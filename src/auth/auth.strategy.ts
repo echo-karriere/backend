@@ -13,7 +13,7 @@ export class AADB2CStrategy extends PassportStrategy(BearerStrategy, "aad") {
       policyName: process.env.AZURE_POLICY_NAME,
       isB2C: true,
       validateIssuer: true,
-      loggingLevel: "info",
+      loggingLevel: "warn",
       passReqToCallback: true,
     });
   }
