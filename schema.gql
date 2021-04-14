@@ -85,6 +85,7 @@ type Query {
   buildInfo: BuildInfo!
   categoryById(id: String!): Category
   companyById(id: String!): Company
+  me: User
 }
 
 input UpdateCategoryInput {
@@ -96,4 +97,13 @@ input UpdateCategoryInput {
 input UpdateCompanyInput {
   homepage: String!
   name: String!
+}
+
+"""A subset of a user"""
+type User {
+  """User ID"""
+  id: ID!
+
+  """Users roles"""
+  roles: [String!]!
 }
