@@ -3,8 +3,6 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  if (!process.env.DEV_MODE) return;
-
   try {
     const categories = await prisma.category.createMany({
       data: [
