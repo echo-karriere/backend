@@ -65,14 +65,14 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Package repo
+        run: zip app.zip -r * -x "node_modules/*"
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: node-app
-          path: |
-            .
-            !node_modules/
-            !dist/
+          path: app.zip
 
   migrate:
     runs-on: ubuntu-latest
@@ -121,4 +121,4 @@ jobs:
           app-name: "echokarriere"
           slot-name: "dev"
           publish-profile: ${{ secrets.AzureAppService_PublishProfile_339790a1cc8d4dea8df5d9708352ee81 }}
-          package: .
+          package: app.zip
