@@ -2,13 +2,14 @@ import { Module } from "@nestjs/common";
 import { GraphQLModule } from "@nestjs/graphql";
 import { TerminusModule } from "@nestjs/terminus";
 
+import { AuthModule } from "../auth/auth.module";
+import { CategoryModule } from "../category/category.module";
+import { CompanyModule } from "../company/company.module";
+import { corsConfiguration } from "../config/cors.config";
+import { HealthController } from "../health/health.controller";
 import { AppController } from "./app.controller";
+import { AppResolver } from "./app.resolver";
 import { AppService } from "./app.service";
-import { AuthModule } from "./auth/auth.module";
-import { CategoryModule } from "./category/category.module";
-import { CompanyModule } from "./company/company.module";
-import { corsConfiguration } from "./config/cors.config";
-import { HealthController } from "./health/health.controller";
 
 @Module({
   imports: [
@@ -25,6 +26,6 @@ import { HealthController } from "./health/health.controller";
     AuthModule,
   ],
   controllers: [AppController, HealthController],
-  providers: [AppService],
+  providers: [AppService, AppResolver],
 })
 export class AppModule {}

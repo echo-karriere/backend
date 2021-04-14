@@ -1,6 +1,6 @@
 import { NestFactory } from "@nestjs/core";
 
-import { AppModule } from "./app.module";
+import { AppModule } from "./app/app.module";
 import { corsConfiguration } from "./config/cors.config";
 
 async function bootstrap() {
