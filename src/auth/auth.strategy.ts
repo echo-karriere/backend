@@ -19,7 +19,7 @@ export class AADB2CStrategy extends PassportStrategy(BearerStrategy, "aad") {
   }
 
   // eslint-disable-next-line @typescript-eslint/require-await
-  async validate(response: unknown): Promise<unknown> {
-    return response;
+  async validate(_: unknown, token: unknown): Promise<unknown> {
+    return token;
   }
 }
