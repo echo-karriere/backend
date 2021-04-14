@@ -48,6 +48,9 @@ jobs:
       - name: Install and build
         run: npm ci
 
+      - name: Build
+        run: npm run build
+
       - name: Lint
         run: |
           npm run format:check
@@ -61,9 +64,6 @@ jobs:
           AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           AZURE_TENANT_NAME: ${{ secrets.AZURE_TENANT_NAME }}
           AZURE_POLICY_NAME: ${{ secrets.AZURE_POLICY_NAME }}
-
-      - name: Build
-        run: npm run build
 
   deploy:
     runs-on: ubuntu-latest
