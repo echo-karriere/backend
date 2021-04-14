@@ -1,5 +1,5 @@
 import { AuthenticationResult, ClientCredentialRequest, ConfidentialClientApplication } from "@azure/msal-node";
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 
 const msalConfig = {
   auth: {
@@ -23,16 +23,29 @@ export async function getToken(tokenRequest: ClientCredentialRequest): Promise<A
   return await cca.acquireTokenByClientCredential(tokenRequest);
 }
 
-export async function msalApiQuery<T>(endpoint: string, accessToken: string): Promise<T | Error> {
-  const options = {
+interface GraphApiResponse<T> {
+  value: T;
+}
+
+/**
+ * A utility function for fetching data from the Azure Graph API.
+ *
+ * @param endpoint - Endpoint to fetch data from, e.q. `/user`
+ * @param body - If you want to use `$select` on the query
+ * @returns - A
+ */
+export async function msalApiQuery<T>(endpoint: string, body: Record<string, unknown> = {}): Promise<T | Error> {
+  const token = await getToken(tokenRequest);
+  const options: AxiosRequestConfig = {
     headers: {
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${token.accessToken}`,
     },
+    params: body,
   };
 
   try {
-    const response = await axios.get<T>(endpoint, options);
-    return response.data;
+    const response = await axios.get<GraphApiResponse<T>>(endpoint, options);
+    return response.data.value;
   } catch (error) {
     const err = error as Error;
     console.error(err);
