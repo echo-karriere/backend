@@ -2,7 +2,7 @@
 import { User } from "@microsoft/microsoft-graph-types-beta";
 import { Injectable } from "@nestjs/common";
 
-import { apiConfig, getToken, msalApiQuery, tokenRequest } from "../config/msal.config";
+import { apiConfig, msalApiQuery } from "../config/msal.config";
 import { PrismaService } from "../prisma.service";
 
 @Injectable()
@@ -10,18 +10,24 @@ export class MsalService {
   constructor(private prisma: PrismaService) {}
 
   async getUsers(): Promise<void> {
-    const token = await getToken(tokenRequest);
-    const users = await msalApiQuery<{ value: User[] }>(apiConfig.users, token.accessToken);
+    const users = await msalApiQuery<User[]>(apiConfig.users, {
+      $select: "id,accountEnabled,displayName",
+    });
 
     if (users instanceof Error) return;
 
-    for (const user of users.value) {
+    for (const user of users) {
       await this.prisma.user.upsert({
         where: { id: user.id },
         create: {
           id: user.id,
+          enabled: user.accountEnabled,
+          name: user.displayName,
         },
-        update: {},
+        update: {
+          enabled: user.accountEnabled,
+          name: user.displayName,
+        },
       });
     }
   }
