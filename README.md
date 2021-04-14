@@ -34,7 +34,9 @@ for managing our events, content and data. It's a student developed project writ
 
 ## Installation
 
-Run `yarn` to install everything you need.
+Run `yarn` to install everything you need. Once that's done run `node scripts/build-info` to generate
+some metadata that is used for quering the status of the application. **NB:** You'll only ever need to
+do this once.
 
 ### Docker
 

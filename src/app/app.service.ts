@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { Field, ObjectType } from "@nestjs/graphql";
 
+// eslint-disable-next-line node/no-unpublished-import
 import data from "../config/build.json";
 
 @ObjectType({ description: "Information used to check application state" })
