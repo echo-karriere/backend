@@ -52,4 +52,26 @@ export class MsalService {
       });
     }
   }
+
+  async assignRoles(): Promise<void> {
+    const users = await this.prisma.user.findMany();
+
+    for (const user of users) {
+      const roles = await msalApiQuery<string[]>(msalApiEndpoints.userGroups(user.id), {
+        body: { securityEnabledOnly: true },
+        method: "POST",
+      });
+
+      if (roles instanceof Error) return;
+
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: {
+          roles: {
+            connect: roles.map((id) => Object.assign({}, { id: id })),
+          },
+        },
+      });
+    }
+  }
 }
