@@ -26,8 +26,8 @@ export const apiConfig = {
 
 export const cca = new ConfidentialClientApplication(msalConfig);
 
-export async function getToken(tokenRequest: ClientCredentialRequest): Promise<AuthenticationResult> {
-  return await cca.acquireTokenByClientCredential(tokenRequest);
+export async function getToken(credentials: ClientCredentialRequest): Promise<AuthenticationResult> {
+  return cca.acquireTokenByClientCredential(credentials);
 }
 
 interface GraphApiResponse<T> {
