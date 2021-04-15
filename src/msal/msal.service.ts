@@ -1,8 +1,8 @@
 // eslint-disable-next-line node/no-unpublished-import
-import { User } from "@microsoft/microsoft-graph-types-beta";
+import { Group, User } from "@microsoft/microsoft-graph-types-beta";
 import { Injectable } from "@nestjs/common";
 
-import { apiConfig, msalApiQuery } from "../config/msal.config";
+import { msalApiEndpoints, msalApiQuery } from "../config/msal.config";
 import { PrismaService } from "../prisma.service";
 
 @Injectable()
@@ -10,7 +10,7 @@ export class MsalService {
   constructor(private prisma: PrismaService) {}
 
   async getUsers(): Promise<void> {
-    const users = await msalApiQuery<User[]>(apiConfig.users, {
+    const users = await msalApiQuery<User[]>(msalApiEndpoints.users, {
       $select: "id,accountEnabled,displayName",
     });
 
@@ -27,6 +27,27 @@ export class MsalService {
         update: {
           enabled: user.accountEnabled,
           name: user.displayName,
+        },
+      });
+    }
+  }
+
+  async getRoles(): Promise<void> {
+    const groups = await msalApiQuery<Group[]>(msalApiEndpoints.groups);
+
+    if (groups instanceof Error) return;
+
+    for (const group of groups) {
+      await this.prisma.role.upsert({
+        where: { id: group.id },
+        create: {
+          id: group.id,
+          name: group.displayName,
+          description: group.description,
+        },
+        update: {
+          name: group.displayName,
+          description: group.description,
         },
       });
     }
