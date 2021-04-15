@@ -20,8 +20,9 @@ export const tokenRequest = {
   scopes: [config.graphEndpoint + ".default"],
 };
 
-export const apiConfig = {
+export const msalApiEndpoints = {
   users: config.graphEndpoint + "v1.0/users",
+  groups: config.graphEndpoint + "v1.0/groups",
 };
 
 export const cca = new ConfidentialClientApplication(msalConfig);

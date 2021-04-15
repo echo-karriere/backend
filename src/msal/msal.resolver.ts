@@ -11,4 +11,10 @@ export class MsalResolver {
     await this.service.getUsers();
     return true;
   }
+
+  @Mutation(() => Boolean)
+  async updateRolesFromMsal(): Promise<boolean> {
+    await this.service.getRoles();
+    return true;
+  }
 }
