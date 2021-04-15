@@ -11,7 +11,7 @@ export class MsalService {
 
   async getUsers(): Promise<void> {
     const users = await msalApiQuery<User[]>(msalApiEndpoints.users, {
-      $select: "id,accountEnabled,displayName",
+      params: { $select: "id,accountEnabled,displayName" },
     });
 
     if (users instanceof Error) return;
