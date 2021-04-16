@@ -38,7 +38,7 @@ export class UserService implements CrudRepository<User | PrismaUser> {
     });
   }
 
-  findMany(where: Prisma.UserWhereInput): Promise<PrismaUser[]> {
-    return this.prisma.user.findMany({ where });
+  findMany(where: Prisma.UserWhereInput, include: Prisma.UserInclude = {}): Promise<PrismaUser[]> {
+    return this.prisma.user.findMany({ where, include });
   }
 }

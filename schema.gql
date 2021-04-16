@@ -106,6 +106,18 @@ type Query {
   users: [User!]!
 }
 
+"""A role assigned to users"""
+type Role {
+  """Description of the role"""
+  description: String!
+
+  """Role ID"""
+  id: ID!
+
+  """Name of the Role"""
+  name: String!
+}
+
 input UpdateCategoryInput {
   description: String
   slug: String!
@@ -138,5 +150,5 @@ type User {
   name: String!
 
   """Users roles"""
-  roles: [String!]!
+  roles: [Role!]!
 }

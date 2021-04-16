@@ -1,5 +1,7 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
 
+import { Role } from "./role.entity";
+
 @ObjectType({ description: "A subset of a user" })
 export class User {
   @Field(() => ID, { description: "User ID" })
@@ -14,6 +16,6 @@ export class User {
   @Field(() => Boolean, { description: "Is the account active?" })
   enabled!: boolean;
 
-  @Field(() => [String], { description: "Users roles" })
-  roles?: string[] | unknown[];
+  @Field(() => [Role], { description: "Users roles" })
+  roles?: Role[];
 }
