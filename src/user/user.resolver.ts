@@ -24,19 +24,17 @@ export class UserResolver {
 
     if (data === null || !data.enabled) return null;
 
-    const roles = data.roles.filter((r) => r).map((r) => r.name);
-
     return {
       id: data.id,
       name: data.name,
       email: data.email,
-      roles,
+      roles: data.roles,
     };
   }
 
   @Query(() => [User], { name: "users" })
   async findMany(): Promise<Array<User>> {
-    return this.service.findMany({});
+    return this.service.findMany({}, { roles: true });
   }
 
   @Query(() => User, { name: "user", nullable: true })
