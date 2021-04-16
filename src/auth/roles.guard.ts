@@ -16,6 +16,12 @@ import { GqlAuthGuard } from "./gql.guard";
 
 type NestCustomDecorator = ReturnType<typeof applyDecorators>;
 
+/**
+ * Secure a resolver or controller, this annotation forces the user to be authenticated
+ * and to have one of the roles to access the function. This is a shorthand for adding
+ * `@UseGuards(GqlAuthGuard)` and `@Roles(ROLES.ADMIN, ROLES.STAFF)`.
+ * @param roles - Allowed roles for this resolver/controller.
+ */
 export const Secured = (...roles: string[]): NestCustomDecorator => {
   return applyDecorators(Roles(...roles), UseGuards(GqlAuthGuard, RolesGuard));
 };
