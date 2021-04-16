@@ -1,17 +1,28 @@
 // eslint-disable-next-line node/no-unpublished-import
 import { Group, User } from "@microsoft/microsoft-graph-types-beta";
-import { Injectable } from "@nestjs/common";
+import { Injectable, OnApplicationBootstrap } from "@nestjs/common";
 
 import { PrismaService } from "../prisma.service";
 import { msalApiEndpoints } from "./azure.config";
 import { GraphService } from "./graph.service";
 
 @Injectable()
-export class MsalService {
+export class MsalService implements OnApplicationBootstrap {
   constructor(private prisma: PrismaService, private graphService: GraphService) {}
+
+  async onApplicationBootstrap(): Promise<void> {
+    if (process.env.NODE_ENV === "production" || process.env.RELOAD_AZURE !== undefined) {
+      await this.getUsers();
+      await this.getRoles();
+      await this.assignRoles();
+    }
+
+    return;
+  }
+
   async getUsers(): Promise<void> {
     const users = await this.graphService.query<User[]>(msalApiEndpoints.users, {
-      params: { $select: "id,accountEnabled,displayName" },
+      params: { $select: "id,accountEnabled,displayName,mail,userPrincipalName" },
     });
 
     if (users instanceof Error) return;
@@ -23,10 +34,12 @@ export class MsalService {
           id: user.id,
           enabled: user.accountEnabled,
           name: user.displayName,
+          email: user.userPrincipalName ?? user.mail,
         },
         update: {
           enabled: user.accountEnabled,
           name: user.displayName,
+          email: user.userPrincipalName ?? user.mail,
         },
       });
     }
