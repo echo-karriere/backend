@@ -6,5 +6,5 @@ export class User {
   id!: string;
 
   @Field(() => [String], { description: "Users roles" })
-  roles!: string[];
+  roles?: string[] | unknown[];
 }
