@@ -54,7 +54,7 @@ jobs:
 
       - name: Test
         run: |
-          npm run test
+          npm run test:cov
           npm run test:e2e
         env:
           AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
