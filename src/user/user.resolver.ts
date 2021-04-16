@@ -19,18 +19,19 @@ export class UserResolver {
   @Query(() => User, { nullable: true })
   @Roles(ROLES.USER)
   @UseGuards(GqlAuthGuard)
-  async me(@CurrentUser() user: AzureToken): Promise<User | null> {
-    try {
-      const data = await this.service.findOne({ id: user.oid });
-      const roles = data.roles.filter((r) => r).map((r) => r.name);
+  async me(@CurrentUser() user: AzureToken): Promise<Omit<User, "enabled"> | null> {
+    const data = await this.service.findOne({ id: user.oid });
 
-      return {
-        id: data.id,
-        roles,
-      };
-    } catch {
-      return null;
-    }
+    if (data === null || !data.enabled) return null;
+
+    const roles = data.roles.filter((r) => r).map((r) => r.name);
+
+    return {
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      roles,
+    };
   }
 
   @Query(() => [User], { name: "users" })
@@ -47,6 +48,7 @@ export class UserResolver {
   async createUser(@Args("input") input: CreateUserInput): Promise<User> {
     return this.service.create({
       name: input.name,
+      email: input.email,
       enabled: true,
     });
   }
@@ -57,6 +59,8 @@ export class UserResolver {
       { id },
       {
         name: input.name,
+        email: input.email,
+        enabled: input.enabled,
       },
     );
   }

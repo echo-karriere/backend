@@ -119,13 +119,23 @@ input UpdateCompanyInput {
 
 input UpdateUserInput {
   email: String!
+  enabled: Boolean!
   name: String!
 }
 
 """A subset of a user"""
 type User {
+  """User email"""
+  email: String!
+
+  """Is the account active?"""
+  enabled: Boolean!
+
   """User ID"""
   id: ID!
+
+  """Name of the user"""
+  name: String!
 
   """Users roles"""
   roles: [String!]!

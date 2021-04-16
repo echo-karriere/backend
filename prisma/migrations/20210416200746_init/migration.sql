@@ -26,6 +26,7 @@ CREATE TABLE "User" (
     "id" UUID NOT NULL,
     "enabled" BOOLEAN NOT NULL,
     "name" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
 
     PRIMARY KEY ("id")
 );
