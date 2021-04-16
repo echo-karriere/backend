@@ -9,7 +9,19 @@ async function bootstrap() {
 
   const port = process.env.PORT ? Number.parseInt(process.env.PORT, 10) : 8080;
 
-  app.use(helmet());
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: [`'self'`],
+          styleSrc: [`'self'`, `'unsafe-inline'`, "cdn.jsdelivr.net", "fonts.googleapis.com"],
+          fontSrc: [`'self'`, "fonts.gstatic.com"],
+          imgSrc: [`'self'`, "data:", "cdn.jsdelivr.net"],
+          scriptSrc: [`'self'`, `https: 'unsafe-inline'`, `cdn.jsdelivr.net`],
+        },
+      },
+    }),
+  );
 
   await app.listen(port, "0.0.0.0");
   console.log(`Application is running on: ${await app.getUrl()}`);
