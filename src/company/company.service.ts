@@ -1,10 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { Company, Prisma } from "@prisma/client";
 
+import { CrudRepository } from "../config/crud-service.interface";
 import { PrismaService } from "../prisma.service";
 
 @Injectable()
-export class CompanyService {
+export class CompanyService implements CrudRepository<Company> {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: Prisma.CompanyCreateInput): Promise<Company> {
