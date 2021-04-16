@@ -32,13 +32,13 @@ export class CategoryService {
     }
   }
 
-  async select(where: Prisma.CategoryWhereUniqueInput): Promise<Category | null> {
+  async findOne(where: Prisma.CategoryWhereUniqueInput): Promise<Category | null> {
     return this.prisma.category.findUnique({
       where,
     });
   }
 
-  async selectAll(where?: Prisma.CategoryWhereInput): Promise<Array<Category>> {
+  async findMany(where?: Prisma.CategoryWhereInput): Promise<Array<Category>> {
     return this.prisma.category.findMany({ where });
   }
 }

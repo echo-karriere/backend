@@ -2,8 +2,8 @@ import { UseGuards } from "@nestjs/common";
 import { Query, Resolver } from "@nestjs/graphql";
 
 import { GqlAuthGuard } from "../auth/gql.guard";
-import { AzureToken } from "./models/token.model";
-import { User } from "./models/user.model";
+import { AzureToken } from "./entities/token.entity";
+import { User } from "./entities/user.entity";
 import { CurrentUser } from "./user.decorator";
 import { UserService } from "./user.service";
 
@@ -15,7 +15,7 @@ export class UserResolver {
   @UseGuards(GqlAuthGuard)
   async me(@CurrentUser() user: AzureToken): Promise<User | null> {
     try {
-      const data = await this.service.select({ id: user.oid });
+      const data = await this.service.findOne({ id: user.oid });
       const roles = data.roles.filter((r) => r).map((r) => r.name);
 
       return {

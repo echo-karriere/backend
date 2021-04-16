@@ -5,21 +5,21 @@ import { GqlAuthGuard } from "../auth/gql.guard";
 import { CompanyService } from "./company.service";
 import { CreateCompanyInput } from "./dto/create-company.input";
 import { UpdateCompanyInput } from "./dto/update-company.input";
-import { Company } from "./models/company.model";
+import { Company } from "./entities/company.entity";
 
 @Resolver(() => Company)
 @UseGuards(GqlAuthGuard)
 export class CompanyResolver {
   constructor(private service: CompanyService) {}
 
-  @Query(() => [Company])
-  async allCompanies(): Promise<Array<Company>> {
-    return this.service.selectAll();
+  @Query(() => [Company], { name: "companies" })
+  async findMany(): Promise<Array<Company>> {
+    return this.service.findMany();
   }
 
-  @Query(() => Company, { nullable: true })
-  async companyById(@Args("id") id: string): Promise<Company | null> {
-    return this.service.select({ id });
+  @Query(() => Company, { name: "company", nullable: true })
+  async findOne(@Args("id") id: string): Promise<Company | null> {
+    return this.service.findOne({ id });
   }
 
   @Mutation(() => Company, { nullable: true })

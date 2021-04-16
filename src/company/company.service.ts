@@ -32,13 +32,13 @@ export class CompanyService {
     }
   }
 
-  async select(where: Prisma.CompanyWhereUniqueInput): Promise<Company | null> {
+  async findOne(where: Prisma.CompanyWhereUniqueInput): Promise<Company | null> {
     return this.prisma.company.findUnique({
       where,
     });
   }
 
-  async selectAll(where?: Prisma.CompanyWhereInput): Promise<Array<Company>> {
+  async findMany(where?: Prisma.CompanyWhereInput): Promise<Array<Company>> {
     return this.prisma.company.findMany({ where });
   }
 }
