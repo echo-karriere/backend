@@ -7,7 +7,7 @@ import { PrismaService } from "../prisma.service";
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async select(where: Prisma.UserWhereUniqueInput): Promise<(User & { roles: Role[] }) | null> {
+  async findOne(where: Prisma.UserWhereUniqueInput): Promise<(User & { roles: Role[] }) | null> {
     return this.prisma.user.findUnique({
       where,
       include: {

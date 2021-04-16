@@ -5,21 +5,21 @@ import { GqlAuthGuard } from "../auth/gql.guard";
 import { CategoryService } from "./category.service";
 import { CreateCategoryInput } from "./dto/create-category.input";
 import { UpdateCategoryInput } from "./dto/update-category.input";
-import { Category } from "./models/category.model";
+import { Category } from "./entities/category.entity";
 
 @Resolver(() => Category)
 @UseGuards(GqlAuthGuard)
 export class CategoryResolver {
   constructor(private service: CategoryService) {}
 
-  @Query(() => [Category])
-  async allCategories(): Promise<Array<Category>> {
-    return this.service.selectAll();
+  @Query(() => [Category], { name: "categories" })
+  async findMany(): Promise<Array<Category>> {
+    return this.service.findMany();
   }
 
-  @Query(() => Category, { nullable: true })
-  async categoryById(@Args("id") id: string): Promise<Category | null> {
-    return this.service.select({ id });
+  @Query(() => Category, { name: "category", nullable: true })
+  async findOne(@Args("id") id: string): Promise<Category | null> {
+    return this.service.findOne({ id });
   }
 
   @Mutation(() => Category, { nullable: true })
