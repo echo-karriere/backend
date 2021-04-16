@@ -2,15 +2,15 @@
 import { Group, User } from "@microsoft/microsoft-graph-types-beta";
 import { Injectable } from "@nestjs/common";
 
-import { msalApiEndpoints, msalApiQuery } from "../config/msal.config";
 import { PrismaService } from "../prisma.service";
+import { msalApiEndpoints } from "./azure.config";
+import { GraphService } from "./graph.service";
 
 @Injectable()
 export class MsalService {
-  constructor(private prisma: PrismaService) {}
-
+  constructor(private prisma: PrismaService, private graphService: GraphService) {}
   async getUsers(): Promise<void> {
-    const users = await msalApiQuery<User[]>(msalApiEndpoints.users, {
+    const users = await this.graphService.query<User[]>(msalApiEndpoints.users, {
       params: { $select: "id,accountEnabled,displayName" },
     });
 
@@ -33,7 +33,7 @@ export class MsalService {
   }
 
   async getRoles(): Promise<void> {
-    const groups = await msalApiQuery<Group[]>(msalApiEndpoints.groups);
+    const groups = await this.graphService.query<Group[]>(msalApiEndpoints.groups);
 
     if (groups instanceof Error) return;
 
@@ -57,7 +57,7 @@ export class MsalService {
     const users = await this.prisma.user.findMany();
 
     for (const user of users) {
-      const roles = await msalApiQuery<string[]>(msalApiEndpoints.userGroups(user.id), {
+      const roles = await this.graphService.query<string[]>(msalApiEndpoints.userGroups(user.id), {
         body: { securityEnabledOnly: true },
         method: "POST",
       });

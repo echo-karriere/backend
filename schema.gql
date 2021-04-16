@@ -71,6 +71,7 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Mutation {
+  """Assign roles from Azure to all users in our system"""
   addRolesToUsers: Boolean!
   createCategory(input: CreateCategoryInput!): Category
   createCompany(input: CreateCompanyInput!): Company
@@ -78,16 +79,20 @@ type Mutation {
   deleteCompany(id: String!): Boolean!
   updateCategory(id: String!, input: UpdateCategoryInput!): Category
   updateCompany(id: String!, input: UpdateCompanyInput!): Company
-  updateRolesFromMsal: Boolean!
-  updateUsersFromMsal: Boolean!
+
+  """Fetch and create or update roles from Azure in our system"""
+  updateRolesFromAzure: Boolean!
+
+  """Fetch and create or update users from Azure in our system"""
+  updateUsersFromAzure: Boolean!
 }
 
 type Query {
-  allCategories: [Category!]!
-  allCompanies: [Company!]!
   buildInfo: BuildInfo!
-  categoryById(id: String!): Category
-  companyById(id: String!): Company
+  categories: [Category!]!
+  category(id: String!): Category
+  companies: [Company!]!
+  company(id: String!): Company
   me: User
 }
 

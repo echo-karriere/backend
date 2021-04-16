@@ -3,11 +3,11 @@ import { GraphQLModule } from "@nestjs/graphql";
 import { TerminusModule } from "@nestjs/terminus";
 
 import { AuthModule } from "../auth/auth.module";
+import { MsalModule } from "../azure/azure.module";
 import { CategoryModule } from "../category/category.module";
 import { CompanyModule } from "../company/company.module";
 import { corsConfiguration } from "../config/cors.config";
 import { HealthController } from "../health/health.controller";
-import { MsalModule } from "../msal/msal.module";
 import { UserModule } from "../user/user.module";
 import { AppController } from "./app.controller";
 import { AppResolver } from "./app.resolver";
