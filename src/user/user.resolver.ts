@@ -28,6 +28,7 @@ export class UserResolver {
       return null;
     }
   }
+
   @Query(() => [User], { name: "users" })
   async findMany(): Promise<Array<User>> {
     return this.service.findMany({});
