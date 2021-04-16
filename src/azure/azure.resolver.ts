@@ -1,8 +1,11 @@
 import { Mutation, Resolver } from "@nestjs/graphql";
 
+import { ROLES } from "../auth/auth.config";
+import { Secured } from "../auth/roles.guard";
 import { MsalService } from "./azure.service";
 
 @Resolver()
+@Secured(ROLES.ADMIN, ROLES.STAFF)
 export class MsalResolver {
   constructor(private service: MsalService) {}
 
