@@ -1,14 +1,14 @@
-import { UseGuards } from "@nestjs/common";
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 
-import { GqlAuthGuard } from "../auth/gql.guard";
+import { ROLES } from "../auth/auth.config";
+import { Secured } from "../auth/roles.guard";
 import { CompanyService } from "./company.service";
 import { CreateCompanyInput } from "./dto/create-company.input";
 import { UpdateCompanyInput } from "./dto/update-company.input";
 import { Company } from "./entities/company.entity";
 
 @Resolver(() => Company)
-@UseGuards(GqlAuthGuard)
+@Secured(ROLES.ADMIN, ROLES.STAFF)
 export class CompanyResolver {
   constructor(private service: CompanyService) {}
 
