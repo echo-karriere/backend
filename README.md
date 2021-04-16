@@ -42,14 +42,7 @@ do this once.
 
 You should look over the
 [documentation](https://docs.echokarriere.no/backend/docker/) if you haven't already for installing Docker and
-configuring IntelliJ. Create a copy of the `env.example` file called `.env`, to get the Auth0 variables contact the web
-master for echo karriere. Optionally, if you want to clear out the database each time the application starts you can add
-
-```ini
-DEV_MODE=on
-```
-
-to the file as well, though this should only be required when making major changes to the database schema.
+configuring IntelliJ. Create a copy of the `env.example` file called `.env`, to get the Azure credentials ask the webmaster.
 
 **NB:** The `.env` file is ignored by `git` by default so that we never accidentally expose secrets, make sure you never
 commit this file to the repositiory!
@@ -66,6 +59,10 @@ to start the development and test server for. We use two different instances of 
 when running tests and a live development server.
 
 ## Running
+
+**NOTE:** On your first lauch you need to do `AZURE_RELOAD=on yarn start:dev` to fetch and populate the users
+and roles from Azure. You'll only need to run this the first time you clone this repository, or whenever the
+database is cleared.
 
 To run the application you can either start it with `yarn start:dev` or run it from your IDE.
 
