@@ -7,7 +7,7 @@ import { msalApiEndpoints } from "./azure.config";
 import { GraphService } from "./graph.service";
 
 @Injectable()
-export class MsalService implements OnApplicationBootstrap {
+export class AzureService implements OnApplicationBootstrap {
   constructor(private prisma: PrismaService, private graphService: GraphService) {}
 
   async onApplicationBootstrap(): Promise<void> {
