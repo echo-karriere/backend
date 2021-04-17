@@ -1,8 +1,10 @@
 // eslint-disable-next-line node/no-unpublished-import
 import { Group, User } from "@microsoft/microsoft-graph-types-beta";
-import { Injectable, OnApplicationBootstrap } from "@nestjs/common";
+import { BadRequestException, Injectable, OnApplicationBootstrap } from "@nestjs/common";
+import generator from "generate-password";
 
 import { PrismaService } from "../prisma.service";
+import { CreateUserInput } from "../user/dto/create-user.input";
 import { msalApiEndpoints } from "./azure.config";
 import { GraphService } from "./graph.service";
 
@@ -18,6 +20,31 @@ export class AzureService implements OnApplicationBootstrap {
     }
 
     return;
+  }
+
+  async createUser(data: CreateUserInput): Promise<User> {
+    const created = await this.graphService.query<User>(msalApiEndpoints.users, {
+      method: "POST",
+      body: {
+        accountEnabled: true,
+        displayName: data.name,
+        identities: [
+          {
+            signInType: "emailAddress",
+            issuer: `${process.env.AZURE_TENANT_NAME}.onmicrosoft.com`,
+            issuerAssignedId: data.email,
+          },
+        ],
+        passwordPolicies: "DisablePasswordExpiration",
+        passwordProfile: {
+          forceChangePasswordNextSignIn: true,
+          password: generator.generate({ length: 16, symbols: true, numbers: true }),
+        },
+      },
+    });
+
+    if (created instanceof Error) throw new BadRequestException("Could not create user");
+    return created;
   }
 
   async getUsers(): Promise<void> {
