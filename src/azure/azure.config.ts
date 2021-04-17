@@ -20,6 +20,7 @@ export const accessTokenRequestData = {
 };
 
 export const msalApiEndpoints = {
+  invitations: config.graphEndpoint + "v1.0/invitations",
   users: config.graphEndpoint + "v1.0/users",
   userGroups: (id: string): string => config.graphEndpoint + `v1.0/users/${id}/getMemberGroups`,
   groups: config.graphEndpoint + "v1.0/groups",

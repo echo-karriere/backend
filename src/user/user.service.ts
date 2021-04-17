@@ -1,6 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { Prisma, Role, User as PrismaUser } from "@prisma/client";
 
+import { AzureService } from "../azure/azure.service";
+
 interface User extends PrismaUser {
   roles: Role[];
 }
@@ -10,10 +12,19 @@ import { PrismaService } from "../prisma.service";
 
 @Injectable()
 export class UserService implements CrudRepository<User | PrismaUser> {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService, private azure: AzureService) {}
 
-  create(data: Prisma.UserCreateInput): Promise<PrismaUser> {
-    return this.prisma.user.create({ data });
+  async create(data: Prisma.UserCreateInput): Promise<PrismaUser> {
+    const user = await this.azure.createUser(data);
+    console.log(user);
+    return this.prisma.user.create({
+      data: {
+        id: user.id,
+        name: user.displayName,
+        email: user.userPrincipalName,
+        enabled: user.accountEnabled,
+      },
+    });
   }
 
   update(where: Prisma.UserWhereUniqueInput, data: Prisma.UserUpdateInput): Promise<PrismaUser> {
