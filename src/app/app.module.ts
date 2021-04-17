@@ -3,7 +3,7 @@ import { GraphQLModule } from "@nestjs/graphql";
 import { TerminusModule } from "@nestjs/terminus";
 
 import { AuthModule } from "../auth/auth.module";
-import { MsalModule } from "../azure/azure.module";
+import { AzureModule } from "../azure/azure.module";
 import { CategoryModule } from "../category/category.module";
 import { CompanyModule } from "../company/company.module";
 import { corsConfiguration } from "../config/cors.config";
@@ -27,7 +27,7 @@ import { AppService } from "./app.service";
     CompanyModule,
     AuthModule,
     UserModule,
-    MsalModule,
+    AzureModule,
   ],
   controllers: [AppController, HealthController],
   providers: [AppService, AppResolver],

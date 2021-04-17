@@ -1,12 +1,12 @@
 import { HttpModule, Module } from "@nestjs/common";
 
 import { PrismaService } from "../prisma.service";
-import { MsalResolver } from "./azure.resolver";
-import { MsalService } from "./azure.service";
+import { AzureResolver } from "./azure.resolver";
+import { AzureService } from "./azure.service";
 import { GraphService } from "./graph.service";
 
 @Module({
   imports: [HttpModule],
-  providers: [MsalResolver, MsalService, GraphService, PrismaService],
+  providers: [AzureResolver, AzureService, GraphService, PrismaService],
 })
-export class MsalModule {}
+export class AzureModule {}
