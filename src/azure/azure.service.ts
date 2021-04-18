@@ -4,8 +4,8 @@ import { BadRequestException, Injectable, OnApplicationBootstrap } from "@nestjs
 import generator from "generate-password";
 
 import { PrismaService } from "../prisma.service";
-import { CreateUserInput } from "../user/dto/create-user.input";
 import { msalApiEndpoints } from "./azure.config";
+import { CreateUserData } from "./dto/create-user.data";
 import { GraphService } from "./graph.service";
 
 @Injectable()
@@ -22,7 +22,7 @@ export class AzureService implements OnApplicationBootstrap {
     return;
   }
 
-  async createUser(data: CreateUserInput): Promise<User> {
+  async createUser(data: CreateUserData): Promise<User> {
     return await this.graphService
       .client()
       .api("/users")

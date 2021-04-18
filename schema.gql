@@ -68,6 +68,7 @@ input CreateCompanyInput {
 input CreateUserInput {
   email: String!
   name: String!
+  roles: [ID!]!
 }
 
 """
