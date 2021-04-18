@@ -1,7 +1,8 @@
+import { Client } from "@microsoft/microsoft-graph-client";
 import { HttpService, Injectable } from "@nestjs/common";
 import { AxiosError, AxiosRequestConfig, Method } from "axios";
 
-import { accessTokenRequestData, getToken } from "./azure.config";
+import { accessTokenRequestData, AuthProvider, getToken } from "./azure.config";
 interface GraphApiResponse<T> {
   value: T;
 }
@@ -20,7 +21,17 @@ const defaultApiConfig: MsalApiConfig = {
 
 @Injectable()
 export class GraphService {
-  constructor(private http: HttpService) {}
+  private readonly _client: Client;
+
+  constructor(private http: HttpService) {
+    this._client = Client.initWithMiddleware({
+      authProvider: new AuthProvider(),
+    });
+  }
+
+  client(): Client {
+    return this._client;
+  }
 
   /**
    * A utility function for fetching data from the Azure Graph API.

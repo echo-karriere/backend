@@ -23,11 +23,13 @@ export class AzureService implements OnApplicationBootstrap {
   }
 
   async createUser(data: CreateUserInput): Promise<User> {
-    const created = await this.graphService.query<User>(msalApiEndpoints.users, {
-      method: "POST",
-      body: {
+    return await this.graphService
+      .client()
+      .api("/users")
+      .create({
         accountEnabled: true,
         displayName: data.name,
+        mail: data.email,
         identities: [
           {
             signInType: "emailAddress",
@@ -40,11 +42,12 @@ export class AzureService implements OnApplicationBootstrap {
           forceChangePasswordNextSignIn: true,
           password: generator.generate({ length: 16, symbols: true, numbers: true }),
         },
-      },
-    });
-
-    if (created instanceof Error) throw new BadRequestException("Could not create user");
-    return created;
+      })
+      .then((user: User) => user)
+      .catch((error) => {
+        console.log(error);
+        throw new BadRequestException("Could not create user.");
+      });
   }
 
   async getUsers(): Promise<void> {
