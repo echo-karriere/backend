@@ -60,8 +60,10 @@ export class UserResolver {
   async updateUser(@Args("id") id: string, @Args("input") input: UpdateUserInput): Promise<User> {
     const user = await this.service.findOne({ id: id });
 
-    const lostRoles = user.roles.filter((role) => !input.roles.includes(role.id));
+    const lostRoles = user.roles.filter((role) => !input.roles.includes(role.id)).map((role) => role.id);
+    const newRoles = input.roles.filter((role) => !user.roles.some((r) => r.id === role));
 
+    await this.service.updateRoles(newRoles, lostRoles, id);
     return this.service.update(
       { id },
       {
@@ -70,7 +72,7 @@ export class UserResolver {
         enabled: input.enabled,
         roles: {
           disconnect: lostRoles.map((role) => {
-            return { id: role.id };
+            return { id: role };
           }),
           connect: input.roles.map((role) => {
             return { id: role };
