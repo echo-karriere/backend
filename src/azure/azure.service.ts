@@ -64,12 +64,12 @@ export class AzureService implements OnApplicationBootstrap {
           id: user.id,
           enabled: user.accountEnabled,
           name: user.displayName,
-          email: user.userPrincipalName ?? user.mail,
+          email: user.mail ?? user.userPrincipalName,
         },
         update: {
           enabled: user.accountEnabled,
           name: user.displayName,
-          email: user.userPrincipalName ?? user.mail,
+          email: user.mail ?? user.userPrincipalName,
         },
       });
     }
