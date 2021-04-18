@@ -21,8 +21,8 @@ export class UserService implements CrudRepository<User | PrismaUser> {
       data: {
         id: user.id,
         name: user.displayName,
-        email: user.userPrincipalName,
-        enabled: user.accountEnabled,
+        email: user.mail,
+        enabled: true,
       },
     });
   }
