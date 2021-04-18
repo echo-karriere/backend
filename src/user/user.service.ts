@@ -31,7 +31,7 @@ export class UserService implements CrudRepository<User | PrismaUser> {
   }
 
   update(where: Prisma.UserWhereUniqueInput, data: Prisma.UserUpdateInput): Promise<PrismaUser> {
-    return this.prisma.user.update({ where, data });
+    return this.prisma.user.update({ where, data, include: { roles: true } });
   }
 
   async delete(where: Prisma.UserWhereUniqueInput): Promise<boolean> {
