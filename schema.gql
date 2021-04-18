@@ -103,19 +103,21 @@ type Query {
   companies: [Company!]!
   company(id: String!): Company
   me: User
+  role(id: ID!): Role!
+  roles: [Role!]!
   user(id: String!): User
   users: [User!]!
 }
 
 """A role assigned to users"""
 type Role {
-  """Description of the role"""
+  """Role description"""
   description: String!
 
-  """Role ID"""
+  """The role ID"""
   id: ID!
 
-  """Name of the Role"""
+  """Name of the role"""
   name: String!
 }
 
