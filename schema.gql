@@ -133,9 +133,10 @@ input UpdateCompanyInput {
 }
 
 input UpdateUserInput {
-  email: String!
-  enabled: Boolean!
-  name: String!
+  email: String
+  enabled: Boolean
+  name: String
+  roles: [ID!]
 }
 
 """A subset of a user"""

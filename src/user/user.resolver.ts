@@ -58,12 +58,24 @@ export class UserResolver {
 
   @Mutation(() => User, { nullable: true })
   async updateUser(@Args("id") id: string, @Args("input") input: UpdateUserInput): Promise<User> {
+    const user = await this.service.findOne({ id: id });
+
+    const lostRoles = user.roles.filter((role) => !input.roles.includes(role.id));
+
     return this.service.update(
       { id },
       {
         name: input.name,
         email: input.email,
         enabled: input.enabled,
+        roles: {
+          disconnect: lostRoles.map((role) => {
+            return { id: role.id };
+          }),
+          connect: input.roles.map((role) => {
+            return { id: role };
+          }),
+        },
       },
     );
   }
