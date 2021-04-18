@@ -1,9 +1,10 @@
-import { Client } from "@microsoft/microsoft-graph-client";
+import { Client, GraphRequest } from "@microsoft/microsoft-graph-client";
 import { HttpService, Injectable } from "@nestjs/common";
 import { AxiosError, AxiosRequestConfig, Method } from "axios";
 
 import { accessTokenRequestData, AuthProvider, getToken } from "./azure.config";
-interface GraphApiResponse<T> {
+
+export interface GraphApiResponse<T> {
   value: T;
 }
 
@@ -21,16 +22,16 @@ const defaultApiConfig: MsalApiConfig = {
 
 @Injectable()
 export class GraphService {
-  private readonly _client: Client;
+  private readonly client: Client;
 
   constructor(private http: HttpService) {
-    this._client = Client.initWithMiddleware({
+    this.client = Client.initWithMiddleware({
       authProvider: new AuthProvider(),
     });
   }
 
-  client(): Client {
-    return this._client;
+  api(path: string): GraphRequest {
+    return this.client.api(path);
   }
 
   /**
