@@ -30,7 +30,22 @@ export class UserService implements CrudRepository<User | PrismaUser> {
     });
   }
 
-  update(where: Prisma.UserWhereUniqueInput, data: Prisma.UserUpdateInput): Promise<PrismaUser> {
+  async updateRoles(newRoles: string[], lostRoles: string[], userId: string): Promise<void> {
+    try {
+      await Promise.all(lostRoles.map((group) => this.azure.removeMembersFromGroup(group, userId)));
+      await Promise.all(newRoles.map((group) => this.azure.addMembersToGroup(group, userId)));
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  async update(where: Prisma.UserWhereUniqueInput, data: Prisma.UserUpdateInput): Promise<PrismaUser> {
+    await this.azure.updateUser(where.id, {
+      name: data.name?.toString(),
+      email: data.email?.toString(),
+      enabled: data.enabled?.valueOf() as boolean,
+    });
     return this.prisma.user.update({ where, data, include: { roles: true } });
   }
 

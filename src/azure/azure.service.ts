@@ -6,6 +6,7 @@ import generator from "generate-password";
 import { PrismaService } from "../prisma.service";
 import { GraphApiResponse } from "./azure.config";
 import { CreateUserData } from "./dto/create-user.data";
+import { UpdateUserData } from "./dto/update-user.data";
 import { GraphService } from "./graph.service";
 
 @Injectable()
@@ -47,6 +48,48 @@ export class AzureService implements OnApplicationBootstrap {
         console.log(error);
         throw new BadRequestException("Could not create user.");
       });
+  }
+
+  async updateUser(id: string, data: UpdateUserData): Promise<void> {
+    const updatedInfo = Object.assign(
+      {},
+      data.name === undefined ? null : { displayName: data.name },
+      data.email === undefined ? null : { mail: data.email },
+      data.enabled === undefined ? null : { accountEnabled: data.enabled },
+    );
+    await this.graphService
+      .api(`/users/${id}`)
+      .update(updatedInfo)
+      .catch((error) => {
+        console.log(error);
+        throw new BadRequestException("Could not update user.");
+      });
+  }
+
+  async addMembersToGroup(group: string, ...members: string[]): Promise<void> {
+    const data = {
+      "members@odata.bind": members.map((id) => `https://graph.microsoft.com/v1.0/directoryObjects/${id}`),
+    };
+
+    await this.graphService
+      .api(`/groups/${group}`)
+      .update(data)
+      .catch((error) => {
+        console.log(error);
+        throw new BadRequestException("Could not assign users to group.");
+      });
+  }
+
+  async removeMembersFromGroup(group: string, ...members: string[]): Promise<void> {
+    for (const id of members) {
+      await this.graphService
+        .api(`/groups/${group}/members/${id}/$ref`)
+        .delete()
+        .catch((error) => {
+          console.log(error);
+          throw new BadRequestException("Could not delete user from group.");
+        });
+    }
   }
 
   async getUsers(): Promise<void> {
