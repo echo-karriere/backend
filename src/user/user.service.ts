@@ -15,14 +15,17 @@ export class UserService implements CrudRepository<User | PrismaUser> {
   constructor(private readonly prisma: PrismaService, private azure: AzureService) {}
 
   async create(data: Prisma.UserCreateInput): Promise<PrismaUser> {
-    const user = await this.azure.createUser(data);
-    console.log(user);
+    const user = await this.azure.createUser({ name: data.name, email: data.email });
     return this.prisma.user.create({
       data: {
         id: user.id,
         name: user.displayName,
         email: user.mail,
         enabled: true,
+        roles: data.roles,
+      },
+      include: {
+        roles: true,
       },
     });
   }

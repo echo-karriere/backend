@@ -48,6 +48,11 @@ export class UserResolver {
       name: input.name,
       email: input.email,
       enabled: true,
+      roles: {
+        connect: input.roles.map((role) => {
+          return { id: role };
+        }),
+      },
     });
   }
 
