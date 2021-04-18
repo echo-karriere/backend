@@ -4,9 +4,8 @@ import { BadRequestException, Injectable, OnApplicationBootstrap } from "@nestjs
 import generator from "generate-password";
 
 import { PrismaService } from "../prisma.service";
-import { msalApiEndpoints } from "./azure.config";
 import { CreateUserData } from "./dto/create-user.data";
-import { GraphService } from "./graph.service";
+import { GraphApiResponse, GraphService } from "./graph.service";
 
 @Injectable()
 export class AzureService implements OnApplicationBootstrap {
@@ -24,7 +23,6 @@ export class AzureService implements OnApplicationBootstrap {
 
   async createUser(data: CreateUserData): Promise<User> {
     return await this.graphService
-      .client()
       .api("/users")
       .create({
         accountEnabled: true,
@@ -51,70 +49,83 @@ export class AzureService implements OnApplicationBootstrap {
   }
 
   async getUsers(): Promise<void> {
-    const users = await this.graphService.query<User[]>(msalApiEndpoints.users, {
-      params: { $select: "id,accountEnabled,displayName,mail,userPrincipalName" },
-    });
-
-    if (users instanceof Error) return;
-
-    for (const user of users) {
-      await this.prisma.user.upsert({
-        where: { id: user.id },
-        create: {
-          id: user.id,
-          enabled: user.accountEnabled,
-          name: user.displayName,
-          email: user.mail ?? user.userPrincipalName,
-        },
-        update: {
-          enabled: user.accountEnabled,
-          name: user.displayName,
-          email: user.mail ?? user.userPrincipalName,
-        },
+    return await this.graphService
+      .api("/users")
+      .select(["id", "accountEnabled", "displayName", "mail", "userPrincipalName"])
+      .get()
+      .then(async (users: GraphApiResponse<User[]>) => {
+        for (const user of users.value) {
+          await this.prisma.user.upsert({
+            where: { id: user.id },
+            create: {
+              id: user.id,
+              enabled: user.accountEnabled,
+              name: user.displayName,
+              email: user.mail ?? user.userPrincipalName,
+            },
+            update: {
+              enabled: user.accountEnabled,
+              name: user.displayName,
+              email: user.mail ?? user.userPrincipalName,
+            },
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        throw new BadRequestException("Could not fetch users");
       });
-    }
   }
 
   async getRoles(): Promise<void> {
-    const groups = await this.graphService.query<Group[]>(msalApiEndpoints.groups);
-
-    if (groups instanceof Error) return;
-
-    for (const group of groups) {
-      await this.prisma.role.upsert({
-        where: { id: group.id },
-        create: {
-          id: group.id,
-          name: group.displayName,
-          description: group.description,
-        },
-        update: {
-          name: group.displayName,
-          description: group.description,
-        },
+    return await this.graphService
+      .api("/groups")
+      .get()
+      .then(async (groups: GraphApiResponse<Group[]>) => {
+        for (const group of groups.value) {
+          await this.prisma.role.upsert({
+            where: { id: group.id },
+            create: {
+              id: group.id,
+              name: group.displayName,
+              description: group.description,
+            },
+            update: {
+              name: group.displayName,
+              description: group.description,
+            },
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        throw new BadRequestException("Could not fetch groups");
       });
-    }
   }
 
   async assignRoles(): Promise<void> {
     const users = await this.prisma.user.findMany();
 
     for (const user of users) {
-      const roles = await this.graphService.query<string[]>(msalApiEndpoints.userGroups(user.id), {
-        body: { securityEnabledOnly: true },
-        method: "POST",
-      });
-
-      if (roles instanceof Error) return;
-
-      await this.prisma.user.update({
-        where: { id: user.id },
-        data: {
-          roles: {
-            connect: roles.map((id) => Object.assign({}, { id: id })),
-          },
-        },
-      });
+      await this.graphService
+        .api(`/users/${user.id}/getMemberGroups`)
+        .post({ securityEnabledOnly: true })
+        .then(async (roles: GraphApiResponse<string[]>) => {
+          await this.prisma.user.update({
+            where: { id: user.id },
+            data: {
+              roles: {
+                connect: roles.value.map((id) => {
+                  return { id: id };
+                }),
+              },
+            },
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+          throw new BadRequestException("Could not assign roles");
+        });
     }
   }
 }
