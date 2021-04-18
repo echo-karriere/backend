@@ -27,8 +27,6 @@ export class AADB2CStrategy extends PassportStrategy(BearerStrategy, "aad") {
       throw new UnauthorizedException();
     }
 
-    const result = Object.assign(token, { roles: user.roles.map((r) => r.name) });
-    // console.log(result);
-    return result;
+    return Object.assign(token, { roles: user.roles.map((r) => r.name) });
   }
 }

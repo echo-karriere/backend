@@ -19,12 +19,10 @@ export class AzureService implements OnApplicationBootstrap {
       await this.getRoles();
       await this.assignRoles();
     }
-
-    return;
   }
 
   async createUser(data: CreateUserData): Promise<User> {
-    return await this.graphService
+    return this.graphService
       .api("/users")
       .create({
         accountEnabled: true,
@@ -93,7 +91,7 @@ export class AzureService implements OnApplicationBootstrap {
   }
 
   async getUsers(): Promise<void> {
-    return await this.graphService
+    return this.graphService
       .api("/users")
       .select(["id", "accountEnabled", "displayName", "mail", "userPrincipalName"])
       .get()
@@ -122,7 +120,7 @@ export class AzureService implements OnApplicationBootstrap {
   }
 
   async getRoles(): Promise<void> {
-    return await this.graphService
+    return this.graphService
       .api("/groups")
       .get()
       .then(async (groups: GraphApiResponse<Group[]>) => {
