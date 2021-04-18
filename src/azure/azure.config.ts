@@ -22,13 +22,6 @@ export const accessTokenRequestData = {
   scopes: [config.graphEndpoint + ".default"],
 };
 
-export const msalApiEndpoints = {
-  invitations: config.graphEndpoint + "v1.0/invitations",
-  users: config.graphEndpoint + "v1.0/users",
-  userGroups: (id: string): string => config.graphEndpoint + `v1.0/users/${id}/getMemberGroups`,
-  groups: config.graphEndpoint + "v1.0/groups",
-};
-
 export const cca = new ConfidentialClientApplication(msalConfig);
 
 export async function getToken(credentials: ClientCredentialRequest): Promise<AuthenticationResult> {
@@ -48,3 +41,7 @@ export class AuthProvider implements AuthenticationProvider {
 export const azureClient = Client.initWithMiddleware({
   authProvider: new AuthProvider(),
 });
+
+export interface GraphApiResponse<T> {
+  value: T;
+}

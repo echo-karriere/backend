@@ -4,8 +4,9 @@ import { BadRequestException, Injectable, OnApplicationBootstrap } from "@nestjs
 import generator from "generate-password";
 
 import { PrismaService } from "../prisma.service";
+import { GraphApiResponse } from "./azure.config";
 import { CreateUserData } from "./dto/create-user.data";
-import { GraphApiResponse, GraphService } from "./graph.service";
+import { GraphService } from "./graph.service";
 
 @Injectable()
 export class AzureService implements OnApplicationBootstrap {
