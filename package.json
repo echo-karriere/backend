@@ -28,7 +28,7 @@
     "@microsoft/microsoft-graph-client": "2.2.1",
     "@nestjs/common": "7.6.15",
     "@nestjs/core": "7.6.15",
-    "@nestjs/graphql": "7.10.3",
+    "@nestjs/graphql": "7.10.6",
     "@nestjs/passport": "7.1.5",
     "@nestjs/platform-express": "7.6.15",
     "@nestjs/terminus": "7.1.2",
