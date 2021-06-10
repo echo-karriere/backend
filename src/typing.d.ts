@@ -7,5 +7,6 @@ declare namespace NodeJS {
     AZURE_CLIENT_SECRET?: string;
     AAD_ENDPOINT?: string;
     GRAPH_ENDPOINT?: string;
+    AZURE_RELOAD?: string;
   }
 }

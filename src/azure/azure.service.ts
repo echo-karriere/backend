@@ -14,7 +14,7 @@ export class AzureService implements OnApplicationBootstrap {
   constructor(private prisma: PrismaService, private graphService: GraphService) {}
 
   async onApplicationBootstrap(): Promise<void> {
-    if (process.env.NODE_ENV === "production" || process.env.RELOAD_AZURE !== undefined) {
+    if (process.env.NODE_ENV === "production" || process.env.AZURE_RELOAD !== undefined) {
       await this.getUsers();
       await this.getRoles();
       await this.assignRoles();
