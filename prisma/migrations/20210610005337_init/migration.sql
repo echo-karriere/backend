@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "JobType" AS ENUM ('FULL', 'PART', 'SUMMER', 'OTHER');
+
 -- CreateTable
 CREATE TABLE "Category" (
     "id" UUID NOT NULL,
@@ -41,6 +44,21 @@ CREATE TABLE "Role" (
 );
 
 -- CreateTable
+CREATE TABLE "Job" (
+    "id" UUID NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "location" TEXT NOT NULL,
+    "url" TEXT NOT NULL,
+    "type" "JobType" NOT NULL,
+    "deadline" TIMESTAMPTZ(6),
+    "finalExpiration" TIMESTAMPTZ(6),
+    "companyId" UUID NOT NULL,
+
+    PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "_RoleToUser" (
     "A" UUID NOT NULL,
     "B" UUID NOT NULL
@@ -59,10 +77,16 @@ CREATE UNIQUE INDEX "Company.name_unique" ON "Company"("name");
 CREATE UNIQUE INDEX "Role.name_unique" ON "Role"("name");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Job.url_unique" ON "Job"("url");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "_RoleToUser_AB_unique" ON "_RoleToUser"("A", "B");
 
 -- CreateIndex
 CREATE INDEX "_RoleToUser_B_index" ON "_RoleToUser"("B");
+
+-- AddForeignKey
+ALTER TABLE "Job" ADD FOREIGN KEY ("companyId") REFERENCES "Company"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_RoleToUser" ADD FOREIGN KEY ("A") REFERENCES "Role"("id") ON DELETE CASCADE ON UPDATE CASCADE;

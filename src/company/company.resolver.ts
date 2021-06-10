@@ -1,7 +1,9 @@
-import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
+import { Args, Mutation, Parent, Query, ResolveField, Resolver } from "@nestjs/graphql";
 
 import { ROLES } from "../auth/auth.config";
 import { Secured } from "../auth/roles.guard";
+import { Job } from "../job/entities/job.entity";
+import { JobService } from "../job/job.service";
 import { CompanyService } from "./company.service";
 import { CreateCompanyInput } from "./dto/create-company.input";
 import { UpdateCompanyInput } from "./dto/update-company.input";
@@ -10,7 +12,7 @@ import { Company } from "./entities/company.entity";
 @Resolver(() => Company)
 @Secured(ROLES.ADMIN, ROLES.STAFF)
 export class CompanyResolver {
-  constructor(private service: CompanyService) {}
+  constructor(private service: CompanyService, private readonly jobService: JobService) {}
 
   @Query(() => [Company], { name: "companies" })
   async findMany(): Promise<Array<Company>> {
@@ -45,5 +47,14 @@ export class CompanyResolver {
   @Mutation(() => Boolean)
   async deleteCompany(@Args("id") id: string): Promise<boolean> {
     return this.service.delete({ id });
+  }
+
+  @ResolveField("jobs", () => [Job])
+  async companyJobs(@Parent() company: Company): Promise<Array<Job>> {
+    const { id } = company;
+    const jobs = await this.jobService.findCompanyJob(id);
+    return jobs.map((job) => {
+      return { ...job, type: this.jobService.typeToEntity(job.type) };
+    });
   }
 }

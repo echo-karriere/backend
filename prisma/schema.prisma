@@ -20,6 +20,7 @@ model Company {
   id         String    @id @default(uuid()) @db.Uuid
   name       String    @unique
   homepage   String
+  jobs       Job[]
   createdAt  DateTime  @default(now()) @db.Timestamptz(6)
   modifiedAt DateTime? @db.Timestamptz(6)
 }
@@ -37,4 +38,24 @@ model Role {
   name        String  @unique
   description String?
   users       User[]
+}
+
+enum JobType {
+  FULL
+  PART
+  SUMMER
+  OTHER
+}
+
+model Job {
+  id              String    @id @default(uuid()) @db.Uuid
+  title           String
+  description     String
+  location        String
+  url             String    @unique
+  type            JobType
+  deadline        DateTime? @db.Timestamptz(6)
+  finalExpiration DateTime? @db.Timestamptz(6)
+  companyId       String    @db.Uuid
+  company         Company   @relation(fields: [companyId], references: [id])
 }
