@@ -34,12 +34,12 @@ export class Job {
   type!: JobType;
 
   @Field({ description: "Whether the job posting is published" })
-  published: boolean;
+  published!: boolean;
 
-  @Field({ description: "When is the deadline for applying?" })
+  @Field({ description: "When is the deadline for applying?", nullable: true })
   deadline?: Date;
 
-  @Field({ description: "When should the job be unlisted?" })
+  @Field({ description: "When should the job be unlisted?", nullable: true })
   finalExpiration?: Date;
 
   @Field(() => Company, { description: "Company for job listing" })

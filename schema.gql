@@ -95,13 +95,13 @@ type Job {
   company: Company!
 
   """When is the deadline for applying?"""
-  deadline: DateTime!
+  deadline: DateTime
 
   """Description of job"""
   description: String!
 
   """When should the job be unlisted?"""
-  finalExpiration: DateTime!
+  finalExpiration: DateTime
 
   """Job ID"""
   id: ID!
