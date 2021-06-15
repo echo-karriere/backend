@@ -38,49 +38,50 @@ type Category {
 
 """A company that is or has participated in one of our events."""
 type Company {
-    """When was this resource created?"""
-    createdAt: DateTime!
+  """When was this resource created?"""
+  createdAt: DateTime!
 
-    """A link to their homepage"""
-    homepage: String!
+  """A link to their homepage"""
+  homepage: String!
 
-    """Company ID"""
-    id: ID!
-    jobs: [Job!]!
+  """Company ID"""
+  id: ID!
+  jobs: [Job!]!
 
-    """When was this resource last updated?"""
-    modifiedAt: DateTime
+  """When was this resource last updated?"""
+  modifiedAt: DateTime
 
-    """Name of company"""
-    name: String!
+  """Name of company"""
+  name: String!
 }
 
 input CreateCategoryInput {
-    description: String
-    slug: String!
-    title: String!
+  description: String
+  slug: String!
+  title: String!
 }
 
 input CreateCompanyInput {
-    homepage: String!
-    name: String!
+  homepage: String!
+  name: String!
 }
 
 input CreateJobInput {
-    company: String!
-    deadline: DateTime
-    description: String!
-    finalExpiration: DateTime
-    location: String!
-    title: String!
-    type: JobType!
-    url: String!
+  company: String!
+  deadline: DateTime
+  description: String!
+  finalExpiration: DateTime
+  location: String!
+  published: Boolean!
+  title: String!
+  type: JobType!
+  url: String!
 }
 
 input CreateUserInput {
-    email: String!
-    name: String!
-    roles: [ID!]!
+  email: String!
+  name: String!
+  roles: [ID!]!
 }
 
 """
@@ -90,78 +91,81 @@ scalar DateTime
 
 """A job"""
 type Job {
-    """Company for job listing"""
-    company: Company!
+  """Company for job listing"""
+  company: Company!
 
-    """When is the deadline for applying?"""
-    deadline: DateTime!
+  """When is the deadline for applying?"""
+  deadline: DateTime!
 
-    """Description of job"""
-    description: String!
+  """Description of job"""
+  description: String!
 
-    """When should the job be unlisted?"""
-    finalExpiration: DateTime!
+  """When should the job be unlisted?"""
+  finalExpiration: DateTime!
 
-    """Job ID"""
-    id: ID!
+  """Job ID"""
+  id: ID!
 
-    """Where is the job?"""
-    location: String!
+  """Where is the job?"""
+  location: String!
 
-    """Title of job"""
-    title: String!
+  """Whether the job posting is published"""
+  published: Boolean!
 
-    """What kind of job it is"""
-    type: JobType!
+  """Title of job"""
+  title: String!
 
-    """External URL for job"""
-    url: String!
+  """What kind of job it is"""
+  type: JobType!
+
+  """External URL for job"""
+  url: String!
 }
 
 """What type of job is it?"""
 enum JobType {
-    Full
-    Other
-    Part
-    Summer
+  Full
+  Other
+  Part
+  Summer
 }
 
 type Mutation {
-    """Assign roles from Azure to all users in our system"""
-    addRolesToUsers: Boolean!
-    createCategory(input: CreateCategoryInput!): Category
-    createCompany(input: CreateCompanyInput!): Company
-    createJob(input: CreateJobInput!): Job!
-    createUser(input: CreateUserInput!): User
-    deleteCategory(id: String!): Boolean!
-    deleteCompany(id: String!): Boolean!
-    deleteJob(id: String!): Boolean!
-    deleteUser(id: String!): Boolean!
-    updateCategory(id: String!, input: UpdateCategoryInput!): Category
-    updateCompany(id: String!, input: UpdateCompanyInput!): Company
-    updateJob(id: String!, input: UpdateJobInput!): Job
+  """Assign roles from Azure to all users in our system"""
+  addRolesToUsers: Boolean!
+  createCategory(input: CreateCategoryInput!): Category
+  createCompany(input: CreateCompanyInput!): Company
+  createJob(input: CreateJobInput!): Job!
+  createUser(input: CreateUserInput!): User
+  deleteCategory(id: String!): Boolean!
+  deleteCompany(id: String!): Boolean!
+  deleteJob(id: String!): Boolean!
+  deleteUser(id: String!): Boolean!
+  updateCategory(id: String!, input: UpdateCategoryInput!): Category
+  updateCompany(id: String!, input: UpdateCompanyInput!): Company
+  updateJob(id: String!, input: UpdateJobInput!): Job
 
-    """Fetch and create or update roles from Azure in our system"""
-    updateRolesFromAzure: Boolean!
-    updateUser(id: String!, input: UpdateUserInput!): User
+  """Fetch and create or update roles from Azure in our system"""
+  updateRolesFromAzure: Boolean!
+  updateUser(id: String!, input: UpdateUserInput!): User
 
-    """Fetch and create or update users from Azure in our system"""
-    updateUsersFromAzure: Boolean!
+  """Fetch and create or update users from Azure in our system"""
+  updateUsersFromAzure: Boolean!
 }
 
 type Query {
-    buildInfo: BuildInfo!
-    categories: [Category!]!
-    category(id: String!): Category
-    companies: [Company!]!
-    company(id: String!): Company
-    job(id: String!): Job
-    jobs: [Job!]!
-    me: User
-    role(id: ID!): Role!
-    roles: [Role!]!
-    user(id: String!): User
-    users: [User!]!
+  buildInfo: BuildInfo!
+  categories: [Category!]!
+  category(id: String!): Category
+  companies: [Company!]!
+  company(id: String!): Company
+  job(id: String!): Job
+  jobs: [Job!]!
+  me: User
+  role(id: ID!): Role!
+  roles: [Role!]!
+  user(id: String!): User
+  users: [User!]!
 }
 
 """A role assigned to users"""
@@ -177,32 +181,33 @@ type Role {
 }
 
 input UpdateCategoryInput {
-    description: String
-    slug: String!
-    title: String!
+  description: String
+  slug: String!
+  title: String!
 }
 
 input UpdateCompanyInput {
-    homepage: String!
-    name: String!
+  homepage: String!
+  name: String!
 }
 
 input UpdateJobInput {
-    company: String!
-    deadline: DateTime
-    description: String!
-    finalExpiration: DateTime
-    location: String!
-    title: String!
-    type: JobType!
-    url: String!
+  company: String!
+  deadline: DateTime
+  description: String!
+  finalExpiration: DateTime
+  location: String!
+  published: Boolean!
+  title: String!
+  type: JobType!
+  url: String!
 }
 
 input UpdateUserInput {
-    email: String
-    enabled: Boolean
-    name: String
-    roles: [ID!]
+  email: String
+  enabled: Boolean
+  name: String
+  roles: [ID!]
 }
 
 """A subset of a user"""

@@ -20,6 +20,9 @@ export class UpdateJobInput {
   @Field(() => JobType)
   type!: JobType;
 
+  @Field()
+  published: boolean;
+
   @Field({ nullable: true })
   @IsOptional()
   deadline?: Date;

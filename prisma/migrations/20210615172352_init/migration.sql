@@ -51,6 +51,7 @@ CREATE TABLE "Job" (
     "location" TEXT NOT NULL,
     "url" TEXT NOT NULL,
     "type" "JobType" NOT NULL,
+    "published" BOOLEAN NOT NULL,
     "deadline" TIMESTAMPTZ(6),
     "finalExpiration" TIMESTAMPTZ(6),
     "companyId" UUID NOT NULL,

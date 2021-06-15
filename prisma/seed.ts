@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { JobType, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -53,8 +53,49 @@ async function main() {
       ],
     });
 
-    console.log({ categories, companies });
-  } catch {
+    const today = new Date();
+
+    const jobs = await prisma.job.createMany({
+      data: [
+        {
+          id: "e0899f1f-3c28-4468-b7a1-bbadaeca4e49",
+          title: "Internship",
+          description: "Get a cool internship",
+          type: JobType.SUMMER,
+          url: "https://www.example.org",
+          published: true,
+          location: "Oslo",
+          companyId: "337e1370-cb5c-45b6-ad6c-fdd925a27313",
+          deadline: new Date(today.setMonth(today.getMonth() + 2)),
+          finalExpiration: new Date(today.setMonth(today.getMonth() + 3)),
+        },
+        {
+          id: "4501eb53-3502-472f-9a10-8c8dce2b7645",
+          title: "Part time junior developer",
+          description: "Mentoring not included",
+          type: JobType.PART,
+          url: "https://www.test.org/junior",
+          published: true,
+          location: "Oslo",
+          companyId: "337e1370-cb5c-45b6-ad6c-fdd925a27313",
+          deadline: new Date(today.setMonth(today.getMonth() + 4)),
+          finalExpiration: new Date(today.setMonth(today.getMonth() + 6)),
+        },
+        {
+          id: "1bd9b7fa-1285-4a19-bf1e-0913ce915b8c",
+          title: "Full-stack developer",
+          description: "Write some hot COBOL",
+          type: JobType.FULL,
+          url: "https://www.test.org/full",
+          published: true,
+          location: "Bergen",
+          companyId: "a04e620b-b9b9-4012-a202-83c15c96fc77",
+        },
+      ],
+    });
+    console.dir({ categories, companies, jobs });
+  } catch (error) {
+    console.error(error);
     return;
   }
 }

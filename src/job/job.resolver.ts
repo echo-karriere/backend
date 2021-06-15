@@ -20,6 +20,7 @@ export class JobResolver {
       location: input.location,
       url: input.url,
       type: this.service.typeToPrisma(input.type),
+      published: input.published,
       deadline: input.deadline,
       finalExpiration: input.finalExpiration,
       company: {
@@ -56,6 +57,7 @@ export class JobResolver {
         location: input.location,
         url: input.url,
         type: this.service.typeToPrisma(input.type),
+        published: input.published,
         deadline: input.deadline,
         finalExpiration: input.finalExpiration,
         company: {

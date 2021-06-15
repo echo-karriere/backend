@@ -54,6 +54,7 @@ model Job {
   location        String
   url             String    @unique
   type            JobType
+  published       Boolean
   deadline        DateTime? @db.Timestamptz(6)
   finalExpiration DateTime? @db.Timestamptz(6)
   companyId       String    @db.Uuid

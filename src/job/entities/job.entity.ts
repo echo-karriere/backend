@@ -33,6 +33,9 @@ export class Job {
   @Field(() => JobType, { description: "What kind of job it is" })
   type!: JobType;
 
+  @Field({ description: "Whether the job posting is published" })
+  published: boolean;
+
   @Field({ description: "When is the deadline for applying?" })
   deadline?: Date;
 
