@@ -15,7 +15,6 @@ module.exports = {
     "plugin:import/typescript",
     "plugin:prettier/recommended",
     "plugin:node/recommended-module",
-    "plugin:unicorn/recommended",
   ],
   root: true,
   env: {
@@ -43,9 +42,6 @@ module.exports = {
     "node/no-missing-import": "off",
     "node/no-extraneous-import": "off",
     "node/no-extraneous-require": "off",
-    // I really hate this rule, please stop
-    "unicorn/prevent-abbreviations": "off",
-    "unicorn/no-null": "off",
   },
   overrides: [
     {

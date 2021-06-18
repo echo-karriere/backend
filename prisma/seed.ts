@@ -103,7 +103,7 @@ async function main() {
 main()
   .catch((error) => {
     console.error(error);
-    // eslint-disable-next-line no-process-exit, unicorn/no-process-exit
+    // eslint-disable-next-line no-process-exit
     process.exit(1);
   })
   .finally(() => {
