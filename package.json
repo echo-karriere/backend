@@ -33,7 +33,7 @@
     "@nestjs/platform-express": "7.6.18",
     "@nestjs/terminus": "7.2.0",
     "@prisma/client": "2.25.0",
-    "apollo-server-express": "2.25.1",
+    "apollo-server-express": "2.25.2",
     "class-transformer": "0.4.0",
     "class-validator": "0.13.1",
     "cross-fetch": "3.1.4",
