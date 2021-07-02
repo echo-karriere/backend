@@ -24,7 +24,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@azure/msal-node": "1.1.0",
+    "@azure/msal-node": "1.2.0",
     "@microsoft/microsoft-graph-client": "2.2.1",
     "@nestjs/common": "7.6.18",
     "@nestjs/core": "7.6.18",
