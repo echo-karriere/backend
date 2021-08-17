@@ -97,11 +97,6 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DEV_DATABASE_URL }}
 
-      - name: Package repo
-        run: |
-          npm ci --production --ignore-scripts
-          zip app.zip -r * -q
-
       - name: "Deploy to Azure Web App"
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
@@ -109,4 +104,4 @@ jobs:
           app-name: "echokarriere"
           slot-name: "dev"
           publish-profile: ${{ secrets.AzureAppService_PublishProfile_339790a1cc8d4dea8df5d9708352ee81 }}
-          package: app.zip
+          package: "."
