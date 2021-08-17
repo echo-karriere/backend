@@ -3,7 +3,7 @@
 <p align="center">
    <a href="https://github.com/echo-karriere/backend/actions"><img alt="GitHub Actions Status" src="https://github.com/echo-karriere/backend/workflows/Pipeline/badge.svg" /></a>
    <a href="https://sonarcloud.io/dashboard?id=echo-karriere_backend"><img alt="Quality Gate Status" src="https://sonarcloud.io/api/project_badges/measure?project=echo-karriere_backend&metric=alert_status" /></a>
-   <a href="https://sonarcloud.io/dashboard?id=echo-karriere_backend"><img alt="Code Coverage" src="https://sonarcloud.io/api/project_badges/measure?project=echo-karriere_backend&metric=coverage" /></a>
+   <a href="https://sonarcloud.io/dashboard?id=echo-karriere_backend"><img alt="Code Coverage" src="https://sonarcloud.io/api/project_badges/measure?project=echo-karriere_backend&metric=alert_status" /></a>
    <br />
 </p>
 
@@ -19,8 +19,12 @@
 
 - [Developing](#developing)
   - [Installation](#installation)
+    - [Docker](#docker)
+    - [Starting the database](#starting-the-database)
   - [Running](#running)
   - [Other commands](#other-commands)
+    - [Running the app](#running-the-app)
+    - [Test](#test)
 - [LICENSE](#license)
 
 </details>

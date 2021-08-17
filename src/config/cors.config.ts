@@ -1,4 +1,4 @@
-import { CorsOptions } from "apollo-server-express";
+import { CorsOptions } from "@nestjs/common/interfaces/external/cors-options.interface";
 
 export const corsConfiguration: CorsOptions = {
   methods: ["POST", "GET"],
