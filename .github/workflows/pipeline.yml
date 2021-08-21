@@ -7,6 +7,7 @@ on:
 
 env:
   docker_image: ghcr.io/echo-karriere/backend:${{ github.sha }}
+  docker_image_latest: ghcr.io/echo-karriere/backend:latest
 
 jobs:
   check-build:
@@ -98,7 +99,7 @@ jobs:
           name: backend
 
       - name: Build
-        run: docker image build --tag ${docker_image} .
+        run: docker image build --tag ${docker_image} --tag ${docker_image_latest} .
 
       - uses: docker/login-action@v1
         with:
@@ -107,7 +108,9 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push image
-        run: docker push ${docker_image}
+        run: |
+          docker push ${docker_image}
+          docker push ${docker_image_latest}
 
   deploy-dev:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
