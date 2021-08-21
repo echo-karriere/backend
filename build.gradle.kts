@@ -50,6 +50,10 @@ tasks.withType<JavaCompile> {
     }
 }
 
+tasks.jar {
+    enabled = false
+}
+
 tasks.withType<Test> {
     useJUnitPlatform()
     failFast = true

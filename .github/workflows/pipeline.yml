@@ -5,6 +5,9 @@ on:
   pull_request:
   workflow_dispatch:
 
+env:
+  docker_image: ghcr.io/echo-karriere/backend:${{ github.sha }}
+
 jobs:
   tests:
     runs-on: ubuntu-latest
@@ -61,6 +64,12 @@ jobs:
       - name: Build
         run: ./gradlew build
 
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: backend
+          path: "${{ github.workspace }}/build/libs/*.jar"
+
       - name: SonarQube analysis
         if: ${{ false }}
         env:
@@ -75,10 +84,34 @@ jobs:
           rm -f ~/.gradle/caches/modules-2/modules-2.lock
           rm -f ~/.gradle/caches/modules-2/gc.properties
 
+  docker:
+    if: ${{ github.ref =='refs/heads/main' || github.ref == 'refs/heads/production' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: backend
+
+      - name: Build
+        run: docker image build --tag ${docker_image} .
+
+      - uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push image
+        run: docker push ${docker_image}
+
   deploy-dev:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    needs: [tests]
+    needs: [ tests ]
     environment:
       name: "dev"
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
