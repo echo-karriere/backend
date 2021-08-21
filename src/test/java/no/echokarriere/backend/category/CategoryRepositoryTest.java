@@ -26,9 +26,9 @@ class CategoryRepositoryTest {
         );
 
         assertThat(actual).isNotEmpty();
-        assertThat(actual.get().getTitle()).isEqualTo("Test Category");
-        assertThat(actual.get().getDescription()).isEqualTo("With a description");
-        assertThat(actual.get().getSlug()).isEqualTo("test-category");
+        assertThat(actual.get().title()).isEqualTo("Test Category");
+        assertThat(actual.get().description()).isEqualTo("With a description");
+        assertThat(actual.get().slug()).isEqualTo("test-category");
     }
 
     @Test
@@ -38,8 +38,8 @@ class CategoryRepositoryTest {
         var actual = categoryRepository.select(categoryId);
 
         assertThat(actual).isNotEmpty();
-        assertThat(actual.get().getId()).isEqualTo(categoryId);
-        assertThat(actual.get().getTitle()).isEqualTo("Test Category");
+        assertThat(actual.get().id()).isEqualTo(categoryId);
+        assertThat(actual.get().title()).isEqualTo("Test Category");
     }
 
     @Test
@@ -58,8 +58,8 @@ class CategoryRepositoryTest {
         var actual = categoryRepository.selectAll();
 
         assertThat(actual)
-                .anyMatch(item -> item.getId().equals(categoryId))
-                .anyMatch(item -> item.getTitle().equals("Test Category"));
+                .anyMatch(item -> item.id().equals(categoryId))
+                .anyMatch(item -> item.title().equals("Test Category"));
     }
 
     @Test
@@ -71,9 +71,9 @@ class CategoryRepositoryTest {
 
 
         assertThat(actual).isNotEmpty();
-        assertThat(actual.get().getTitle()).isEqualTo("Test Category");
-        assertThat(actual.get().getDescription()).isEqualTo("Updated description");
-        assertThat(actual.get().getSlug()).isEqualTo("test");
+        assertThat(actual.get().title()).isEqualTo("Test Category");
+        assertThat(actual.get().description()).isEqualTo("Updated description");
+        assertThat(actual.get().slug()).isEqualTo("test");
     }
 
     @Test

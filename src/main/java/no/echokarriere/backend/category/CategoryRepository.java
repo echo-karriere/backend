@@ -29,7 +29,7 @@ public class CategoryRepository implements CrudRepository<CategoryEntity, UUID> 
     public Optional<CategoryEntity> create(CategoryEntity entity) {
         return dsl.insertInto(CATEGORY)
                 .columns(CATEGORY.ID, CATEGORY.TITLE, CATEGORY.DESCRIPTION, CATEGORY.SLUG)
-                .values(entity.getId(), entity.getTitle(), entity.getDescription(), entity.getSlug())
+                .values(entity.id(), entity.title(), entity.description(), entity.slug())
                 .returning()
                 .fetchOptional()
                 .map(CategoryRepository::map);
@@ -40,9 +40,9 @@ public class CategoryRepository implements CrudRepository<CategoryEntity, UUID> 
         return dsl.update(CATEGORY)
                 .set(
                         row(CATEGORY.TITLE, CATEGORY.DESCRIPTION, CATEGORY.SLUG, CATEGORY.MODIFIED_AT),
-                        row(entity.getTitle(), entity.getDescription(), entity.getSlug(), OffsetDateTime.now())
+                        row(entity.title(), entity.description(), entity.slug(), OffsetDateTime.now())
                 )
-                .where(CATEGORY.ID.eq(entity.getId()))
+                .where(CATEGORY.ID.eq(entity.id()))
                 .returning()
                 .fetchOptional()
                 .map(CategoryRepository::map);

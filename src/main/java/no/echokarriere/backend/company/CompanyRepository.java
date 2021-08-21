@@ -29,7 +29,7 @@ public class CompanyRepository implements CrudRepository<CompanyEntity, UUID> {
     public Optional<CompanyEntity> create(CompanyEntity entity) {
         return dsl.insertInto(COMPANY)
                 .columns(COMPANY.ID, COMPANY.NAME, COMPANY.HOMEPAGE)
-                .values(entity.getId(), entity.getName(), entity.getHomepage())
+                .values(entity.id(), entity.name(), entity.homepage())
                 .returning()
                 .fetchOptional()
                 .map(CompanyRepository::map);
@@ -41,9 +41,9 @@ public class CompanyRepository implements CrudRepository<CompanyEntity, UUID> {
                 .update(COMPANY)
                 .set(
                         row(COMPANY.NAME, COMPANY.HOMEPAGE, COMPANY.MODIFIED_AT),
-                        row(entity.getName(), entity.getHomepage(), OffsetDateTime.now())
+                        row(entity.name(), entity.homepage(), OffsetDateTime.now())
                 )
-                .where(COMPANY.ID.eq(entity.getId()))
+                .where(COMPANY.ID.eq(entity.id()))
                 .returning()
                 .fetchOptional()
                 .map(CompanyRepository::map);

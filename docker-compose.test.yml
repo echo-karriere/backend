@@ -5,7 +5,7 @@ services:
     container_name: "echo_backend_test_db"
     image: postgres:11.6
     ports:
-      - 32789:5432
+      - "32789:5432"
     environment:
       POSTGRES_DB: test_db
       POSTGRES_USER: karriere

@@ -29,8 +29,8 @@ class CompanyRepositoryTest {
         );
 
         assertThat(actual).isNotEmpty();
-        assertThat(actual.get().getName()).isEqualTo("Norge AS");
-        assertThat(actual.get().getHomepage()).isEqualTo("http://www.norge.no");
+        assertThat(actual.get().name()).isEqualTo("Norge AS");
+        assertThat(actual.get().homepage()).isEqualTo("http://www.norge.no");
     }
 
     @Test
@@ -40,8 +40,8 @@ class CompanyRepositoryTest {
         var actual = companyRepository.select(companyId);
 
         assertThat(actual).isNotEmpty();
-        assertThat(actual.get().getId()).isEqualTo(companyId);
-        assertThat(actual.get().getName()).isEqualTo("Norge AS");
+        assertThat(actual.get().id()).isEqualTo(companyId);
+        assertThat(actual.get().name()).isEqualTo("Norge AS");
     }
 
     @Test
@@ -60,8 +60,8 @@ class CompanyRepositoryTest {
         var actual = companyRepository.selectAll();
 
         assertThat(actual)
-                .anyMatch(item -> item.getId().equals(companyId))
-                .anyMatch(item -> item.getName().equals("Norge AS"));
+                .anyMatch(item -> item.id().equals(companyId))
+                .anyMatch(item -> item.name().equals("Norge AS"));
     }
 
     @Test
@@ -73,8 +73,8 @@ class CompanyRepositoryTest {
 
 
         assertThat(actual).isNotEmpty();
-        assertThat(actual.get().getName()).isEqualTo("Norge Associates");
-        assertThat(actual.get().getHomepage()).isEqualTo("http://www.norge.nu");
+        assertThat(actual.get().name()).isEqualTo("Norge Associates");
+        assertThat(actual.get().homepage()).isEqualTo("http://www.norge.nu");
     }
 
     @Test

@@ -4,24 +4,17 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 plugins {
     jacoco
     java
-    id("io.freefair.lombok").version("5.3.0")
-    id("org.springframework.boot").version("2.4.4")
+    id("org.springframework.boot").version("2.5.4")
     id("io.spring.dependency-management").version("1.0.11.RELEASE")
-    id("com.netflix.dgs.codegen").version("4.4.1")
-    id("org.sonarqube").version("3.1.1")
+    id("com.netflix.dgs.codegen").version("5.0.5")
+    id("org.sonarqube").version("3.3")
     id("org.flywaydb.flyway").version("7.7.0")
-    id("nu.studer.jooq").version("5.2.1")
+    id("nu.studer.jooq").version("6.0")
+    id("com.github.ben-manes.versions").version("0.39.0")
 }
 
 repositories {
     mavenCentral()
-    jcenter()
-}
-
-dependencyManagement {
-    imports {
-        mavenBom("org.keycloak.bom:keycloak-adapter-bom:12.0.4")
-    }
 }
 
 dependencies {
@@ -29,17 +22,16 @@ dependencies {
     implementation("org.springframework.boot", "spring-boot-starter-actuator")
     implementation("org.springframework.boot", "spring-boot-starter-jooq")
     implementation("org.springframework.boot", "spring-boot-starter-security")
-    implementation("org.keycloak", "keycloak-spring-boot-starter")
     developmentOnly("org.springframework.boot", "spring-boot-devtools")
 
-    jooqGenerator("org.postgresql", "postgresql", "42.2.19")
+    jooqGenerator("org.postgresql", "postgresql", "42.2.23")
 
-    implementation("org.flywaydb", "flyway-core", "7.7.0")
-    runtimeOnly("org.postgresql", "postgresql", "42.2.19")
+    implementation("org.flywaydb", "flyway-core", "7.14.0")
+    runtimeOnly("org.postgresql", "postgresql", "42.2.23")
 
-    implementation(platform("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:3.10.2"))
+    implementation(platform("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:4.5.1"))
     implementation("com.netflix.graphql.dgs", "graphql-dgs-spring-boot-starter")
-    implementation("com.graphql-java", "graphql-java-extended-scalars", "15.0.0")
+    implementation("com.netflix.graphql.dgs", "graphql-dgs-extended-scalars")
 
     testImplementation("org.springframework.boot", "spring-boot-starter-test") {
         exclude("org.junit.vintage", "junit-vintage-engine")
@@ -50,15 +42,11 @@ group = "no.echokarriere"
 version = "0.0.1-SNAPSHOT"
 description = "backend"
 
-configurations {
-    compileOnly {
-        extendsFrom(configurations.annotationProcessor.get())
-    }
-}
-
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(11))
+java.sourceCompatibility = JavaVersion.VERSION_16
+tasks.withType<JavaCompile> {
+    java {
+        targetCompatibility = JavaVersion.VERSION_16
+        sourceCompatibility = JavaVersion.VERSION_16
     }
 }
 
@@ -88,8 +76,6 @@ flyway {
 }
 
 jooq {
-    version.set(dependencyManagement.importedProperties["jooq.version"])
-    edition.set(nu.studer.gradle.jooq.JooqEdition.OSS)
     configurations {
         create("main") {
             jooqConfiguration.apply {
@@ -132,9 +118,9 @@ tasks.named<nu.studer.gradle.jooq.JooqGenerate>("generateJooq") {
 tasks.jacocoTestReport {
     dependsOn(tasks.test)
     reports {
-        xml.isEnabled = true
-        xml.destination = File("$buildDir/reports/jacoco/test/jacoco.xml")
-        html.isEnabled = true
+        xml.required.set(true)
+        xml.outputLocation.set(File("$buildDir/reports/jacoco/test/jacoco.xml"))
+        html.required.set(true)
     }
 }
 

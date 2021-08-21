@@ -4,9 +4,9 @@
   "author": "Sondre Nilsen <nilsen.sondre@gmail.com>",
   "devDependencies": {
     "@echo-karriere/clubhouse-lint": "0.3.0",
-    "husky": "6.0.0",
-    "lint-staged": "10.5.4",
-    "prettier": "2.2.1"
+    "husky": "7.0.1",
+    "lint-staged": "11.1.2",
+    "prettier": "2.3.2"
   },
   "scripts": {
     "postinstall": "husky install",
