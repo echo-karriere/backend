@@ -39,11 +39,21 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
+      - name: Cache Gradle packages
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - uses: actions/setup-java@v2
         with:
           distribution: adopt
           java-version: 16
-          cache: gradle
+          # cache: gradle TODO: Enable once released
 
       - name: Check
         run: ./gradlew check --info
