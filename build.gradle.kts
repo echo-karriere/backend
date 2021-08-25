@@ -3,7 +3,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
     jacoco
-    java
+    id("application")
     id("org.springframework.boot").version("2.5.4")
     id("io.spring.dependency-management").version("1.0.11.RELEASE")
     id("com.netflix.dgs.codegen").version("5.0.5")
@@ -42,11 +42,9 @@ group = "no.echokarriere"
 version = "0.0.1-SNAPSHOT"
 description = "backend"
 
-java.sourceCompatibility = JavaVersion.VERSION_16
-tasks.withType<JavaCompile> {
-    java {
-        targetCompatibility = JavaVersion.VERSION_16
-        sourceCompatibility = JavaVersion.VERSION_16
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(16))
     }
 }
 
