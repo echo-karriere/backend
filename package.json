@@ -31,7 +31,7 @@
     "@nestjs/graphql": "8.0.2",
     "@nestjs/passport": "8.0.1",
     "@nestjs/platform-express": "8.0.7",
-    "@nestjs/terminus": "7.2.0",
+    "@nestjs/terminus": "8.0.1",
     "@prisma/client": "2.30.3",
     "apollo-server-express": "2.25.2",
     "class-transformer": "0.4.0",
